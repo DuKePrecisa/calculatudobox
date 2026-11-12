@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CalculaTudoBox - Calculadoras Online</title>
+  <style>
+    :root {
+      --bg-body: #020617;
+      --bg-card: #0f172a;
+      --bg-card-hover: #1e293b;
+      --border-color: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+    }
+
+    body.light-mode {
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --border-color: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* Cabeçalho */
+    header {
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 1.3rem;
+    }
+
+    .logo-icon {
+      background: var(--primary);
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .logo span { color: var(--primary); }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .nav-links button:hover { color: var(--primary); }
+
+    .theme-btn {
+      background: var(--bg-card-hover);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    /* Container Geral */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    /* Espaço de Propaganda */
+    .ad-banner-top {
+      margin-top: 24px;
+      height: 90px;
+      background: var(--bg-card);
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* Hero & Busca */
+    .hero {
+      text-align: center;
+      padding: 48px 0 32px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 span { color: var(--primary); }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-bottom: 28px;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 16px 20px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .search-box:focus { border-color: var(--primary); }
+
+    /* Filtros */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .cat-btn {
+      padding: 8px 16px;
+      border-radius: 99px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .cat-btn.active, .cat-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Layout Principal (Grid + Sidebar) */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 28px;
+      margin: 24px 0 60px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .calc-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: var(--text-main);
+      display: block;
+      position: relative;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .calc-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+    }
+
+    .badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--primary);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 99px;
+    }
+
+    .card-icon {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .calc-card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+
+    .calc-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .ad-sidebar {
+      height: 260px;
+      background: var(--bg-card);
+      border: 2px dashed var(--border-color);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    .widget-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .widget-box h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .widget-box ul { list-style: none; }
+
+    .widget-box li { margin-bottom: 10px; }
+
+    .widget-box a {
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.92rem;
+    }
+
+    .widget-box a:hover { color: var(--primary); }
+
+    /* Rodapé */
+    footer {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-color);
+      padding: 28px 0;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+
+    .footer-links a:hover { color: var(--primary); }
+
+    #no-results {
+      display: none;
+      text-align: center;
+      padding: 40px;
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+    }
+
+    @media (max-width: 900px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">📦</div>
+        Calcula<span>Tudo</span>Box
+      </a>
+
+      <nav class="nav-links">
+        <button onclick="filterCategory('todos')">Todas</button>
+        <button onclick="filterCategory('games')">Games & Hardware</button>
+        <button onclick="filterCategory('financas')">Finanças & Câmbio</button>
+        <button onclick="filterCategory('unidades')">Unidades</button>
+        <button onclick="filterCategory('utilidades')">Dia a Dia</button>
+      </nav>
+
+      <button class="theme-btn" onclick="toggleTheme()">🌓 Tema</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="ad-banner-top">
+      Publicidade • Espaço Banner Topo (728x90)
+    </div>
+
+    <section class="hero">
+      <h1>Todas as calculadoras que você precisa em <span>um só lugar</span></h1>
+      <p>Do desempenho do seu PC nos jogos até cotações de moedas e conversões de medidas. Rápido, preciso e 100% gratuito.</p>
+
+      <input 
+        type="text" 
+        id="search-input" 
+        class="search-box"
+        onkeyup="searchCalculators()" 
+        placeholder="O que você quer calcular hoje? Ex: FPS, Dólar, Porcentagem, IMC..." 
+      />
+
+      <div class="pills">
+        <button onclick="filterCategory('todos')" data-cat="todos" class="cat-btn active">Todas</button>
+        <button onclick="filterCategory('games')" data-cat="games" class="cat-btn">🎮 Games & Hardware</button>
+        <button onclick="filterCategory('financas')" data-cat="financas" class="cat-btn">💱 Finanças & Câmbio</button>
+        <button onclick="filterCategory('unidades')" data-cat="unidades" class="cat-btn">📏 Unidades & Medidas</button>
+        <button onclick="filterCategory('utilidades')" data-cat="utilidades" class="cat-btn">⚡ Dia a Dia</button>
+      </div>
+    </section>
+
+    <div class="main-grid">
+      <div>
+        <div class="cards-grid" id="calculators-grid">
+          <a href="calculadora-fps.html" class="calc-card" data-category="games" data-keywords="fps jogos hardware placa de video cpu pc gamer bottleneck">
+            <span class="badge">Destaque</span>
+            <span class="card-icon">🎮</span>
+            <h2>Calculadora de FPS & Gargalo</h2>
+            <p>Simule o desempenho da sua CPU e GPU nos jogos atuais e antigos.</p>

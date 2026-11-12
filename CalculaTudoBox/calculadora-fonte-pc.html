@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Fonte de PC (Watts / PSU) - CalculaTudoBox</title>
+<style>
+  :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --cyan: #06b6d4; --green: #10b981; }
+  body.light { --bg: #f8fafc; --card: #ffffff; --input: #f1f5f9; --border: #cbd5e1; --text: #0f172a; --muted: #475569; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+  body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 10; }
+  .nav { max-width: 1150px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-size: 1.3rem; font-weight: 800; color: var(--text); text-decoration: none; }
+  .logo span { color: var(--blue); }
+  .btn { background: var(--input); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+  .wrap { max-width: 1150px; margin: 0 auto; padding: 20px; width: 100%; }
+  .ad-top { height: 85px; background: var(--card); border: 2px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 24px; }
+  h1 { font-size: 1.9rem; margin-bottom: 6px; }
+  .sub { color: var(--muted); margin-bottom: 24px; font-size: 0.95rem; }
+  .grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px; }
+  .box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  label { display: block; font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+  select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--input); color: var(--text); font-size: 0.95rem; }
+  .result-panel { background: rgba(6, 182, 212, 0.12); border: 1px solid var(--cyan); border-radius: 12px; padding: 22px; text-align: center; margin-top: 10px; }
+  .result-val { font-size: 2.6rem; font-weight: 900; color: var(--cyan); margin: 6px 0; }
+  .ad-side { height: 260px; background: var(--card); border: 2px dashed var(--border); border-radius: 14px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; color: var(--muted); font-size: 0.75rem; margin-bottom: 20px; }
+  .seo p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; }
+  .seo h2 { font-size: 1.2rem; margin-bottom: 10px; }
+  footer { background: var(--card); border-top: 1px solid var(--border); padding: 22px; margin-top: auto; text-align: center; font-size: 0.85rem; color: var(--muted); }
+  @media (max-width: 850px) { .grid, .row-2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="logo">📦 Calcula<span>Tudo</span>Box</a>
+    <div style="display:flex; gap:10px;">
+      <a href="index.html" class="btn">← Início</a>
+      <button type="button" class="btn" onclick="document.body.classList.toggle('light')">🌓 Tema</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="ad-top">PUBLICIDADE • BANNER TOPO (728x90)</div>
+
+  <h1>Calculadora de Fonte de PC (PSU)</h1>
+  <p class="sub">Descubra o consumo estimado do seu computador e a potência ideal da fonte de alimentação.</p>
+
+  <div class="grid">
+    <div>
+      <div class="box">
+        <div class="row-2">
+          <div>
+            <label for="cpu-w">Processador (CPU)</label>
+            <select id="cpu-w" onchange="calcPSU()">
+              <option value="65" selected>Ryzen 5 / Core i5 (65W TDP)</option>
+              <option value="105">Ryzen 7 / Xeon E5-2680 v4 (105W-120W)</option>
+              <option value="150">Xeon Dual / Core i7 K (150W)</option>
+              <option value="250">Core i9 / Ryzen 9 Extreme (250W)</option>
+              <option value="45">Core i3 / Ryzen 3 / Athlon (45W)</option>
+            </select>
+          </div>
+          <div>
+            <label for="gpu-w">Placa de Vídeo (GPU)</label>
+            <select id="gpu-w" onchange="calcPSU()">
+              <option value="0">Vídeo Integrado (Sem placa dedicada)</option>
+              <option value="75">GTX 1050 Ti / GTX 1650 / RX 6400 (75W)</option>
+              <option value="115" selected>RTX 4060 / RX 6600 / GTX 1060 (115W-130W)</option>
+              <option value="185">RX 580 / RTX 3060 / GTX 1070 (170W-185W)</option>
+              <option value="220">RTX 4070 Super / RX 7700 XT (220W-245W)</option>
+              <option value="320">RTX 4080 / RX 7900 XT (320W)</option>
+              <option value="450">RTX 4090 / Série Enthusiast (450W)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row-2">
+          <div>
+            <label for="ram-w">Módulos de Memória RAM</label>
+            <select id="ram-w" onchange="calcPSU()">
+              <option value="5">1 Pente de RAM</option>
+              <option value="10" selected>2 Pentes de RAM</option>
+              <option value="20">4 Pentes de RAM</option>
+            </select>
+          </div>
+          <div>
+            <label for="storage-w">Armazenamento e Ventoinhas</label>
+            <select id="storage-w" onchange="calcPSU()">
+              <option value="35" selected>1 SSD NVMe + 3 Fans (Básico)</option>
+              <option value="55">2 SSDs/HDs + Water Cooler + RGB</option>
+              <option value="80">Múltiplos HDs + 6 Fans RGB + Water Cooler</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--muted); text-transform:uppercase;">Potência Recomendada</div>
+          <div class="result-val" id="psu-rec">500W (80 Plus)</div>
+          <div id="psu-load" style="font-size:0.88rem; color:var(--muted);">Consumo máximo estimado do sistema: 275W</div>
+        </div>
+      </div>
+
+      <div class="box seo">
+        <h2>Por que deixar margem de folga na fonte?</h2>
+        <p>Fontes de alimentação atingem sua maior eficiência energética e menor aquecimento quando operam entre 50% e 75% de sua capacidade máxima. Além disso, picos rápidos de energia em placas de vídeo modernas exigem folga para evitar desligamentos repentinos.</p>
+      </div>
+    </div>
+
+    <aside>
+      <div class="ad-side">PUBLICIDADE • LATERAL (300x250)</div>
+      <div class="box">
+        <h3 style="font-size:0.85rem; color:var(--muted); margin-bottom:12px;">OUTRAS CALCULADORAS</h3>
+        <ul style="list-style:none; line-height:2.2; font-size:0.9rem;">
+          <li><a href="calculadora-fps.html" style="color:var(--text); text-decoration:none;">🎮 Calculadora de FPS</a></li>
+          <li><a href="calculadora-cambio.html" style="color:var(--text); text-decoration:none;">💱 Conversor de Câmbio</a></li>
+          <li><a href="conversor-unidades.html" style="color:var(--text); text-decoration:none;">📏 Conversor de Unidades</a></li>
+          <li><a href="calculadora-porcentagem.html" style="color:var(--text); text-decoration:none;">📊 Porcentagem</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>© 2026 CalculaTudoBox • Todos os direitos reservados.</footer>
+
+<script>
+  function calcPSU() {
+    var cpu = parseInt(document.getElementById('cpu-w').value) || 0;
+    var gpu = parseInt(document.getElementById('gpu-w').value) || 0;
+    var ram = parseInt(document.getElementById('ram-w').value) || 0;
+    var stor = parseInt(document.getElementById('storage-w').value) || 0;
+
+    var totalLoad = cpu + gpu + ram + stor + 50; // +50W placa-mãe e USB
+    var withMargin = totalLoad * 1.35;
+
+    var recommended = 400;
+    if (withMargin > 850) recommended = 1000;
+    else if (withMargin > 750) recommended = 850;
+    else if (withMargin > 650) recommended = 750;
+    else if (withMargin > 550) recommended = 650;
+    else if (withMargin > 500) recommended = 550;
+    else if (withMargin > 400) recommended = 500;
+
+    document.getElementById('psu-rec').innerText = recommended + 'W (Selo 80 Plus)';
+    document.getElementById('psu-load').innerText = 'Consumo máximo estimado do sistema: ' + totalLoad + 'W';
+  }
+  calcPSU();
+</script>
+</body>
+</html>

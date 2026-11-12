@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conversor de Unidades e Medidas - CalculaTudoBox</title>
+<style>
+  :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --purple: #a855f7; }
+  body.light { --bg: #f8fafc; --card: #ffffff; --input: #f1f5f9; --border: #cbd5e1; --text: #0f172a; --muted: #475569; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+  body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 10; }
+  .nav { max-width: 1150px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-size: 1.3rem; font-weight: 800; color: var(--text); text-decoration: none; }
+  .logo span { color: var(--blue); }
+  .btn { background: var(--input); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+  .wrap { max-width: 1150px; margin: 0 auto; padding: 20px; width: 100%; }
+  .ad-top { height: 85px; background: var(--card); border: 2px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 24px; }
+  h1 { font-size: 1.9rem; margin-bottom: 6px; }
+  .sub { color: var(--muted); margin-bottom: 24px; font-size: 0.95rem; }
+  .grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px; }
+  .box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  label { display: block; font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+  input, select { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid var(--border); background: var(--input); color: var(--text); font-size: 1rem; font-weight: 600; }
+  .result-panel { background: rgba(168, 85, 247, 0.12); border: 1px solid var(--purple); border-radius: 12px; padding: 22px; text-align: center; }
+  .result-val { font-size: 2.4rem; font-weight: 900; color: var(--purple); margin: 6px 0; word-break: break-word; }
+  .ad-side { height: 260px; background: var(--card); border: 2px dashed var(--border); border-radius: 14px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; color: var(--muted); font-size: 0.75rem; margin-bottom: 20px; }
+  .seo p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; }
+  .seo h2 { font-size: 1.2rem; margin-bottom: 10px; }
+  footer { background: var(--card); border-top: 1px solid var(--border); padding: 22px; margin-top: auto; text-align: center; font-size: 0.85rem; color: var(--muted); }
+  @media (max-width: 850px) { .grid, .row-2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="logo">📦 Calcula<span>Tudo</span>Box</a>
+    <div style="display:flex; gap:10px;">
+      <a href="index.html" class="btn">← Início</a>
+      <button type="button" class="btn" onclick="document.body.classList.toggle('light')">🌓 Tema</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="ad-top">PUBLICIDADE • BANNER TOPO (728x90)</div>
+
+  <h1>Conversor de Unidades e Medidas</h1>
+  <p class="sub">Converta rapidamente medidas de comprimento, massa, temperatura e armazenamento digital.</p>
+
+  <div class="grid">
+    <div>
+      <div class="box">
+        <div class="row-2">
+          <div>
+            <label for="cat">Tipo de Medida</label>
+            <select id="cat" onchange="loadUnits()">
+              <option value="length" selected>📏 Comprimento / Distância</option>
+              <option value="weight">⚖️ Peso / Massa</option>
+              <option value="temp">🌡️ Temperatura</option>
+              <option value="data">💾 Armazenamento Digital</option>
+            </select>
+          </div>
+          <div>
+            <label for="val">Valor a Converter</label>
+            <input type="number" id="val" value="10" step="any" oninput="convertUnit()">
+          </div>
+        </div>
+
+        <div class="row-2">
+          <div>
+            <label for="from-u">De</label>
+            <select id="from-u" onchange="convertUnit()"></select>
+          </div>
+          <div>
+            <label for="to-u">Para</label>
+            <select id="to-u" onchange="convertUnit()"></select>
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--muted); text-transform:uppercase;">Resultado</div>
+          <div class="result-val" id="res-out">1000 cm</div>
+        </div>
+      </div>
+
+      <div class="box seo">
+        <h2>Sobre o Conversor de Unidades</h2>
+        <p>Ideal para estudantes, engenheiros, técnicos de informática e tarefas do cotidiano. Suporta o Sistema Internacional de Unidades (metros, quilogramas, Celsius) e medidas imperiais (polegadas, pés, milhas, libras e Fahrenheit).</p>
+      </div>
+    </div>
+
+    <aside>
+      <div class="ad-side">PUBLICIDADE • LATERAL (300x250)</div>
+      <div class="box">
+        <h3 style="font-size:0.85rem; color:var(--muted); margin-bottom:12px;">OUTRAS CALCULADORAS</h3>
+        <ul style="list-style:none; line-height:2.2; font-size:0.9rem;">
+          <li><a href="calculadora-fps.html" style="color:var(--text); text-decoration:none;">🎮 Calculadora de FPS</a></li>
+          <li><a href="calculadora-cambio.html" style="color:var(--text); text-decoration:none;">💱 Conversor de Câmbio</a></li>
+          <li><a href="calculadora-porcentagem.html" style="color:var(--text); text-decoration:none;">📊 Porcentagem</a></li>
+          <li><a href="calculadora-imc.html" style="color:var(--text); text-decoration:none;">❤️ Calculadora de IMC</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>© 2026 CalculaTudoBox • Todos os direitos reservados.</footer>
+
+<script>
+  var unitsData = {
+    length: {
+      m: { name: 'Metros (m)', factor: 1 },
+      km: { name: 'Quilômetros (km)', factor: 1000 },
+      cm: { name: 'Centímetros (cm)', factor: 0.01 },
+      mm: { name: 'Milímetros (mm)', factor: 0.001 },
+      in: { name: 'Polegadas (in)', factor: 0.0254 },
+      ft: { name: 'Pés (ft)', factor: 0.3048 },
+      mi: { name: 'Milhas (mi)', factor: 1609.344 }
+    },
+    weight: {
+      kg: { name: 'Quilogramas (kg)', factor: 1 },
+      g: { name: 'Gramas (g)', factor: 0.001 },
+      mg: { name: 'Miligramas (mg)', factor: 0.000001 },
+      t: { name: 'Toneladas (t)', factor: 1000 },
+      lb: { name: 'Libras (lb)', factor: 0.453592 },
+      oz: { name: 'Onças (oz)', factor: 0.0283495 }
+    },
+    temp: {
+      c: { name: 'Celsius (°C)' },
+      f: { name: 'Fahrenheit (°F)' },
+      k: { name: 'Kelvin (K)' }
+    },
+    data: {
+      gb: { name: 'Gigabytes (GB)', factor: 1024 },
+      mb: { name: 'Megabytes (MB)', factor: 1 },
+      tb: { name: 'Terabytes (TB)', factor: 1048576 },
+      kb: { name: 'Kilobytes (KB)', factor: 0.0009765625 }
+    }
+  };
+
+  function loadUnits() {
+    var cat = document.getElementById('cat').value;
+    var fromSel = document.getElementById('from-u');
+    var toSel = document.getElementById('to-u');
+    var list = unitsData[cat];
+    var html = '';
+    for (var key in list) {
+      html += '<option value="' + key + '">' + list[key].name + '</option>';
+    }
+    fromSel.innerHTML = html;
+    toSel.innerHTML = html;
+    if (toSel.options.length > 1) toSel.selectedIndex = 1;
+    convertUnit();
+  }
+
+  function convertUnit() {
+    var cat = document.getElementById('cat').value;
+    var val = parseFloat(document.getElementById('val').value) || 0;
+    var from = document.getElementById('from-u').value;
+    var to = document.getElementById('to-u').value;
+    var res = 0;
+
+    if (cat === 'temp') {
+      var celsius = from === 'c' ? val : from === 'f' ? (val - 32) * 5 / 9 : val - 273.15;
+      res = to === 'c' ? celsius : to === 'f' ? (celsius * 9 / 5) + 32 : celsius + 273.15;
+    } else {
+      var baseVal = val * unitsData[cat][from].factor;
+      res = baseVal / unitsData[cat][to].factor;
+    }
+
+    var formatted = Number(res.toFixed(6)).toString().replace('.', ',');
+    document.getElementById('res-out').innerText = formatted + ' ' + to.toUpperCase();
+  }
+
+  loadUnits();
+</script>
+</body>
+</html>

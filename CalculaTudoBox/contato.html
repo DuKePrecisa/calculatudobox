@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contato - CalculaTudoBox</title>
+<style>
+  body { background: #020617; color: #f8fafc; font-family: system-ui, sans-serif; line-height: 1.7; margin: 0; }
+  header { background: #0f172a; border-bottom: 1px solid #1e293b; padding: 16px 20px; }
+  .nav { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .logo { color: #fff; font-weight: 800; font-size: 1.3rem; text-decoration: none; }
+  .logo span { color: #3b82f6; }
+  .btn { background: #1e293b; color: #fff; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; }
+  .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+  .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 14px; padding: 32px; }
+  h1 { margin-bottom: 16px; color: #3b82f6; }
+  p { color: #cbd5e1; margin-bottom: 16px; }
+  input, textarea { width: 100%; padding: 12px; margin-bottom: 14px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff; font-family: inherit; }
+  button { background: #3b82f6; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+</style>
+</head>
+<body>
+<header><div class="nav"><a href="index.html" class="logo">📦 Calcula<span>Tudo</span>Box</a><a href="index.html" class="btn">← Voltar ao Início</a></div></header>
+<div class="container">
+  <div class="card">
+    <h1>Entre em Contato</h1>
+    <p>Tem alguma sugestão de nova calculadora, encontrou algum erro ou deseja falar sobre parcerias comerciais? Envie sua mensagem abaixo.</p>
+    <form onsubmit="event.preventDefault(); alert('Mensagem enviada com sucesso! Obrigado pelo contato.'); this.reset();">
+      <input type="text" placeholder="Seu Nome" required>
+      <input type="email" placeholder="Seu E-mail" required>
+      <textarea rows="5" placeholder="Sua mensagem ou sugestão de calculadora..." required></textarea>
+      <button type="submit">Enviar Mensagem</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
