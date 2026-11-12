@@ -143,3 +143,83 @@
           <h3>🔥 Mais Acessadas</h3>
           <ul>
             <li><a href="calculadora-fps.html">1. Calculadora de FPS</a></li>
+            <li><a href="calculadora-cambio.html">2. Dólar Hoje (Câmbio)</a></li>
+            <li><a href="calculadora-porcentagem.html">3. Cálculo de Porcentagem</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap footer-row">
+      <div>
+        <strong>Calcula<span style="color: var(--blue);">Tudo</span>Box</strong>
+        <p style="font-size: 0.78rem; color: var(--muted); margin-top: 4px;">© 2026 CalculaTudoBox. Todos os direitos reservados.</p>
+      </div>
+      <div class="footer-links">
+        <a href="sobre.html">Sobre Nós</a>
+        <a href="privacidade.html">Política de Privacidade</a>
+        <a href="termos.html">Termos de Uso</a>
+        <a href="contato.html">Contato</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function filterCategory(category) {
+      var cards = document.querySelectorAll('.calc-card');
+      var buttons = document.querySelectorAll('.cat-btn');
+      var visibleCount = 0;
+
+      for (var i = 0; i < buttons.length; i++) {
+        if (buttons[i].getAttribute('data-cat') === category) {
+          buttons[i].classList.add('active');
+        } else {
+          buttons[i].classList.remove('active');
+        }
+      }
+
+      for (var j = 0; j < cards.length; j++) {
+        var cardCat = cards[j].getAttribute('data-category');
+        if (category === 'todos' || cardCat === category) {
+          cards[j].style.display = 'block';
+          visibleCount++;
+        } else {
+          cards[j].style.display = 'none';
+        }
+      }
+
+      var noRes = document.getElementById('no-results');
+      if (noRes) {
+        noRes.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+    }
+
+    function searchCalculators() {
+      var input = document.getElementById('search-input');
+      var query = input.value.toLowerCase().trim();
+      var cards = document.querySelectorAll('.calc-card');
+      var visibleCount = 0;
+
+      for (var i = 0; i < cards.length; i++) {
+        var title = cards[i].querySelector('h2').innerText.toLowerCase();
+        var desc = cards[i].querySelector('p').innerText.toLowerCase();
+        var keywords = (cards[i].getAttribute('data-keywords') || '').toLowerCase();
+
+        if (title.indexOf(query) !== -1 || desc.indexOf(query) !== -1 || keywords.indexOf(query) !== -1) {
+          cards[i].style.display = 'block';
+          visibleCount++;
+        } else {
+          cards[i].style.display = 'none';
+        }
+      }
+
+      var noRes = document.getElementById('no-results');
+      if (noRes) {
+        noRes.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+    }
+  </script>
+</body>
+</html>
