@@ -46,48 +46,58 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura:
   "aiTip": "Dica prática de 2 frases sobre ajustes gráficos neste jogo para ganhar FPS."
 }`;
 
-  try {
-    const domain = "generativelanguage" + "." + "googleapis" + "." + "com";
-    const endpoint = `https://${domain}/v1beta/models/gemini-flash-latest:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const domain = "generativelanguage" + "." + "googleapis" + "." + "com";
+  const models = ["gemini-flash-latest", "gemini-flash-lite-latest"];
 
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.2,
-          responseMimeType: "application/json"
-        }
-      })
-    });
+  for (let i = 0; i < models.length; i++) {
+    try {
+      const endpoint = `https://${domain}/v1beta/models/${models.at(i)}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
-    const rawText = await response.text();
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.2,
+            responseMimeType: "application/json"
+          }
+        })
+      });
 
-    if (!response.ok) {
-      return new Response(JSON.stringify({ 
-        error: `Erro Google (${response.status}): ${rawText.slice(0, 150)}` 
-      }), {
-        status: response.status,
+      const rawText = await response.text();
+
+      if (response.status === 503 && i < models.length - 1) {
+        continue; // Se der pico de demanda (503), tenta o modelo reserva na hora
+      }
+
+      if (!response.ok) {
+        return new Response(JSON.stringify({ 
+          error: `Servidor de IA ocupado no momento (${response.status}). Tente clicar novamente em alguns segundos.` 
+        }), {
+          status: response.status,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+
+      const data = JSON.parse(rawText);
+      const firstCandidate = data.candidates && data.candidates.at(0);
+      const firstPart = firstCandidate && firstCandidate.content && firstCandidate.content.parts && firstCandidate.content.parts.at(0);
+      let textResult = firstPart ? firstPart.text : '';
+
+      textResult = textResult.replace(/```json/gi, '').replace(/```/g, '').trim();
+
+      return new Response(textResult, {
+        status: 200,
         headers: { 'Content-Type': 'application/json' }
       });
+    } catch (error) {
+      if (i === models.length - 1) {
+        return new Response(JSON.stringify({ error: 'Erro interno: ' + error.message }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
     }
-
-    const data = JSON.parse(rawText);
-    const firstCandidate = data.candidates && data.candidates.at(0);
-    const firstPart = firstCandidate && firstCandidate.content && firstCandidate.content.parts && firstCandidate.content.parts.at(0);
-    let textResult = firstPart ? firstPart.text : '';
-
-    textResult = textResult.replace(/```json/gi, '').replace(/```/g, '').trim();
-
-    return new Response(textResult, {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: 'Erro interno: ' + error.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
   }
 }
