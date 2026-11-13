@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Conversor de Câmbio (Dólar, Euro, Real) - CalculaTudoBox</title>
 <style>
-  :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --green: #10b981; }
+  :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --green: #10b981; --red: #ef4444; }
   body.light { --bg: #f8fafc; --card: #ffffff; --input: #f1f5f9; --border: #cbd5e1; --text: #0f172a; --muted: #475569; }
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
   body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
@@ -29,6 +29,16 @@
   .result-panel { background: rgba(16, 185, 129, 0.12); border: 1px solid var(--green); border-radius: 12px; padding: 22px; text-align: center; }
   .result-val { font-size: 2.6rem; font-weight: 900; color: var(--green); margin: 6px 0; }
   .rate-info { font-size: 0.85rem; color: var(--muted); }
+  
+  /* Estilos do Gráfico */
+  .chart-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .chart-stats { display: flex; gap: 16px; font-size: 0.82rem; }
+  .stat-pill { background: var(--input); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); }
+  .stat-pill span { color: var(--muted); display: block; font-size: 0.72rem; }
+  .chart-container { width: 100%; height: 210px; position: relative; background: var(--input); border-radius: 12px; padding: 16px 12px 10px 12px; border: 1px solid var(--border); }
+  svg.sparkline { width: 100%; height: 150px; overflow: visible; }
+  .chart-labels { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted); margin-top: 6px; padding: 0 4px; }
+
   .ad-side { height: 260px; background: var(--card); border: 2px dashed var(--border); border-radius: 14px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; color: var(--muted); font-size: 0.75rem; margin-bottom: 20px; }
   .seo p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; }
   .seo h2 { font-size: 1.2rem; margin-bottom: 10px; }
@@ -52,10 +62,11 @@
   <div class="ad-top">PUBLICIDADE • BANNER TOPO (728x90)</div>
 
   <h1>Conversor de Câmbio e Moedas</h1>
-  <p class="sub">Converta valores entre Real, Dólar Americano, Euro, Libra Esterlina e outras moedas instantaneamente.</p>
+  <p class="sub">Converta valores entre Real, Dólar Americano, Euro, Libra Esterlina e acompanhe a variação histórica.</p>
 
   <div class="grid">
     <div>
+      <!-- Conversor -->
       <div class="box">
         <div style="margin-bottom: 18px;">
           <label for="amount">Valor para Converter</label>
@@ -65,7 +76,7 @@
         <div class="row-3">
           <div>
             <label for="from-curr">De (Moeda de Origem)</label>
-            <select id="from-curr" onchange="convert()">
+            <select id="from-curr" onchange="handleCurrencyChange()">
               <option value="USD" selected>🇺🇸 Dólar Americano (USD)</option>
               <option value="BRL">🇧🇷 Real Brasileiro (BRL)</option>
               <option value="EUR">🇪🇺 Euro (EUR)</option>
@@ -80,7 +91,7 @@
 
           <div>
             <label for="to-curr">Para (Moeda de Destino)</label>
-            <select id="to-curr" onchange="convert()">
+            <select id="to-curr" onchange="handleCurrencyChange()">
               <option value="BRL" selected>🇧🇷 Real Brasileiro (BRL)</option>
               <option value="USD">🇺🇸 Dólar Americano (USD)</option>
               <option value="EUR">🇪🇺 Euro (EUR)</option>
@@ -96,6 +107,25 @@
           <div style="font-size:0.8rem; font-weight:700; color:var(--muted); text-transform:uppercase;">Resultado da Conversão</div>
           <div class="result-val" id="result-text">R$ 580,00</div>
           <div class="rate-info" id="rate-info">Carregando cotação comercial...</div>
+        </div>
+      </div>
+
+      <!-- Gráfico de Variação -->
+      <div class="box" id="chart-box">
+        <div class="chart-header">
+          <div>
+            <h2 style="font-size:1.15rem;" id="chart-title">Variação nos Últimos 15 Dias (USD → BRL)</h2>
+            <span style="font-size:0.8rem; color:var(--muted);" id="chart-subtitle">Histórico comercial diário</span>
+          </div>
+          <div class="chart-stats">
+            <div class="stat-pill"><span>Mínima (15d)</span><strong id="stat-min">--</strong></div>
+            <div class="stat-pill"><span>Máxima (15d)</span><strong id="stat-max">--</strong></div>
+            <div class="stat-pill"><span>Variação</span><strong id="stat-var">--</strong></div>
+          </div>
+        </div>
+
+        <div class="chart-container" id="chart-container">
+          <div style="text-align:center; padding-top:65px; color:var(--muted); font-size:0.85rem;">Carregando histórico da cotação...</div>
         </div>
       </div>
 
@@ -130,76 +160,167 @@
 
   async function fetchLiveRates() {
     try {
-      // Monta a URL oficial da ExchangeRate-API sem risco de corte ao copiar
       var host1 = "open" + "." + "er-api" + "." + "com";
       var res = await fetch("https://" + host1 + "/v6/latest/USD");
       var data = await res.json();
       
       if (data && data.rates) {
         rates = data.rates;
-        isLive = true;
-        var agora = new Date();
-        lastUpdate = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        convert();
-        return;
-      }
-    } catch (e) {
-      // Se falhar, tenta o servidor reserva brasileiro (AwesomeAPI)
-      try {
-        var host2 = "economia" + "." + "awesomeapi" + "." + "com" + "." + "br";
-        var res2 = await fetch("https://" + host2 + "/last/USD-BRL,EUR-BRL,GBP-BRL,CAD-BRL,ARS-BRL,JPY-BRL");
-        var d2 = await res2.json();
-        if (d2 && d2.USDBRL) {
-          var usdBrl = parseFloat(d2.USDBRL.bid);
-          rates.BRL = usdBrl;
-          rates.EUR = usdBrl / parseFloat(d2.EURBRL.bid);
-          rates.GBP = usdBrl / parseFloat(d2.GBPBRL.bid);
-          rates.CAD = usdBrl / parseFloat(d2.CADBRL.bid);
-          rates.ARS = usdBrl / parseFloat(d2.ARSBRL.bid);
-          rates.JPY = usdBrl / parseFloat(d2.JPYBRL.bid);
-          isLive = true;
-          var agora2 = new Date();
-          lastUpdate = agora2.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-          convert();
-          return;
-        }
-      } catch (e2) {}
-    }
-    convert();
-  }
-
-  function swapCurrencies() {
-    var from = document.getElementById('from-curr');
-    var to = document.getElementById('to-curr');
-    var temp = from.value;
-    from.value = to.value;
-    to.value = temp;
-    convert();
-  }
-
-  function convert() {
-    var amount = parseFloat(document.getElementById('amount').value) || 0;
-    var from = document.getElementById('from-curr').value;
-    var to = document.getElementById('to-curr').value;
-
-    var inUsd = amount / rates[from];
-    var converted = inUsd * rates[to];
-    var unitRate = (1 / rates[from]) * rates[to];
-
-    document.getElementById('result-text').innerText = converted.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: to,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: to === 'JPY' ? 0 : 2
-    });
-
-    var statusTag = isLive ? 'Cotação comercial ao vivo às ' + lastUpdate : 'Cotação de referência (offline)';
-    document.getElementById('rate-info').innerText = '1 ' + from + ' = ' + unitRate.toFixed(4) + ' ' + to + ' • ' + statusTag;
-  }
-
-  convert();
-  fetchLiveRates();
-</script>
-</body>
-</html>
-
+isLive = true;
+var agora = new Date();
+lastUpdate = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+convert();
+return;
+}
+} catch (e) {
+try {
+var host2 = "economia" + "." + "awesomeapi" + "." + "com" + "." + "br";
+var res2 = await fetch("https://" + host2 + "/last/USD-BRL,EUR-BRL,GBP-BRL,CAD-BRL,ARS-BRL,JPY-BRL");
+var d2 = await res2.json();
+if (d2 && d2.USDBRL) {
+var usdBrl = parseFloat(d2.USDBRL.bid);
+rates.BRL = usdBrl;
+rates.EUR = usdBrl / parseFloat(d2.EURBRL.bid);
+rates.GBP = usdBrl / parseFloat(d2.GBPBRL.bid);
+rates.CAD = usdBrl / parseFloat(d2.CADBRL.bid);
+rates.ARS = usdBrl / parseFloat(d2.ARSBRL.bid);
+rates.JPY = usdBrl / parseFloat(d2.JPYBRL.bid);
+isLive = true;
+var agora2 = new Date();
+lastUpdate = agora2.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+convert();
+return;
+}
+} catch (e2) {}
+}
+convert();
+}
+async function fetchHistoryChart() {
+var from = document.getElementById('from-curr').value;
+var to = document.getElementById('to-curr').value;
+var container = document.getElementById('chart-container');
+document.getElementById('chart-title').innerText = 'Variação nos Últimos 15 Dias (' + from + ' → ' + to + ')';
+if (from === to) {
+document.getElementById('stat-min').innerText = '1.0000';
+document.getElementById('stat-max').innerText = '1.0000';
+document.getElementById('stat-var').innerText = '0.00%';
+container.innerHTML = 'Selecione moedas diferentes para visualizar a variação histórica.';
+return;
+}
+container.innerHTML = 'Atualizando gráfico histórico...';
+try {
+var host = "api" + "." + "frankfurter" + "." + "app";
+var end = new Date();
+var start = new Date();
+start.setDate(end.getDate() - 21); // Pega 21 dias corridos para garantir 15 dias úteis
+var startStr = start.toISOString().split('T')[0];
+var url = "https://" + host + "/" + startStr + "..?from=" + from + "&to=" + to;
+var res = await fetch(url);
+if (!res.ok) throw new Error('Par não suportado no histórico direto');
+var data = await res.json();
+var dates = Object.keys(data.rates).sort();
+var points = dates.map(function(d) {
+return { date: d, val: data.rates[d][to] };
+});
+if (points.length < 2) throw new Error('Poucos dados');
+renderSVGChart(points, to);
+} catch (e) {
+// Fallback via AwesomeAPI caso a moeda seja ARS (Peso Argentino)
+try {
+var hostBr = "economia" + "." + "awesomeapi" + "." + "com" + "." + "br";
+var resBr = await fetch("https://" + hostBr + "/json/daily/" + from + "-" + to + "/15");
+var dataBr = await resBr.json();
+if (Array.isArray(dataBr) && dataBr.length > 1) {
+var pointsBr = dataBr.reverse().map(function(item) {
+var dt = new Date(parseInt(item.timestamp) * 1000).toISOString().split('T')[0];
+return { date: dt, val: parseFloat(item.bid) };
+});
+renderSVGChart(pointsBr, to);
+return;
+}
+} catch (e2) {}
+container.innerHTML = 'Histórico gráfico indisponível para este par específico no momento.';
+document.getElementById('stat-min').innerText = '--';
+document.getElementById('stat-max').innerText = '--';
+document.getElementById('stat-var').innerText = '--';
+}
+}
+function renderSVGChart(points, targetCurr) {
+var container = document.getElementById('chart-container');
+var values = points.map(function(p) { return p.val; });
+var minVal = Math.min.apply(null, values);
+var maxVal = Math.max.apply(null, values);
+var firstVal = values[0];
+var lastVal = values[values.length - 1];
+var diffPct = ((lastVal - firstVal) / firstVal) * 100;
+var decimals = targetCurr === 'JPY' ? 2 : 4;
+document.getElementById('stat-min').innerText = minVal.toFixed(decimals);
+document.getElementById('stat-max').innerText = maxVal.toFixed(decimals);
+var varEl = document.getElementById('stat-var');
+var sign = diffPct >= 0 ? '+' : '';
+varEl.innerText = sign + diffPct.toFixed(2) + '%';
+varEl.style.color = diffPct >= 0 ? 'var(--green)' : 'var(--red)';
+var lineColor = diffPct >= 0 ? '#10b981' : '#ef4444';
+var width = 600;
+var height = 140;
+var range = (maxVal - minVal) || (maxVal * 0.01);
+var coords = points.map(function(p, idx) {
+var x = (idx / (points.length - 1)) * width;
+var y = height - (((p.val - minVal) / range) * (height - 20) + 10);
+return x.toFixed(1) + ',' + y.toFixed(1);
+});
+var polylinePoints = coords.join(' ');
+var areaPoints = '0,' + height + ' ' + polylinePoints + ' ' + width + ',' + height;
+var firstDateFmt = points[0].date.split('-').reverse().slice(0, 2).join('/');
+var midDateFmt = points[Math.floor(points.length / 2)].date.split('-').reverse().slice(0, 2).join('/');
+var lastDateFmt = points[points.length - 1].date.split('-').reverse().slice(0, 2).join('/');
+var lastCoord = coords[coords.length - 1].split(',');
+container.innerHTML =
+'' +
+'' +
+'' +
+'' +
+'' +
+'' +
+'' +
+'' +
+'' +
+'' +
+'' +
+'' +
+'' + firstDateFmt + '' +
+'' + midDateFmt + '' +
+'Hoje (' + lastDateFmt + ')' +
+'';
+}
+function handleCurrencyChange() {
+convert();
+fetchHistoryChart();
+}
+function swapCurrencies() {
+var from = document.getElementById('from-curr');
+var to = document.getElementById('to-curr');
+var temp = from.value;
+from.value = to.value;
+to.value = temp;
+handleCurrencyChange();
+}
+function convert() {
+var amount = parseFloat(document.getElementById('amount').value) || 0;
+var from = document.getElementById('from-curr').value;
+var to = document.getElementById('to-curr').value;
+var inUsd = amount / rates[from];
+var converted = inUsd * rates[to];
+var unitRate = (1 / rates[from]) * rates[to];
+document.getElementById('result-text').innerText = converted.toLocaleString('pt-BR', {
+style: 'currency',
+currency: to,
+minimumFractionDigits: 2,
+maximumFractionDigits: to === 'JPY' ? 0 : 2
+});
+var statusTag = isLive ? 'Cotação comercial ao vivo às ' + lastUpdate : 'Cotação de referência (offline)';
+document.getElementById('rate-info').innerText = '1 ' + from + ' = ' + unitRate.toFixed(4) + ' ' + to + ' • ' + statusTag;
+}
+convert();
+fetchLiveRates();
+fetchHistoryChart();
