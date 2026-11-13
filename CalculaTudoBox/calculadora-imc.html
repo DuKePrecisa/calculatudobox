@@ -169,3 +169,129 @@
             </tr>
           </thead>
           <tbody>
+            <tr><td>Menor que 18,5</td><td>Abaixo do peso</td><td>Moderado</td></tr>
+            <tr><td>18,5 a 24,9</td><td>Peso normal (Eutrofia)</td><td>Baixo (Ideal)</td></tr>
+            <tr><td>25,0 a 29,9</td><td>Sobrepeso</td><td>Aumentado</td></tr>
+            <tr><td>30,0 a 34,9</td><td>Obesidade Grau I</td><td>Moderado</td></tr>
+            <tr><td>35,0 a 39,9</td><td>Obesidade Grau II</td><td>Grave</td></tr>
+            <tr><td>40,0 ou mais</td><td>Obesidade Grau III</td><td>Muito Grave</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:14px;"><strong>Importante:</strong> Para pessoas com 60 anos ou mais, a faixa considerada adequada pela OPAS/OMS situa-se entre <strong>22,0 e 27,0 kg/m²</strong>, protegendo contra perda de massa magra. Além disso, o IMC não distingue massa muscular de gordura corporal, devendo ser interpretado junto a um profissional de saúde.</p>
+      </div>
+    </div>
+
+    <aside>
+      <div class="ad-side">PUBLICIDADE • LATERAL (300x250)</div>
+      <div class="box">
+        <h3 style="font-size:0.85rem; color:var(--muted); margin-bottom:12px;">OUTRAS CALCULADORAS</h3>
+        <ul style="list-style:none; line-height:2.2; font-size:0.9rem;">
+          <li><a href="calculadora-fps.html" style="color:var(--text); text-decoration:none;">🎮 Calculadora de FPS</a></li>
+          <li><a href="calculadora-cambio.html" style="color:var(--text); text-decoration:none;">💱 Conversor de Câmbio</a></li>
+          <li><a href="conversor-unidades.html" style="color:var(--text); text-decoration:none;">📏 Conversor de Unidades</a></li>
+          <li><a href="calculadora-porcentagem.html" style="color:var(--text); text-decoration:none;">📊 Porcentagem</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>© 2026 CalculaTudoBox • Todos os direitos reservados.</footer>
+
+<script>
+  var gender = 'M';
+
+  function setGender(g) {
+    gender = g;
+    document.getElementById('btn-m').className = g === 'M' ? 'gender-btn active' : 'gender-btn';
+    document.getElementById('btn-f').className = g === 'F' ? 'gender-btn active' : 'gender-btn';
+    calcIMC();
+  }
+
+  function calcIMC() {
+    var peso = parseFloat(document.getElementById('peso').value) || 0;
+    var altCm = parseFloat(document.getElementById('altura').value) || 0;
+    var idade = parseInt(document.getElementById('idade').value) || 30;
+    var fatorAtiv = parseFloat(document.getElementById('atividade').value) || 1.375;
+    var altM = altCm / 100;
+
+    if (peso <= 0 || altM <= 0) return;
+
+    var imc = peso / (altM * altM);
+    document.getElementById('imc-val').innerText = imc.toFixed(1).replace('.', ',');
+
+    var isElderly = idade >= 60;
+    var minLim = isElderly ? 22.0 : 18.5;
+    var maxLim = isElderly ? 27.0 : 24.9;
+    document.getElementById('imc-label').innerText = isElderly ? 'Seu IMC (Referência 60+ Anos)' : 'Seu IMC (Adulto)';
+
+    var statusEl = document.getElementById('imc-status');
+    var valEl = document.getElementById('imc-val');
+
+    if (imc < minLim) {
+      statusEl.innerText = 'Abaixo do Peso';
+      statusEl.style.background = 'rgba(59,130,246,0.2)'; statusEl.style.color = '#3b82f6';
+      valEl.style.color = '#3b82f6';
+    } else if (imc <= maxLim) {
+      statusEl.innerText = 'Peso Normal (Saudável)';
+      statusEl.style.background = 'rgba(16,185,129,0.2)'; statusEl.style.color = '#10b981';
+      valEl.style.color = '#10b981';
+    } else if (imc < 30) {
+      statusEl.innerText = 'Sobrepeso';
+      statusEl.style.background = 'rgba(245,158,11,0.2)'; statusEl.style.color = '#f59e0b';
+      valEl.style.color = '#f59e0b';
+    } else if (imc < 35) {
+      statusEl.innerText = 'Obesidade Grau I';
+      statusEl.style.background = 'rgba(244,63,94,0.2)'; statusEl.style.color = '#f43f5e';
+      valEl.style.color = '#f43f5e';
+    } else if (imc < 40) {
+      statusEl.innerText = 'Obesidade Grau II';
+      statusEl.style.background = 'rgba(244,63,94,0.2)'; statusEl.style.color = '#f43f5e';
+      valEl.style.color = '#f43f5e';
+    } else {
+      statusEl.innerText = 'Obesidade Grau III';
+      statusEl.style.background = 'rgba(244,63,94,0.2)'; statusEl.style.color = '#f43f5e';
+      valEl.style.color = '#f43f5e';
+    }
+
+    var pct = ((imc - 15) / (40 - 15)) * 100;
+    if (pct < 2) pct = 2;
+    if (pct > 98) pct = 98;
+    document.getElementById('bmi-pointer').style.left = pct.toFixed(1) + '%';
+
+    var minP = (minLim * altM * altM).toFixed(1).replace('.', ',');
+    var maxP = (maxLim * altM * altM).toFixed(1).replace('.', ',');
+    document.getElementById('peso-ideal').innerText = 'Faixa de peso saudável para sua altura e idade: ' + minP + ' kg a ' + maxP + ' kg';
+
+    var tmb = (10 * peso) + (6.25 * altCm) - (5 * idade) + (gender === 'M' ? 5 : -161);
+    var tdee = tmb * fatorAtiv;
+    document.getElementById('res-tmb').innerText = Math.round(tmb).toLocaleString('pt-BR') + ' kcal/dia';
+    document.getElementById('res-tdee').innerText = 'Gasto total diário estimado: ' + Math.round(tdee).toLocaleString('pt-BR') + ' kcal';
+
+    var sexFactor = gender === 'M' ? 1 : 0;
+    var bf = (1.20 * imc) + (0.23 * idade) - (10.8 * sexFactor) - 5.4;
+    if (bf < 3) bf = 3;
+    document.getElementById('res-bf').innerText = bf.toFixed(1).replace('.', ',') + '%';
+
+    var baseDevine = gender === 'M' ? 50.0 : 45.5;
+    var devineKg = baseDevine + 0.91 * (altCm - 152.4);
+    if (devineKg < 35) devineKg = minLim * altM * altM;
+    document.getElementById('res-devine').innerText = devineKg.toFixed(1).replace('.', ',') + ' kg';
+
+    var diffKg = peso - devineKg;
+    if (Math.abs(diffKg) < 0.5) {
+      document.getElementById('res-diff').innerText = 'Você está exatamente no peso de referência!';
+    } else if (diffKg > 0) {
+      document.getElementById('res-diff').innerText = diffKg.toFixed(1).replace('.', ',') + ' kg acima da referência Devine';
+    } else {
+      document.getElementById('res-diff').innerText = Math.abs(diffKg).toFixed(1).replace('.', ',') + ' kg abaixo da referência Devine';
+    }
+
+    var waterLiters = (peso * 0.035).toFixed(1).replace('.', ',');
+    document.getElementById('res-water').innerText = waterLiters + ' Litros';
+  }
+
+  calcIMC();
+</script>
+</body>
+</html>
