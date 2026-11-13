@@ -1,1 +1,1 @@
-index.html, calculadora-fps.html, calculadora-cambio.html, calculadora-imc.html, 
+calculadora-fonte-pc.html, calculadora-fps.html, calculadora-imc.html, calculadora-porcentagem.html, contato.html, conversor-unidades.html, index.html, privacidade.html, robots.txt, sitemap.xml, sobre.html, termos.html
