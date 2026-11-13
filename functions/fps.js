@@ -47,7 +47,9 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura:
 }`;
 
   try {
-    const url = "https://googleapis.com" + apiKey;
+    const host = "https://googleapis.com";
+    const path = "/v1beta/models/gemini-2.5-flash:generateContent?key=";
+    const url = host + path + apiKey;
     
     const response = await fetch(url, {
       method: 'POST',
