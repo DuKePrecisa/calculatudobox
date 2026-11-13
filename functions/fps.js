@@ -47,20 +47,19 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura:
 }`;
 
   try {
-    const response = await fetch(
-      `https://googleapis.com{apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.2,
-            responseMimeType: "application/json"
-          }
-        })
-      }
-    );
+    const url = "https://googleapis.com" + apiKey;
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.2,
+          responseMimeType: "application/json"
+        }
+      })
+    });
 
     const data = await response.json();
 
