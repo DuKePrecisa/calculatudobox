@@ -12,7 +12,7 @@ export async function onRequestPost(context) {
   }
 
   const { cpu, gpu, game, resolution, quality, ram } = bodyData;
-  const apiKey = env.GEMINI_API_KEY;
+  const apiKey = (env.GEMINI_API_KEY || '').trim();
 
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'Chave GEMINI_API_KEY não configurada na Cloudflare.' }), {
@@ -47,11 +47,13 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura:
 }`;
 
   try {
-    const host = "https://googleapis.com";
-    const path = "/v1beta/models/gemini-2.5-flash:generateContent?key=";
-    const url = host + path + apiKey;
-    
-    const response = await fetch(url, {
+    const endpoint = [
+      "https://googleapis.com",
+      "/v1beta/models/gemini-2.5-flash:generateContent?key=",
+      apiKey
+    ].join("");
+
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -63,15 +65,18 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura:
       })
     });
 
-    const data = await response.json();
+    const rawText = await response.text();
 
     if (!response.ok) {
-      return new Response(JSON.stringify({ error: data.error ? data.error.message : 'Erro na API do Gemini' }), {
+      return new Response(JSON.stringify({ 
+        error: `Erro Google (${response.status}): Verifique sua GEMINI_API_KEY. Detalhe: ${rawText.slice(0, 150)}` 
+      }), {
         status: response.status,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
+    const data = JSON.parse(rawText);
     const firstCandidate = data.candidates && data.candidates.at(0);
     const firstPart = firstCandidate && firstCandidate.content && firstCandidate.content.parts && firstCandidate.content.parts.at(0);
     let textResult = firstPart ? firstPart.text : '';
@@ -83,7 +88,7 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura:
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Erro ao processar resposta: ' + error.message }), {
+    return new Response(JSON.stringify({ error: 'Erro interno: ' + error.message }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
