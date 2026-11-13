@@ -1,23 +1,24 @@
-exports.handler = async function (event) {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: JSON.stringify({ error: 'Método não permitido' }) };
-  }
+export async function onRequestPost(context) {
+  const { request, env } = context;
 
   let bodyData = {};
   try {
-    bodyData = JSON.parse(event.body || '{}');
+    bodyData = await request.json();
   } catch (e) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'Dados inválidos enviados.' }) };
+    return new Response(JSON.stringify({ error: 'Dados inválidos enviados.' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   const { cpu, gpu, game, resolution, quality, ram } = bodyData;
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Chave GEMINI_API_KEY não configurada na Netlify.' })
-    };
+    return new Response(JSON.stringify({ error: 'Chave GEMINI_API_KEY não configurada na Cloudflare.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   const prompt = `Você é um engenheiro de testes de hardware (estilo Gamers Nexus e TechPowerUp).
@@ -64,10 +65,10 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura:
     const data = await response.json();
 
     if (!response.ok) {
-      return {
-        statusCode: response.status,
-        body: JSON.stringify({ error: data.error ? data.error.message : 'Erro na API do Gemini' })
-      };
+      return new Response(JSON.stringify({ error: data.error ? data.error.message : 'Erro na API do Gemini' }), {
+        status: response.status,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     const firstCandidate = data.candidates && data.candidates.at(0);
@@ -75,17 +76,15 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura:
     let textResult = firstPart ? firstPart.text : '';
 
     textResult = textResult.replace(/```json/gi, '').replace(/```/g, '').trim();
-    const parsed = JSON.parse(textResult);
 
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(parsed)
-    };
+    return new Response(textResult, {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Erro ao processar resposta: ' + error.message })
-    };
+    return new Response(JSON.stringify({ error: 'Erro ao processar resposta: ' + error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
-};
+}
