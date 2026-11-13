@@ -48,7 +48,7 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura:
 
   try {
     const domain = "generativelanguage" + "." + "googleapis" + "." + "com";
-    const endpoint = `https://${domain}/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const endpoint = `https://${domain}/v1beta/models/gemini-flash-latest:generateContent?key=${encodeURIComponent(apiKey)}`;
 
     const response = await fetch(endpoint, {
       method: 'POST',
