@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadora de FPS com IA - CalculaTudoBox</title>
 <style>
-  :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --green: #10b981; --yellow: #f59e0b; --purple: #8b5cf6; }
+  :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --green: #10b981; --yellow: #f59e0b; --purple: #8b5cf6; --red: #ef4444; }
   body.light { --bg: #f8fafc; --card: #ffffff; --input: #f1f5f9; --border: #cbd5e1; --text: #0f172a; --muted: #475569; }
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
   body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 10; }
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 20; }
   .nav { max-width: 1150px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
   .logo { font-size: 1.3rem; font-weight: 800; color: var(--text); text-decoration: none; }
   .logo span { color: var(--blue); }
@@ -24,16 +24,32 @@
   .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
   .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
   label { display: block; font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
-  input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--input); color: var(--text); font-size: 0.92rem; }
-  .ai-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; background: linear-gradient(135deg, var(--blue), var(--purple)); color: white; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  
+  /* Autocomplete Customizado */
+  .autocomplete-wrap { position: relative; }
+  input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--input); color: var(--text); font-size: 0.92rem; outline: none; }
+  input:focus, select:focus { border-color: var(--blue); }
+  .suggestions-list { position: absolute; top: 100%; left: 0; right: 0; background: var(--card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; max-height: 220px; overflow-y: auto; z-index: 30; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+  .suggestion-item { padding: 10px 12px; font-size: 0.88rem; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .suggestion-item:hover { background: var(--blue); color: white; }
+
+  .ai-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; background: linear-gradient(135deg, var(--blue), var(--purple)); color: white; font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+  .ai-btn:hover { opacity: 0.92; }
+  .ai-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  
   .res-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
   .fps-card { background: rgba(59,130,246,0.12); border: 1px solid var(--blue); border-radius: 12px; padding: 18px; text-align: center; }
   .fps-val { font-size: 3rem; font-weight: 900; color: var(--blue); line-height: 1.1; }
+  .fps-badge { display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; background: rgba(16,185,129,0.2); color: var(--green); }
   .mini-card { background: var(--input); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
   .mini-card span { font-size: 0.78rem; color: var(--muted); font-weight: 700; }
   .mini-card strong { font-size: 1.5rem; margin-top: 6px; }
-  .info-box { background: var(--input); border-left: 4px solid var(--blue); padding: 14px; border-radius: 8px; font-size: 0.88rem; line-height: 1.5; }
+  
+  .info-box { background: var(--input); border-left: 4px solid var(--blue); padding: 14px; border-radius: 8px; font-size: 0.88rem; line-height: 1.5; margin-bottom: 12px; }
+  .info-box.tip { border-left-color: var(--purple); margin-bottom: 0; }
   .info-box p { color: var(--muted); margin-top: 4px; }
+  .error-msg { background: rgba(239,68,68,0.15); border: 1px solid var(--red); color: #fca5a5; padding: 12px; border-radius: 8px; font-size: 0.88rem; margin-top: 14px; display: none; }
+
   .ad-side { height: 260px; background: var(--card); border: 2px dashed var(--border); border-radius: 14px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; color: var(--muted); font-size: 0.75rem; margin-bottom: 20px; }
   footer { background: var(--card); border-top: 1px solid var(--border); padding: 22px; margin-top: auto; text-align: center; font-size: 0.85rem; color: var(--muted); }
   @media (max-width: 850px) { .grid, .res-grid, .row-2, .row-3 { grid-template-columns: 1fr; } }
@@ -49,185 +65,106 @@
     </div>
   </div>
 </header>
+
 <div class="wrap">
   <div class="ad-top">PUBLICIDADE • BANNER TOPO (728x90)</div>
   <h1>Calculadora de FPS & Gargalo com IA</h1>
-  <p class="sub">Digite ou escolha qualquer processador, placa de vídeo e jogo.</p>
+  <p class="sub">Digite ou selecione qualquer processador, placa de vídeo e jogo para simular o desempenho real.</p>
+
   <div class="grid">
     <div>
+      <!-- Formulário -->
       <div class="box">
         <div class="box-head">
           <span>1. Configuração do Hardware e Jogo</span>
-          <span style="font-size:0.75rem; background:rgba(139,92,246,0.2); color:#a78bfa; padding:4px 10px; border-radius:99px;">✨ Motor IA Netlify</span>
+          <span style="font-size:0.75rem; background:rgba(139,92,246,0.2); color:#a78bfa; padding:4px 10px; border-radius:99px;">✨ Motor IA Benchmark</span>
         </div>
+
         <div class="row-2">
-          <div>
+          <div class="autocomplete-wrap">
             <label for="cpu-input">Processador (CPU)</label>
-            <input list="cpu-list" id="cpu-input" value="AMD Ryzen 5 5600">
-            <datalist id="cpu-list">
-              <option value="AMD Ryzen 7 7800X3D"><option value="AMD Ryzen 7 5700X3D"><option value="AMD Ryzen 5 5600">
-              <option value="Intel Core i5-13400F"><option value="Intel Core i5-12400F"><option value="Intel Xeon E5-2680 v4">
-              <option value="Intel Xeon E5-2670 v3"><option value="Intel Xeon E5-2666 v3"><option value="Intel Xeon E3-1270 v3">
-              <option value="Intel Core i7-4790K"><option value="Intel Core i7-3770"><option value="Intel Core i7-2600K"><option value="AMD FX-8350">
-            </datalist>
+            <input type="text" id="cpu-input" placeholder="Ex: Intel Core i3-12100F, Ryzen 5 5600..." value="AMD Ryzen 5 5600" autocomplete="off">
+            <div id="cpu-suggestions" class="suggestions-list"></div>
           </div>
-          <div>
+          <div class="autocomplete-wrap">
             <label for="gpu-input">Placa de Vídeo (GPU)</label>
-            <input list="gpu-list" id="gpu-input" value="NVIDIA GeForce RTX 4060 8GB">
-            <datalist id="gpu-list">
-              <option value="NVIDIA GeForce RTX 4090 24GB"><option value="NVIDIA GeForce RTX 4070 Super 12GB"><option value="AMD Radeon RX 7700 XT 12GB">
-              <option value="NVIDIA GeForce RTX 4060 8GB"><option value="NVIDIA GeForce RTX 3060 12GB"><option value="AMD Radeon RX 6600 8GB">
-              <option value="NVIDIA GeForce GTX 1660 Super 6GB"><option value="AMD Radeon RX 580 8GB"><option value="NVIDIA GeForce GTX 1060 6GB">
-              <option value="NVIDIA GeForce GTX 1050 Ti 4GB"><option value="NVIDIA GeForce GTX 970 4GB"><option value="NVIDIA GeForce GTX 750 Ti 2GB">
-            </datalist>
+            <input type="text" id="gpu-input" placeholder="Ex: RTX 4060, RX 6600, GTX 1650..." value="NVIDIA GeForce RTX 4060 8GB" autocomplete="off">
+            <div id="gpu-suggestions" class="suggestions-list"></div>
           </div>
         </div>
-        <div style="margin-bottom: 14px;">
+
+        <div class="autocomplete-wrap" style="margin-bottom: 14px;">
           <label for="game-input">Nome do Jogo</label>
-          <input list="game-list" id="game-input" value="Counter-Strike 2 (CS2)">
-          <datalist id="game-list">
-            <option value="Counter-Strike 2 (CS2)"><option value="Valorant"><option value="Fortnite"><option value="Call of Duty: Warzone">
-            <option value="Grand Theft Auto V (GTA 5)"><option value="Grand Theft Auto VI (GTA 6)"><option value="Black Myth: Wukong">
-            <option value="Cyberpunk 2077"><option value="Red Dead Redemption 2"><option value="EA Sports FC 25">
-          </datalist>
+          <input type="text" id="game-input" placeholder="Digite o nome do jogo..." value="Counter-Strike 2 (CS2)" autocomplete="off">
+          <div id="game-suggestions" class="suggestions-list"></div>
         </div>
+
         <div class="row-3">
           <div>
             <label for="res">Resolução</label>
-            <select id="res"><option value="720p">720p</option><option value="1080p" selected>1080p</option><option value="1440p">1440p</option><option value="4K">4K</option></select>
+            <select id="res">
+              <option value="720p">720p (HD)</option>
+              <option value="1080p" selected>1080p (Full HD)</option>
+              <option value="1440p">1440p (Quad HD)</option>
+              <option value="4K">4K (Ultra HD)</option>
+            </select>
           </div>
           <div>
-            <label for="qual">Gráficos</label>
-            <select id="qual"><option value="Baixo">Baixo</option><option value="Médio" selected>Médio</option><option value="Alto">Alto</option><option value="Ultra">Ultra</option></select>
+            <label for="qual">Qualidade Gráfica</label>
+            <select id="qual">
+              <option value="Baixo">Baixo</option>
+              <option value="Médio" selected>Médio</option>
+              <option value="Alto">Alto</option>
+              <option value="Ultra">Ultra</option>
+            </select>
           </div>
           <div>
-            <label for="ram">RAM</label>
-            <select id="ram"><option value="8 GB">8 GB</option><option value="16 GB" selected>16 GB</option><option value="32 GB">32 GB+</option></select>
+            <label for="ram">Memória RAM</label>
+            <select id="ram">
+              <option value="8 GB">8 GB</option>
+              <option value="16 GB" selected>16 GB</option>
+              <option value="32 GB">32 GB+</option>
+            </select>
           </div>
         </div>
-        <button type="button" class="ai-btn" id="calc-btn" onclick="calcularAgora()">✨ Calcular FPS e Analisar Hardware</button>
+
+        <button type="button" class="ai-btn" id="calc-btn" onclick="calcularFPS()">🚀 Calcular FPS e Gargalo</button>
+        <div id="error-box" class="error-msg"></div>
       </div>
 
-      <div class="box">
+      <!-- Resultados -->
+      <div class="box" id="result-box" style="display:none;">
         <div class="box-head">
-          <span>2. Diagnóstico de Desempenho</span>
-          <span id="badge" style="font-size:0.8rem; padding:4px 10px; border-radius:99px; background:rgba(16,185,129,0.2); color:#10b981;">Fluidez Competitiva</span>
+          <span>2. Resultado da Simulação</span>
+          <span id="res-hardware-label" style="font-size:0.78rem; color:var(--muted);"></span>
         </div>
+
         <div class="res-grid">
           <div class="fps-card">
-            <span style="font-size:0.75rem; font-weight:700; color:var(--muted);">MÉDIA ESTIMADA</span>
-            <div class="fps-val" id="avg">210</div>
-            <span style="font-size:0.8rem; color:var(--muted);">FPS</span>
+            <div style="font-size:0.8rem; font-weight:700; color:var(--muted);">FPS MÉDIO ESTIMADO</div>
+            <div class="fps-val" id="res-avg">--</div>
+            <div class="fps-badge" id="res-status">--</div>
           </div>
-          <div class="mini-card"><span>MÍNIMO (1% LOW)</span><strong id="min" style="color:var(--yellow);">155 FPS</strong></div>
-          <div class="mini-card"><span>MÁXIMO PICO</span><strong id="max" style="color:var(--green);">256 FPS</strong></div>
+          <div class="mini-card">
+            <span>FPS MÍNIMO (1% LOW)</span>
+            <strong id="res-min" style="color:var(--yellow);">--</strong>
+          </div>
+          <div class="mini-card">
+            <span>FPS MÁXIMO</span>
+            <strong id="res-max" style="color:var(--green);">--</strong>
+          </div>
         </div>
-        <div class="row-2" style="margin-bottom:0;">
-          <div class="info-box"><strong id="bn-title">✅ Hardware Equilibrado</strong><p id="bn-desc">Boa combinação entre CPU e GPU.</p></div>
-          <div class="info-box" style="border-left-color: var(--green);"><strong>💡 Recomendação</strong><p id="tip">Excelente desempenho para este jogo.</p></div>
+
+        <div class="info-box">
+          <strong id="res-bottleneck-title">Análise de Gargalo</strong>
+          <p id="res-bottleneck-desc">--</p>
+        </div>
+
+        <div class="info-box tip">
+          <strong>💡 Dica de Otimização da IA</strong>
+          <p id="res-ai-tip">--</p>
         </div>
       </div>
     </div>
 
-    <aside>
-      <div class="ad-side">PUBLICIDADE • LATERAL (300x250)</div>
-      <div class="box">
-        <h3 style="font-size:0.85rem; color:var(--muted); margin-bottom:12px;">OUTRAS CALCULADORAS</h3>
-        <ul style="list-style:none; line-height:2.2; font-size:0.9rem;">
-          <li><a href="calculadora-cambio.html" style="color:var(--text); text-decoration:none;">💱 Conversor de Câmbio</a></li>
-          <li><a href="conversor-unidades.html" style="color:var(--text); text-decoration:none;">📏 Conversor de Unidades</a></li>
-          <li><a href="calculadora-porcentagem.html" style="color:var(--text); text-decoration:none;">📊 Porcentagem</a></li>
-          <li><a href="calculadora-imc.html" style="color:var(--text); text-decoration:none;">❤️ Calculadora de IMC</a></li>
-        </ul>
-      </div>
-    </aside>
-  </div>
-</div>
-
-<footer>© 2026 CalculaTudoBox • Todos os direitos reservados.</footer>
-
-<script>
-  function estimarScoreCPU(t) {
-    t = t.toLowerCase();
-    if (t.includes('7800x3d') || t.includes('9800x3d') || t.includes('14900')) return 195;
-    if (t.includes('5700x3d') || t.includes('14700') || t.includes('13700') || t.includes('7600')) return 165;
-    if (t.includes('13400') || t.includes('12400') || t.includes('5600') || t.includes('5700')) return 138;
-    if (t.includes('3600') || t.includes('10400') || t.includes('11400')) return 110;
-    if (t.includes('2680') || t.includes('2666') || t.includes('2670') || t.includes('xeon e5')) return 90;
-    if (t.includes('xeon') || t.includes('4790') || t.includes('3770')) return 72;
-    if (t.includes('2600') || t.includes('4590') || t.includes('fx-8')) return 56;
-    if (t.includes('fx-') || t.includes('2500') || t.includes('i3')) return 44;
-    return 100;
-  }
-  function estimarScoreGPU(t) {
-    t = t.toLowerCase();
-    if (t.includes('4090') || t.includes('5090') || t.includes('7900 xtx')) return 255;
-    if (t.includes('4080') || t.includes('4070 ti') || t.includes('7900 xt')) return 210;
-    if (t.includes('4070') || t.includes('5070') || t.includes('7800 xt') || t.includes('7700 xt') || t.includes('3080')) return 175;
-    if (t.includes('4060') || t.includes('3060 ti') || t.includes('6700')) return 135;
-    if (t.includes('3060') || t.includes('6600') || t.includes('2060')) return 118;
-    if (t.includes('1660') || t.includes('1070')) return 95;
-    if (t.includes('1060') || t.includes('580') || t.includes('1650')) return 78;
-    if (t.includes('970') || t.includes('1050 ti') || t.includes('280x')) return 60;
-    if (t.includes('960') || t.includes('750 ti') || t.includes('7850')) return 42;
-    if (t.includes('660') || t.includes('560') || t.includes('460')) return 25;
-    return 90;
-  }
-  function estimarPesoJogo(t) {
-    t = t.toLowerCase();
-    if (t.includes('valorant')) return { base: 250, cpuW: 0.70 };
-    if (t.includes('cs2') || t.includes('counter-strike')) return { base: 195, cpuW: 0.65 };
-    if (t.includes('fortnite')) return { base: 165, cpuW: 0.55 };
-    if (t.includes('gta 5') || t.includes('gta v')) return { base: 150, cpuW: 0.50 };
-    if (t.includes('fc 25') || t.includes('fifa')) return { base: 140, cpuW: 0.40 };
-    if (t.includes('warzone') || t.includes('call of duty')) return { base: 115, cpuW: 0.45 };
-    if (t.includes('red dead') || t.includes('rdr2')) return { base: 88, cpuW: 0.30 };
-    if (t.includes('cyberpunk')) return { base: 82, cpuW: 0.30 };
-    if (t.includes('wukong') || t.includes('gta 6')) return { base: 70, cpuW: 0.25 };
-    return { base: 110, cpuW: 0.40 };
-  }
-  function exibirResultado(avg, min, max, status, bnTitle, bnDesc, tip) {
-    document.getElementById('avg').innerText = avg;
-    document.getElementById('min').innerText = min + ' FPS';
-    document.getElementById('max').innerText = max + ' FPS';
-    document.getElementById('badge').innerText = status;
-    document.getElementById('bn-title').innerText = bnTitle;
-    document.getElementById('bn-desc').innerText = bnDesc;
-    document.getElementById('tip').innerText = tip;
-  }
-  function calcularLocal(cpu, gpu, game, res, qual, ram) {
-    var c = estimarScoreCPU(cpu) * (ram === '8 GB' ? 0.86 : ram === '32 GB' ? 1.04 : 1.0);
-    var g = estimarScoreGPU(gpu) * (res === '720p' ? 1.35 : res === '1440p' ? 0.68 : res === '4K' ? 0.40 : 1.0) * (qual === 'Baixo' ? 1.35 : qual === 'Alto' ? 0.76 : qual === 'Ultra' ? 0.58 : 1.0);
-    var j = estimarPesoJogo(game);
-    var ratio = Math.min(((c / 120) * j.cpuW) + ((g / 120) * (1 - j.cpuW)), (Math.min(c, g) / 100) * 1.45);
-    var avg = Math.max(10, Math.round(j.base * ratio));
-    var min = Math.max(6, Math.round(avg * (c < g ? 0.66 : 0.76)));
-    var max = Math.round(avg * 1.22);
-    var diff = g - c;
-    var st = avg >= 100 ? 'Fluidez Competitiva' : avg >= 55 ? 'Fluidez Boa (60+ FPS)' : avg >= 30 ? 'Jogável (30+ FPS)' : 'Abaixo do Ideal';
-    var bt = diff > 45 ? '⚠️ Gargalo de CPU' : diff < -45 ? '⚠️ Limite na GPU' : '✅ Hardware Equilibrado';
-    var bd = diff > 45 ? cpu + ' está limitando a ' + gpu + '.' : diff < -45 ? gpu + ' está no limite máximo.' : 'Boa combinação entre ' + cpu + ' e ' + gpu + '.';
-    var tp = diff > 45 ? 'Aumentar gráficos transfere peso para a GPU.' : avg < 60 ? 'Ative DLSS/FSR para ganhar mais FPS.' : 'Ótimo desempenho para ' + game + '.';
-    exibirResultado(avg, min, max, st, bt, bd, tp);
-  }
-  async function calcularAgora() {
-    var btn = document.getElementById('calc-btn');
-    var cpu = document.getElementById('cpu-input').value.trim() || 'Ryzen 5 5600';
-    var gpu = document.getElementById('gpu-input').value.trim() || 'RTX 4060';
-    var game = document.getElementById('game-input').value.trim() || 'CS2';
-    var res = document.getElementById('res').value;
-    var qual = document.getElementById('qual').value;
-    var ram = document.getElementById('ram').value;
-    calcularLocal(cpu, gpu, game, res, qual, ram);
-    if (window.location.protocol.startsWith('http')) {
-      btn.innerText = '✨ Refinando análise com IA...';
-      try {
-        var r = await fetch('/.netlify/functions/fps', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cpu: cpu, gpu: gpu, game: game, resolution: res, quality: qual, ram: ram }) });
-        if (r.ok) { var d = await r.json(); exibirResultado(d.avgFps, d.minFps, d.maxFps, d.status, d.bottleneckTitle, d.bottleneckDesc, d.aiTip); }
-      } catch (e) {}
-      btn.innerText = '✨ Calcular FPS e Analisar Hardware';
-    }
-  }
-</script>
-</body>
-</html>
+    <!-- Barra Lateral -->
