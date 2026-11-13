@@ -296,3 +296,21 @@ async function calcularFPS() {
     document.getElementById('res-min').textContent = `${data.minFps} FPS`;
     document.getElementById('res-max').textContent = `${data.maxFps} FPS`;
     document.getElementById('res-status').textContent = data.status;
+    document.getElementById('res-bottleneck-title').textContent = data.bottleneckTitle;
+    document.getElementById('res-bottleneck-desc').textContent = data.bottleneckDesc;
+    document.getElementById('res-ai-tip').textContent = data.aiTip;
+
+    resultBox.style.display = 'block';
+    resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  } catch (err) {
+    errorBox.textContent = `Falha na simulação: ${err.message}`;
+    errorBox.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "🚀 Calcular FPS e Gargalo";
+  }
+}
+</script>
+</body>
+</html>
