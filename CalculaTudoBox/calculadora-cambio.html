@@ -126,19 +126,46 @@
 <script>
   var rates = { USD: 1, BRL: 5.80, EUR: 0.92, GBP: 0.79, CAD: 1.39, ARS: 1000, JPY: 154 };
   var isLive = false;
+  var lastUpdate = '';
 
   async function fetchLiveRates() {
     try {
-      var res = await fetch('https://er-api.com');
+      // Monta a URL oficial da ExchangeRate-API sem risco de corte ao copiar
+      var host1 = "open" + "." + "er-api" + "." + "com";
+      var res = await fetch("https://" + host1 + "/v6/latest/USD");
       var data = await res.json();
+      
       if (data && data.rates) {
         rates = data.rates;
         isLive = true;
+        var agora = new Date();
+        lastUpdate = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         convert();
+        return;
       }
     } catch (e) {
-      convert();
+      // Se falhar, tenta o servidor reserva brasileiro (AwesomeAPI)
+      try {
+        var host2 = "economia" + "." + "awesomeapi" + "." + "com" + "." + "br";
+        var res2 = await fetch("https://" + host2 + "/last/USD-BRL,EUR-BRL,GBP-BRL,CAD-BRL,ARS-BRL,JPY-BRL");
+        var d2 = await res2.json();
+        if (d2 && d2.USDBRL) {
+          var usdBrl = parseFloat(d2.USDBRL.bid);
+          rates.BRL = usdBrl;
+          rates.EUR = usdBrl / parseFloat(d2.EURBRL.bid);
+          rates.GBP = usdBrl / parseFloat(d2.GBPBRL.bid);
+          rates.CAD = usdBrl / parseFloat(d2.CADBRL.bid);
+          rates.ARS = usdBrl / parseFloat(d2.ARSBRL.bid);
+          rates.JPY = usdBrl / parseFloat(d2.JPYBRL.bid);
+          isLive = true;
+          var agora2 = new Date();
+          lastUpdate = agora2.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          convert();
+          return;
+        }
+      } catch (e2) {}
     }
+    convert();
   }
 
   function swapCurrencies() {
@@ -161,11 +188,13 @@
 
     document.getElementById('result-text').innerText = converted.toLocaleString('pt-BR', {
       style: 'currency',
-      currency: to
+      currency: to,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: to === 'JPY' ? 0 : 2
     });
 
-    var statusTag = isLive ? 'Cotação ao vivo' : 'Cotação de referência';
-    document.getElementById('rate-info').innerText = '1 ' + from + ' = ' + unitRate.toFixed(4) + ' ' + to + ' • (' + statusTag + ')';
+    var statusTag = isLive ? 'Cotação comercial ao vivo às ' + lastUpdate : 'Cotação de referência (offline)';
+    document.getElementById('rate-info').innerText = '1 ' + from + ' = ' + unitRate.toFixed(4) + ' ' + to + ' • ' + statusTag;
   }
 
   convert();
@@ -173,3 +202,4 @@
 </script>
 </body>
 </html>
+
