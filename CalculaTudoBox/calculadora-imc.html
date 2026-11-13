@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora de IMC (Índice de Massa Corporal) - CalculaTudoBox</title>
+<title>Calculadora de IMC Completa, TMB e Peso Ideal - CalculaTudoBox</title>
 <style>
-  :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --rose: #f43f5e; --green: #10b981; }
+  :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --rose: #f43f5e; --green: #10b981; --yellow: #f59e0b; --purple: #8b5cf6; }
   body.light { --bg: #f8fafc; --card: #ffffff; --input: #f1f5f9; --border: #cbd5e1; --text: #0f172a; --muted: #475569; }
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
   body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
@@ -20,17 +20,44 @@
   .sub { color: var(--muted); margin-bottom: 24px; font-size: 0.95rem; }
   .grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px; }
   .box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
-  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
   label { display: block; font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
-  input { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid var(--border); background: var(--input); color: var(--text); font-size: 1.1rem; font-weight: 700; }
-  .result-panel { background: rgba(244, 63, 94, 0.12); border: 1px solid var(--rose); border-radius: 12px; padding: 22px; text-align: center; }
-  .result-val { font-size: 2.8rem; font-weight: 900; color: var(--rose); margin: 4px 0; }
-  .status-tag { display: inline-block; padding: 6px 14px; border-radius: 99px; font-weight: 700; font-size: 0.9rem; margin-top: 6px; }
+  input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--input); color: var(--text); font-size: 1rem; font-weight: 700; outline: none; }
+  input:focus, select:focus { border-color: var(--blue); }
+
+  /* Seletor de Sexo */
+  .gender-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .gender-btn { padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--input); color: var(--muted); font-weight: 700; cursor: pointer; font-size: 0.95rem; transition: all 0.2s; }
+  .gender-btn.active { background: rgba(59, 130, 246, 0.15); border-color: var(--blue); color: var(--text); }
+
+  /* Painel Principal de Resultado */
+  .result-panel { background: rgba(16, 185, 129, 0.08); border: 1px solid var(--border); border-radius: 14px; padding: 22px; text-align: center; margin-bottom: 16px; }
+  .result-val { font-size: 3rem; font-weight: 900; color: var(--green); line-height: 1.1; margin: 4px 0; }
+  .status-tag { display: inline-block; padding: 6px 16px; border-radius: 99px; font-weight: 700; font-size: 0.9rem; margin-top: 6px; }
+
+  /* Barra Visual de IMC */
+  .bmi-bar-wrap { margin: 18px auto 8px auto; max-width: 480px; }
+  .bmi-bar { height: 10px; border-radius: 99px; background: linear-gradient(90deg, #3b82f6 0%, #10b981 30%, #f59e0b 65%, #f43f5e 100%); position: relative; }
+  .bmi-pointer { width: 16px; height: 16px; background: white; border: 3px solid #0f172a; border-radius: 50%; position: absolute; top: -3px; transform: translateX(-50%); transition: left 0.3s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+  .bmi-scale { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted); margin-top: 6px; }
+
+  /* Cards Extras de Saúde */
+  .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .metric-card { background: var(--input); border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: left; }
+  .metric-card span { font-size: 0.75rem; color: var(--muted); font-weight: 700; text-transform: uppercase; display: block; }
+  .metric-card strong { font-size: 1.25rem; color: var(--text); display: block; margin: 4px 0; }
+  .metric-card small { font-size: 0.78rem; color: var(--muted); line-height: 1.3; display: block; }
+
+  /* Tabela de Referência */
+  .ref-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.86rem; }
+  .ref-table th, .ref-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .ref-table th { color: var(--muted); font-weight: 700; }
+
   .ad-side { height: 260px; background: var(--card); border: 2px dashed var(--border); border-radius: 14px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; color: var(--muted); font-size: 0.75rem; margin-bottom: 20px; }
   .seo p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; }
-  .seo h2 { font-size: 1.2rem; margin-bottom: 10px; }
+  .seo h2 { font-size: 1.15rem; margin-bottom: 10px; }
   footer { background: var(--card); border-top: 1px solid var(--border); padding: 22px; margin-top: auto; text-align: center; font-size: 0.85rem; color: var(--muted); }
-  @media (max-width: 850px) { .grid, .row-2 { grid-template-columns: 1fr; } }
+  @media (max-width: 850px) { .grid, .row-2, .metrics-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -48,85 +75,184 @@
 <div class="wrap">
   <div class="ad-top">PUBLICIDADE • BANNER TOPO (728x90)</div>
 
-  <h1>Calculadora de IMC</h1>
-  <p class="sub">Calcule seu Índice de Massa Corporal e veja a faixa de peso recomendada para adultos.</p>
+  <h1>Calculadora de IMC, TMB e Peso Ideal</h1>
+  <p class="sub">Avalie seu Índice de Massa Corporal, gasto calórico basal, percentual de gordura estimado e meta de hidratação.</p>
 
   <div class="grid">
     <div>
       <div class="box">
+        <label>Sexo Biológico</label>
+        <div class="gender-group">
+          <button type="button" class="gender-btn active" id="btn-m" onclick="setGender('M')">👨 Homem</button>
+          <button type="button" class="gender-btn" id="btn-f" onclick="setGender('F')">👩 Mulher</button>
+        </div>
+
         <div class="row-2">
           <div>
-            <label for="peso">Peso (kg)</label>
-            <input type="number" id="peso" value="72" step="0.1" oninput="calcIMC()">
+            <label for="idade">Idade (anos)</label>
+            <input type="number" id="idade" value="30" min="18" max="110" oninput="calcIMC()">
           </div>
           <div>
-            <label for="altura">Altura (cm)</label>
-            <input type="number" id="altura" value="175" step="1" oninput="calcIMC()">
+            <label for="atividade">Nível de Atividade Física</label>
+            <select id="atividade" onchange="calcIMC()">
+              <option value="1.2">Sedentário (pouco ou nenhum exercício)</option>
+              <option value="1.375" selected>Leve (1 a 3 dias/semana)</option>
+              <option value="1.55">Moderado (3 a 5 dias/semana)</option>
+              <option value="1.725">Intenso (6 a 7 dias/semana)</option>
+            </select>
           </div>
         </div>
 
-        <div class="result-panel">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--muted); text-transform:uppercase;">Seu IMC é</div>
+        <div class="row-2">
+          <div>
+            <label for="peso">Peso Atual (kg)</label>
+            <input type="number" id="peso" value="72" step="0.1" min="20" max="350" oninput="calcIMC()">
+          </div>
+          <div>
+            <label for="altura">Altura (cm)</label>
+            <input type="number" id="altura" value="175" step="1" min="100" max="250" oninput="calcIMC()">
+          </div>
+        </div>
+
+        <div class="result-panel" id="result-panel">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--muted); text-transform:uppercase;" id="imc-label">Seu IMC (Adulto)</div>
           <div class="result-val" id="imc-val">23,5</div>
-          <div class="status-tag" id="imc-status" style="background: rgba(16,185,129,0.2); color: #10b981;">Peso Normal</div>
-          <p id="peso-ideal" style="font-size:0.85rem; color:var(--muted); margin-top:12px;">Faixa de peso saudável para sua altura: 56,7 kg a 76,3 kg</p>
+          <div class="status-tag" id="imc-status">Peso Normal</div>
+
+          <div class="bmi-bar-wrap">
+            <div class="bmi-bar">
+              <div class="bmi-pointer" id="bmi-pointer" style="left: 42%;"></div>
+            </div>
+            <div class="bmi-scale">
+              <span>Abaixo</span>
+              <span>Normal</span>
+              <span>Sobrepeso</span>
+              <span>Obesidade</span>
+            </div>
+          </div>
+
+          <p id="peso-ideal" style="font-size:0.88rem; color:var(--muted); margin-top:12px;">Faixa saudável: 56,7 kg a 76,3 kg</p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span>🔥 Taxa Metabólica Basal (TMB)</span>
+            <strong id="res-tmb">1.693 kcal/dia</strong>
+            <small id="res-tdee">Gasto total estimado com atividade: 2.328 kcal/dia</small>
+          </div>
+          <div class="metric-card">
+            <span>📊 Gordura Corporal Estimada</span>
+            <strong id="res-bf">18,9%</strong>
+            <small id="res-bf-desc">Estimativa pela fórmula de Deurenberg (IMC + Idade + Sexo)</small>
+          </div>
+          <div class="metric-card">
+            <span>🎯 Peso Ideal (Fórmula Devine)</span>
+            <strong id="res-devine">70,5 kg</strong>
+            <small id="res-diff">Você está 1,5 kg acima da referência clássica</small>
+          </div>
+          <div class="metric-card">
+            <span>💧 Meta Diária de Água</span>
+            <strong id="res-water">2,5 Litros</strong>
+            <small>Baseado na recomendação média de 35 ml por kg de peso</small>
+          </div>
         </div>
       </div>
 
       <div class="box seo">
-        <h2>Como o IMC é calculado?</h2>
-        <p>O Índice de Massa Corporal (IMC) é calculado dividindo o peso em quilogramas pela altura em metros elevada ao quadrado. Ele serve como uma referência rápida para triagem nutricional em adultos, embora não diferencie massa muscular de gordura corporal.</p>
-      </div>
-    </div>
+        <h2>Tabela de Classificação do IMC (OMS)</h2>
+        <table class="ref-table">
+          <thead>
+            <tr>
+              <th>IMC (kg/m²)</th>
+              <th>Classificação (Adultos)</th>
+              <th>Grau de Risco</th>
+            </tr>
+          </thead>
+          <tbody>
 
-    <aside>
-      <div class="ad-side">PUBLICIDADE • LATERAL (300x250)</div>
-      <div class="box">
-        <h3 style="font-size:0.85rem; color:var(--muted); margin-bottom:12px;">OUTRAS CALCULADORAS</h3>
-        <ul style="list-style:none; line-height:2.2; font-size:0.9rem;">
-          <li><a href="calculadora-fps.html" style="color:var(--text); text-decoration:none;">🎮 Calculadora de FPS</a></li>
-          <li><a href="calculadora-cambio.html" style="color:var(--text); text-decoration:none;">💱 Conversor de Câmbio</a></li>
-          <li><a href="conversor-unidades.html" style="color:var(--text); text-decoration:none;">📏 Conversor de Unidades</a></li>
-          <li><a href="calculadora-porcentagem.html" style="color:var(--text); text-decoration:none;">📊 Porcentagem</a></li>
-        </ul>
-      </div>
-    </aside>
-  </div>
-</div>
-
-<footer>© 2026 CalculaTudoBox • Todos os direitos reservados.</footer>
-
-<script>
-  function calcIMC() {
-    var peso = parseFloat(document.getElementById('peso').value) || 0;
-    var altCm = parseFloat(document.getElementById('altura').value) || 0;
-    var altM = altCm / 100;
-
-    if (peso <= 0 || altM <= 0) return;
-
-    var imc = peso / (altM * altM);
-    document.getElementById('imc-val').innerText = imc.toFixed(1).replace('.', ',');
-
-    var statusEl = document.getElementById('imc-status');
-    if (imc < 18.5) {
-      statusEl.innerText = 'Abaixo do Peso';
-      statusEl.style.background = 'rgba(59,130,246,0.2)'; statusEl.style.color = '#3b82f6';
-    } else if (imc < 25) {
-      statusEl.innerText = 'Peso Normal';
-      statusEl.style.background = 'rgba(16,185,129,0.2)'; statusEl.style.color = '#10b981';
-    } else if (imc < 30) {
-      statusEl.innerText = 'Sobrepeso';
-      statusEl.style.background = 'rgba(245,158,11,0.2)'; statusEl.style.color = '#f59e0b';
-    } else {
-      statusEl.innerText = 'Obesidade';
-      statusEl.style.background = 'rgba(244,63,94,0.2)'; statusEl.style.color = '#f43f5e';
-    }
-
-    var minP = (18.5 * altM * altM).toFixed(1).replace('.', ',');
-    var maxP = (24.9 * altM * altM).toFixed(1).replace('.', ',');
-    document.getElementById('peso-ideal').innerText = 'Faixa de peso saudável para sua altura: ' + minP + ' kg a ' + maxP + ' kg';
-  }
-  calcIMC();
-</script>
-</body>
-</html>
+© 2026 CalculaTudoBox • Todos os direitos reservados.
+var gender = 'M';
+function setGender(g) {
+gender = g;
+document.getElementById('btn-m').className = g === 'M' ? 'gender-btn active' : 'gender-btn';
+document.getElementById('btn-f').className = g === 'F' ? 'gender-btn active' : 'gender-btn';
+calcIMC();
+}
+function calcIMC() {
+var peso = parseFloat(document.getElementById('peso').value) || 0;
+var altCm = parseFloat(document.getElementById('altura').value) || 0;
+var idade = parseInt(document.getElementById('idade').value) || 30;
+var fatorAtiv = parseFloat(document.getElementById('atividade').value) || 1.375;
+var altM = altCm / 100;
+if (peso <= 0 || altM <= 0) return;
+var imc = peso / (altM * altM);
+document.getElementById('imc-val').innerText = imc.toFixed(1).replace('.', ',');
+// Faixa muda automaticamente para idosos (60+)
+var isElderly = idade >= 60;
+var minLim = isElderly ? 22.0 : 18.5;
+var maxLim = isElderly ? 27.0 : 24.9;
+document.getElementById('imc-label').innerText = isElderly ? 'Seu IMC (Referência 60+ Anos)' : 'Seu IMC (Adulto)';
+var statusEl = document.getElementById('imc-status');
+var valEl = document.getElementById('imc-val');
+if (imc < minLim) {
+statusEl.innerText = 'Abaixo do Peso';
+statusEl.style.background = 'rgba(59,130,246,0.2)'; statusEl.style.color = '#3b82f6';
+valEl.style.color = '#3b82f6';
+} else if (imc <= maxLim) {
+statusEl.innerText = 'Peso Normal (Saudável)';
+statusEl.style.background = 'rgba(16,185,129,0.2)'; statusEl.style.color = '#10b981';
+valEl.style.color = '#10b981';
+} else if (imc < 30) {
+statusEl.innerText = 'Sobrepeso';
+statusEl.style.background = 'rgba(245,158,11,0.2)'; statusEl.style.color = '#f59e0b';
+valEl.style.color = '#f59e0b';
+} else if (imc < 35) {
+statusEl.innerText = 'Obesidade Grau I';
+statusEl.style.background = 'rgba(244,63,94,0.2)'; statusEl.style.color = '#f43f5e';
+valEl.style.color = '#f43f5e';
+} else if (imc < 40) {
+statusEl.innerText = 'Obesidade Grau II';
+statusEl.style.background = 'rgba(244,63,94,0.2)'; statusEl.style.color = '#f43f5e';
+valEl.style.color = '#f43f5e';
+} else {
+statusEl.innerText = 'Obesidade Grau III';
+statusEl.style.background = 'rgba(244,63,94,0.2)'; statusEl.style.color = '#f43f5e';
+valEl.style.color = '#f43f5e';
+}
+// Posição do ponteiro na barra (escala visual de 15 a 40)
+var pct = ((imc - 15) / (40 - 15)) * 100;
+if (pct < 2) pct = 2;
+if (pct > 98) pct = 98;
+document.getElementById('bmi-pointer').style.left = pct.toFixed(1) + '%';
+// Faixa de peso saudável
+var minP = (minLim * altM * altM).toFixed(1).replace('.', ',');
+var maxP = (maxLim * altM * altM).toFixed(1).replace('.', ',');
+document.getElementById('peso-ideal').innerText = 'Faixa de peso saudável para sua altura e idade: ' + minP + ' kg a ' + maxP + ' kg';
+// Taxa Metabólica Basal (Mifflin-St Jeor)
+var tmb = (10 * peso) + (6.25 * altCm) - (5 * idade) + (gender === 'M' ? 5 : -161);
+var tdee = tmb * fatorAtiv;
+document.getElementById('res-tmb').innerText = Math.round(tmb).toLocaleString('pt-BR') + ' kcal/dia';
+document.getElementById('res-tdee').innerText = 'Gasto total diário estimado: ' + Math.round(tdee).toLocaleString('pt-BR') + ' kcal';
+// Gordura Corporal Estimada (Fórmula de Deurenberg)
+var sexFactor = gender === 'M' ? 1 : 0;
+var bf = (1.20 * imc) + (0.23 * idade) - (10.8 * sexFactor) - 5.4;
+if (bf < 3) bf = 3;
+document.getElementById('res-bf').innerText = bf.toFixed(1).replace('.', ',') + '%';
+// Peso Ideal (Fórmula de Devine adaptada para cm)
+var baseDevine = gender === 'M' ? 50.0 : 45.5;
+var devineKg = baseDevine + 0.91 * (altCm - 152.4);
+if (devineKg < 35) devineKg = minLim * altM * altM;
+document.getElementById('res-devine').innerText = devineKg.toFixed(1).replace('.', ',') + ' kg';
+var diffKg = peso - devineKg;
+if (Math.abs(diffKg) < 0.5) {
+document.getElementById('res-diff').innerText = 'Você está exatamente no peso de referência!';
+} else if (diffKg > 0) {
+document.getElementById('res-diff').innerText = diffKg.toFixed(1).replace('.', ',') + ' kg acima da referência Devine';
+} else {
+document.getElementById('res-diff').innerText = Math.abs(diffKg).toFixed(1).replace('.', ',') + ' kg abaixo da referência Devine';
+}
+// Meta diária de água (35ml por kg)
+var waterLiters = (peso * 0.035).toFixed(1).replace('.', ',');
+document.getElementById('res-water').innerText = waterLiters + ' Litros';
+}
+calcIMC();
