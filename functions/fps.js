@@ -12,7 +12,7 @@ export async function onRequestPost(context) {
   }
 
   const { cpu, gpu, game, resolution, quality, ram } = bodyData;
-  const apiKey = (env.GEMINI_API_KEY || '').trim();
+  const apiKey = (env.GEMINI_API_KEY || '').replace(/\s+/g, '');
 
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'Chave GEMINI_API_KEY não configurada na Cloudflare.' }), {
@@ -47,11 +47,8 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura:
 }`;
 
   try {
-    const endpoint = [
-      "https://googleapis.com",
-      "/v1beta/models/gemini-2.5-flash:generateContent?key=",
-      apiKey
-    ].join("");
+    const domain = "generativelanguage" + "." + "googleapis" + "." + "com";
+    const endpoint = `https://${domain}/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
 
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -69,7 +66,7 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura:
 
     if (!response.ok) {
       return new Response(JSON.stringify({ 
-        error: `Erro Google (${response.status}): Verifique sua GEMINI_API_KEY. Detalhe: ${rawText.slice(0, 150)}` 
+        error: `Erro Google (${response.status}): ${rawText.slice(0, 150)}` 
       }), {
         status: response.status,
         headers: { 'Content-Type': 'application/json' }
