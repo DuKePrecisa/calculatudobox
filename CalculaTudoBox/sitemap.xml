@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://sitemaps.org">
   <url>
-    <loc>https://pages.dev</loc>
+    <loc>https://calculatudobox.pages.dev</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://pages.devcalculadora-fps.html</loc>
+    <loc>https://calculatudobox.pages.dev/calculadora-fps.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pages.devcalculadora-cambio.html</loc>
+    <loc>https://calculatudobox.pages.dev/calculadora-cambio.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pages.devcalculadora-imc.html</loc>
+    <loc>https://calculatudobox.pages.dev/calculadora-imc.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pages.devcalculadora-fonte-pc.html</loc>
+    <loc>https://calculatudobox.pages.dev/calculadora-fonte-pc.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pages.devcalculadora-porcentagem.html</loc>
+    <loc>https://calculatudobox.pages.dev/calculadora-porcentagem.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pages.devconversor-unidades.html</loc>
+    <loc>https://calculatudobox.pages.dev/conversor-unidades.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pages.devsobre.html</loc>
+    <loc>https://calculatudobox.pages.dev/sobre.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://pages.devcontato.html</loc>
+    <loc>https://calculatudobox.pages.dev/contato.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://pages.devprivacidade.html</loc>
+    <loc>https://calculatudobox.pages.dev/privacidade.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://pages.devtermos.html</loc>
+    <loc>https://calculatudobox.pages.dev/termos.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
