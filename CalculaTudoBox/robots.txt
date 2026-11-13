@@ -1,0 +1,1 @@
+index.html, calculadora-fps.html, calculadora-cambio.html, calculadora-imc.html, 
