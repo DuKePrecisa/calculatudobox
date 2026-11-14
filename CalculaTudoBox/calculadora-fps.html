@@ -1,3 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de FPS com IA - CalculaTudoBox</title>
+<style>
+  :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --green: #10b981; --yellow: #f59e0b; --purple: #8b5cf6; --red: #ef4444; }
+  body.light { --bg: #f8fafc; --card: #ffffff; --input: #f1f5f9; --border: #cbd5e1; --text: #0f172a; --muted: #475569; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+  body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 20; }
+  .nav { max-width: 1150px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-size: 1.3rem; font-weight: 800; color: var(--text); text-decoration: none; }
+  .logo span { color: var(--blue); }
+  .btn { background: var(--input); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+  .wrap { max-width: 1150px; margin: 0 auto; padding: 20px; width: 100%; }
+  .ad-top { height: 85px; background: var(--card); border: 2px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 24px; }
+  h1 { font-size: 1.9rem; margin-bottom: 6px; }
+  .sub { color: var(--muted); margin-bottom: 24px; font-size: 0.95rem; }
+  .grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px; }
+  .box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 20px; }
+  .box-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; font-weight: 700; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  label { display: block; font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+  .autocomplete-wrap { position: relative; }
+  input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--input); color: var(--text); font-size: 0.92rem; outline: none; }
+  input:focus, select:focus { border-color: var(--blue); }
+  .suggestions-list { position: absolute; top: 100%; left: 0; right: 0; background: var(--card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; max-height: 220px; overflow-y: auto; z-index: 30; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+  .suggestion-item { padding: 10px 12px; font-size: 0.88rem; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .suggestion-item:hover { background: var(--blue); color: white; }
+  .ai-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; background: linear-gradient(135deg, var(--blue), var(--purple)); color: white; font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+  .ai-btn:hover { opacity: 0.92; }
+  .ai-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .res-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .fps-card { background: rgba(59,130,246,0.12); border: 1px solid var(--blue); border-radius: 12px; padding: 18px; text-align: center; }
+  .fps-val { font-size: 3rem; font-weight: 900; color: var(--blue); line-height: 1.1; }
+  .fps-badge { display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; background: rgba(16,185,129,0.2); color: var(--green); }
+  .mini-card { background: var(--input); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+  .mini-card span { font-size: 0.78rem; color: var(--muted); font-weight: 700; }
+  .mini-card strong { font-size: 1.5rem; margin-top: 6px; }
+  .info-box { background: var(--input); border-left: 4px solid var(--blue); padding: 14px; border-radius: 8px; font-size: 0.88rem; line-height: 1.5; margin-bottom: 12px; }
+  .info-box.tip { border-left-color: var(--purple); margin-bottom: 0; }
+  .info-box p { color: var(--muted); margin-top: 4px; }
+  .error-msg { background: rgba(239,68,68,0.15); border: 1px solid var(--red); color: #fca5a5; padding: 12px; border-radius: 8px; font-size: 0.88rem; margin-top: 14px; display: none; }
+  .ad-side { height: 260px; background: var(--card); border: 2px dashed var(--border); border-radius: 14px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; color: var(--muted); font-size: 0.75rem; margin-bottom: 20px; }
+  footer { background: var(--card); border-top: 1px solid var(--border); padding: 22px; margin-top: auto; text-align: center; font-size: 0.85rem; color: var(--muted); }
+  @media (max-width: 850px) { .grid, .res-grid, .row-2, .row-3 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <a href="index.html" class="logo">📦 Calcula<span>Tudo</span>Box</a>
+    <div style="display:flex; gap:10px;">
+      <a href="index.html" class="btn">← Início</a>
+      <button type="button" class="btn" onclick="document.body.classList.toggle('light')">🌓 Tema</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="ad-top">PUBLICIDADE • BANNER TOPO (728x90)</div>
+  <h1>Calculadora de FPS & Gargalo com IA</h1>
+  <p class="sub">Digite ou selecione qualquer processador, placa de vídeo e jogo para simular o desempenho real.</p>
+
+  <div class="grid">
+    <div>
+      <div class="box">
+        <div class="box-head">
+          <span>1. Configuração do Hardware e Jogo</span>
+          <span style="font-size:0.75rem; background:rgba(139,92,246,0.2); color:#a78bfa; padding:4px 10px; border-radius:99px;">✨ Motor IA Benchmark</span>
+        </div>
+
+        <div class="row-2">
+          <div class="autocomplete-wrap">
+            <label for="cpu-input">Processador (CPU)</label>
+            <input type="text" id="cpu-input" placeholder="Ex: Intel Core i3-12100F, Ryzen 5 5600..." value="AMD Ryzen 5 5600" autocomplete="off">
+            <div id="cpu-suggestions" class="suggestions-list"></div>
+          </div>
+          <div class="autocomplete-wrap">
+            <label for="gpu-input">Placa de Vídeo (GPU)</label>
+            <input type="text" id="gpu-input" placeholder="Ex: RTX 4060, RX 6600, GTX 1650..." value="NVIDIA GeForce RTX 4060 8GB" autocomplete="off">
+            <div id="gpu-suggestions" class="suggestions-list"></div>
+          </div>
+        </div>
+
+        <div class="autocomplete-wrap" style="margin-bottom: 14px;">
+          <label for="game-input">Nome do Jogo</label>
+          <input type="text" id="game-input" placeholder="Digite o nome do jogo..." value="Counter-Strike 2 (CS2)" autocomplete="off">
+          <div id="game-suggestions" class="suggestions-list"></div>
+        </div>
+
+        <div class="row-3">
+          <div>
+            <label for="res">Resolução</label>
+            <select id="res">
+              <option value="720p">720p (HD)</option>
+              <option value="1080p" selected>1080p (Full HD)</option>
+              <option value="1440p">1440p (Quad HD)</option>
+              <option value="4K">4K (Ultra HD)</option>
+            </select>
+          </div>
+          <div>
+            <label for="qual">Qualidade Gráfica</label>
+            <select id="qual">
+              <option value="Baixo">Baixo</option>
+              <option value="Médio" selected>Médio</option>
+              <option value="Alto">Alto</option>
+              <option value="Ultra">Ultra</option>
+            </select>
+          </div>
+          <div>
+            <label for="ram">Memória RAM</label>
+             <select id="ram">
+              <option value="8 GB">8 GB</option>
+              <option value="16 GB" selected>16 GB</option>
+              <option value="32 GB">32 GB+</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="button" class="ai-btn" id="calc-btn" onclick="calcularFPS()">🚀 Calcular FPS e Gargalo</button>
+        <div id="error-box" class="error-msg"></div>
+      </div>
+
+      <div class="box" id="result-box" style="display:none;">
+        <div class="box-head">
+          <span>2. Resultado da Simulação</span>
+          <span id="res-hardware-label" style="font-size:0.78rem; color:var(--muted);"></span>
+        </div>
+
+        <div class="res-grid">
+          <div class="fps-card">
+            <div style="font-size:0.8rem; font-weight:700; color:var(--muted);">FPS MÉDIO ESTIMADO</div>
+            <div class="fps-val" id="res-avg">--</div>
+            <div class="fps-badge" id="res-status">--</div>
+          </div>
+          <div class="mini-card">
+            <span>FPS MÍNIMO (1% LOW)</span>
+            <strong id="res-min" style="color:var(--yellow);">--</strong>
+          </div>
+          <div class="mini-card">
+            <span>FPS MÁXIMO</span>
+            <strong id="res-max" style="color:var(--green);">--</strong>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <strong id="res-bottleneck-title">Análise de Gargalo</strong>
+          <p id="res-bottleneck-desc">--</p>
+        </div>
+
+        <div class="info-box tip">
+          <strong>💡 Dica de Otimização da IA</strong>
+          <p id="res-ai-tip">--</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="ad-side">PUBLICIDADE • LATERAL (300x250)</div>
+      <div class="box">
+        <div class="box-head"><span>Como funciona o cálculo?</span></div>
+        <p style="font-size:0.85rem; color:var(--muted); line-height:1.5;">
+          Nossa IA cruza dados de benchmarks reais de largura de banda de memória, contagem de núcleos, VRAM da placa de vídeo e peso específico do motor gráfico de cada jogo para entregar uma estimativa realista sem exageros.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2026 CalculaTudoBox. Todos os direitos reservados.
+</footer>
+
+<script>
+const cpuDatabase = [
+  "Intel Core i3-14100F", "Intel Core i3-13100F", "Intel Core i3-12100F", "Intel Core i3-10100F", "Intel Core i3-10105F", "Intel Core i3-9100F", "Intel Core i3-8100", "Intel Core i3-7100", "Intel Core i3-4170",
+  "Intel Core i5-14600K", "Intel Core i5-14400F", "Intel Core i5-13600K", "Intel Core i5-13400F", "Intel Core i5-12600K", "Intel Core i5-12400F", "Intel Core i5-11400F", "Intel Core i5-10400F", "Intel Core i5-9400F", "Intel Core i5-8400", "Intel Core i5-4590", "Intel Core i5-3570",
+  "Intel Core i7-14700K", "Intel Core i7-13700K", "Intel Core i7-12700F", "Intel Core i7-11700K", "Intel Core i7-10700K", "Intel Core i7-9700K", "Intel Core i7-8700K", "Intel Core i7-7700K", "Intel Core i7-4790K", "Intel Core i7-3770", "Intel Core i7-2600K",
+  "Intel Core i9-14900K", "Intel Core i9-13900K", "Intel Core i9-12900K", "Intel Core i9-11900K", "Intel Core i9-10900K",
+  "Intel Xeon E5-2680 v4", "Intel Xeon E5-2670 v3", "Intel Xeon E5-2666 v3", "Intel Xeon E5-2650 v2", "Intel Xeon E5-2640 v3", "Intel Xeon E5-2620 v3", "Intel Xeon E3-1270 v3", "Intel Xeon E3-1230 v2",
+  "AMD Ryzen 3 4100", "AMD Ryzen 3 3200G", "AMD Ryzen 3 3100", "AMD Ryzen 3 2200G",
+  "AMD Ryzen 5 9600X", "AMD Ryzen 5 7600X", "AMD Ryzen 5 7600", "AMD Ryzen 5 7500F", "AMD Ryzen 5 5600X3D", "AMD Ryzen 5 5600X", "AMD Ryzen 5 5600", "AMD Ryzen 5 5600GT", "AMD Ryzen 5 5600G", "AMD Ryzen 5 5500", "AMD Ryzen 5 4600G", "AMD Ryzen 5 4500", "AMD Ryzen 5 3600", "AMD Ryzen 5 2600", "AMD Ryzen 5 1600 AF",
+  "AMD Ryzen 7 9800X3D", "AMD Ryzen 7 9700X", "AMD Ryzen 7 7800X3D", "AMD Ryzen 7 7700X", "AMD Ryzen 7 5800X3D", "AMD Ryzen 7 5700X3D", "AMD Ryzen 7 5700X", "AMD Ryzen 7 5700G", "AMD Ryzen 7 3700X", "AMD Ryzen 7 2700X",
+  "AMD Ryzen 9 9950X", "AMD Ryzen 9 7950X3D", "AMD Ryzen 9 7900X", "AMD Ryzen 9 5950X", "AMD Ryzen 9 5900X",
+  "AMD FX-8350", "AMD FX-6300"
+];
+
+const gpuDatabase = [
+  "NVIDIA GeForce RTX 5090 32GB", "NVIDIA GeForce RTX 5080 16GB", "NVIDIA GeForce RTX 5070 Ti 16GB", "NVIDIA GeForce RTX 5070 12GB",
+  "NVIDIA GeForce RTX 4090 24GB", "NVIDIA GeForce RTX 4080 Super 16GB", "NVIDIA GeForce RTX 4070 Ti Super 16GB", "NVIDIA GeForce RTX 4070 Super 12GB", "NVIDIA GeForce RTX 4070 12GB", "NVIDIA GeForce RTX 4060 Ti 16GB", "NVIDIA GeForce RTX 4060 Ti 8GB", "NVIDIA GeForce RTX 4060 8GB",
+  "NVIDIA GeForce RTX 3090 24GB", "NVIDIA GeForce RTX 3080 10GB", "NVIDIA GeForce RTX 3070 Ti 8GB", "NVIDIA GeForce RTX 3070 8GB", "NVIDIA GeForce RTX 3060 Ti 8GB", "NVIDIA GeForce RTX 3060 12GB", "NVIDIA GeForce RTX 3050 8GB", "NVIDIA GeForce RTX 3050 6GB",
+  "NVIDIA GeForce RTX 2080 Ti 11GB", "NVIDIA GeForce RTX 2070 Super 8GB", "NVIDIA GeForce RTX 2060 Super 8GB", "NVIDIA GeForce RTX 2060 6GB",
+  "NVIDIA GeForce GTX 1660 Ti 6GB", "NVIDIA GeForce GTX 1660 Super 6GB", "NVIDIA GeForce GTX 1660 6GB", "NVIDIA GeForce GTX 1650 Super 4GB", "NVIDIA GeForce GTX 1650 4GB",
+  "NVIDIA GeForce GTX 1080 Ti 11GB", "NVIDIA GeForce GTX 1070 8GB", "NVIDIA GeForce GTX 1060 6GB", "NVIDIA GeForce GTX 1060 3GB", "NVIDIA GeForce GTX 1050 Ti 4GB", "NVIDIA GeForce GTX 1050 2GB",
+  "NVIDIA GeForce GTX 970 4GB", "NVIDIA GeForce GTX 960 2GB", "NVIDIA GeForce GTX 750 Ti 2GB", "NVIDIA GeForce GT 1030 2GB",
+  "AMD Radeon RX 7900 XTX 24GB", "AMD Radeon RX 7900 XT 20GB", "AMD Radeon RX 7800 XT 16GB", "AMD Radeon RX 7700 XT 12GB", "AMD Radeon RX 7600 XT 16GB", "AMD Radeon RX 7600 8GB",
+  "AMD Radeon RX 6950 XT 16GB", "AMD Radeon RX 6800 XT 16GB", "AMD Radeon RX 6750 XT 12GB", "AMD Radeon RX 6700 XT 12GB", "AMD Radeon RX 6650 XT 8GB", "AMD Radeon RX 6600 XT 8GB", "AMD Radeon RX 6600 8GB", "AMD Radeon RX 6500 XT 4GB", "AMD Radeon RX 6400 4GB",
+  "AMD Radeon RX 5700 XT 8GB", "AMD Radeon RX 5600 XT 6GB", "AMD Radeon RX 5500 XT 8GB", "AMD Radeon RX 590 8GB", "AMD Radeon RX 580 8GB", "AMD Radeon RX 570 4GB", "AMD Radeon RX 550 4GB",
+  "Intel Arc B580 12GB", "Intel Arc A770 16GB", "Intel Arc A750 8GB", "Intel Arc A580 8GB",
+  "Vídeo Integrado AMD Radeon Vega 8", "Vídeo Integrado AMD Radeon Vega 7", "Vídeo Integrado Intel UHD Graphics 730"
+];
+
+const gameDatabase = [
+  "Counter-Strike 2 (CS2)", "Valorant", "Fortnite", "Call of Duty: Warzone", "Call of Duty: Black Ops 6",
+  "Grand Theft Auto V (GTA 5)", "Grand Theft Auto VI (GTA 6)", "Red Dead Redemption 2", "Cyberpunk 2077",
+  "Black Myth: Wukong", "Alan Wake 2", "God of War Ragnarök", "The Last of Us Part I", "Hogwarts Legacy",
+  "Elden Ring", "Baldur's Gate 3", "Starfield", "Resident Evil 4 Remake", "Silent Hill 2 Remake",
+  "EA Sports FC 25", "EA Sports FC 24", "Forza Horizon 5", "Assetto Corsa Competizione",
+  "League of Legends", "Dota 2", "Apex Legends", "Overwatch 2", "Rainbow Six Siege", "PUBG: Battlegrounds",
+  "Minecraft (Vanilla)", "Minecraft (Com Shaders)", "Roblox", "The Witcher 3: Wild Hunt", "DayZ", "Rust", "Escape from Tarkov"
+];
+
+function setupAutocomplete(inputId, listId, dataArray) {
+  const input = document.getElementById(inputId);
+  const list = document.getElementById(listId);
+
+  function showSuggestions(filterText) {
+    list.innerHTML = '';
+    const term = filterText.toLowerCase().trim();
+    const matches = dataArray.filter(item => item.toLowerCase().includes(term));
+
+    if (matches.length === 0) {
+      list.style.display = 'none';
+      return;
+    }
+
+    matches.slice(0, 15).forEach(match => {
+      const div = document.createElement('div');
+      div.className = 'suggestion-item';
+      div.textContent = match;
+      div.onclick = () => {
+        input.value = match;
+        list.style.display = 'none';
+      };
+      list.appendChild(div);
+    });
+
+    list.style.display = 'block';
+  }
+
+  input.addEventListener('input', () => showSuggestions(input.value));
+  input.addEventListener('focus', () => showSuggestions(''));
+
+  document.addEventListener('click', (e) => {
+    if (!input.contains(e.target) && !list.contains(e.target)) {
+      list.style.display = 'none';
+    }
+  });
+}
+
+setupAutocomplete('cpu-input', 'cpu-suggestions', cpuDatabase);
+setupAutocomplete('gpu-input', 'gpu-suggestions', gpuDatabase);
+setupAutocomplete('game-input', 'game-suggestions', gameDatabase);
+
 async function calcularFPS() {
   const cpu = document.getElementById('cpu-input').value.trim();
   const gpu = document.getElementById('gpu-input').value.trim();
@@ -53,3 +311,6 @@ async function calcularFPS() {
     btn.textContent = "🚀 Calcular FPS e Gargalo";
   }
 }
+</script>
+</body>
+</html>
