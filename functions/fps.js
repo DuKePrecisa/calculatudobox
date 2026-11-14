@@ -47,7 +47,6 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura exata, s
 }`;
 
   try {
-    // Usando o modelo estável e rápido gemini-1.5-flash
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
 
     const response = await fetch(endpoint, {
@@ -91,69 +90,3 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura exata, s
     });
   }
 }
-```[cite: 9]
-
----
-
-### 2. Atualizar a função `calcularFPS()` no arquivo `calculadora-fps.html`
-Certifique-se de que a função de envio no seu arquivo HTML está limpa e com tratamento de erros adequado (substitua a função antiga no script do seu HTML):
-
-```javascript
-async function calcularFPS() {
-  const cpu = document.getElementById('cpu-input').value.trim();
-  const gpu = document.getElementById('gpu-input').value.trim();
-  const game = document.getElementById('game-input').value.trim();
-  const resolution = document.getElementById('res').value;
-  const quality = document.getElementById('qual').value;
-  const ram = document.getElementById('ram').value;
-
-  const btn = document.getElementById('calc-btn');
-  const errorBox = document.getElementById('error-box');
-  const resultBox = document.getElementById('result-box');
-
-  if (!cpu || !gpu || !game) {
-    errorBox.textContent = "Por favor, preencha o Processador, a Placa de Vídeo e o Jogo.";
-    errorBox.style.display = 'block';
-    return;
-  }
-
-  errorBox.style.display = 'none';
-  btn.disabled = true;
-  btn.textContent = "⏳ Simulando desempenho com IA...";
-
-  try {
-    const response = await fetch('/fps', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cpu, gpu, game, resolution, quality, ram })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Erro ao conectar com o servidor.');
-    }
-
-    document.getElementById('res-hardware-label').textContent = `${game} • ${resolution} (${quality})`;
-    document.getElementById('res-avg').textContent = data.avgFps;
-    document.getElementById('res-min').textContent = `${data.minFps} FPS`;
-    document.getElementById('res-max').textContent = `${data.maxFps} FPS`;
-    document.getElementById('res-status').textContent = data.status;
-    document.getElementById('res-bottleneck-title').textContent = data.bottleneckTitle;
-    document.getElementById('res-bottleneck-desc').textContent = data.bottleneckDesc;
-    document.getElementById('res-ai-tip').textContent = data.aiTip;
-
-    resultBox.style.display = 'block';
-    resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-  } catch (err) {
-    errorBox.textContent = `Falha na simulação: ${err.message}`;
-    errorBox.style.display = 'block';
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "🚀 Calcular FPS e Gargalo";
-  }
-}
-```[cite: 8]
-
-Faça o *commit* dessas atualizações no seu GitHub e teste novamente. A consulta à API vai responder de forma bem mais ágil e estável!
