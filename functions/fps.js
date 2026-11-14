@@ -47,7 +47,7 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura exata, s
 }`;
 
   try {
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const endpoint = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
 
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -65,7 +65,7 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura exata, s
 
     if (!response.ok) {
       return new Response(JSON.stringify({ 
-        error: `Servidor de IA ocupado no momento (${response.status}). Tente clicar novamente em alguns segundos.` 
+        error: `Erro na API do Gemini (${response.status}): ${rawText.substring(0, 100)}` 
       }), {
         status: response.status,
         headers: { 'Content-Type': 'application/json' }
