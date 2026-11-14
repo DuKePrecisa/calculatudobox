@@ -47,8 +47,8 @@ Responda EXCLUSIVAMENTE em formato JSON válido seguindo esta estrutura exata, s
 }`;
 
   try {
-    // Atualizado para utilizar o modelo mais recente e ativo da API
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+    // Utilizando o modelo atualizado gemini-3.5-flash-lite
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${encodeURIComponent(apiKey)}`;
 
     const response = await fetch(endpoint, {
       method: 'POST',
