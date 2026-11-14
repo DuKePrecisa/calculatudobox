@@ -1,181 +1,311 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Conversor de Unidades e Medidas - CalculaTudoBox</title>
-<style>
-  :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --purple: #a855f7; }
-  body.light { --bg: #f8fafc; --card: #ffffff; --input: #f1f5f9; --border: #cbd5e1; --text: #0f172a; --muted: #475569; }
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-  body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 10; }
-  .nav { max-width: 1150px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-  .logo { font-size: 1.3rem; font-weight: 800; color: var(--text); text-decoration: none; }
-  .logo span { color: var(--blue); }
-  .btn { background: var(--input); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
-  .wrap { max-width: 1150px; margin: 0 auto; padding: 20px; width: 100%; }
-  .ad-top { height: 85px; background: var(--card); border: 2px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 24px; }
-  h1 { font-size: 1.9rem; margin-bottom: 6px; }
-  .sub { color: var(--muted); margin-bottom: 24px; font-size: 0.95rem; }
-  .grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px; }
-  .box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
-  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
-  label { display: block; font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
-  input, select { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid var(--border); background: var(--input); color: var(--text); font-size: 1rem; font-weight: 600; }
-  .result-panel { background: rgba(168, 85, 247, 0.12); border: 1px solid var(--purple); border-radius: 12px; padding: 22px; text-align: center; }
-  .result-val { font-size: 2.4rem; font-weight: 900; color: var(--purple); margin: 6px 0; word-break: break-word; }
-  .ad-side { height: 260px; background: var(--card); border: 2px dashed var(--border); border-radius: 14px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; color: var(--muted); font-size: 0.75rem; margin-bottom: 20px; }
-  .seo p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; }
-  .seo h2 { font-size: 1.2rem; margin-bottom: 10px; }
-  footer { background: var(--card); border-top: 1px solid var(--border); padding: 22px; margin-top: auto; text-align: center; font-size: 0.85rem; color: var(--muted); }
-  @media (max-width: 850px) { .grid, .row-2 { grid-template-columns: 1fr; } }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadoras e Conversores Técnicos - Calcula Tudo Box</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0f172a',
+                        cardBg: '#1e293b',
+                        accentBlue: '#3b82f6'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="bg-darkBg text-slate-100 min-h-screen flex flex-col justify-between font-sans">
 
-<header>
-  <div class="nav">
-    <a href="index.html" class="logo">📦 Calcula<span>Tudo</span>Box</a>
-    <div style="display:flex; gap:10px;">
-      <a href="index.html" class="btn">← Início</a>
-      <button type="button" class="btn" onclick="document.body.classList.toggle('light')">🌓 Tema</button>
-    </div>
-  </div>
-</header>
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-cardBg/50 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-bold transition">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span>Voltar ao Início</span>
+            </a>
+            <h1 class="text-lg font-semibold flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-blue-400"></i>
+                Utilitários & Engenharia
+            </h1>
+        </div>
+    </header>
 
-<div class="wrap">
-  <div class="ad-top">PUBLICIDADE • BANNER TOPO (728x90)</div>
-
-  <h1>Conversor de Unidades e Medidas</h1>
-  <p class="sub">Converta rapidamente medidas de comprimento, massa, temperatura e armazenamento digital.</p>
-
-  <div class="grid">
-    <div>
-      <div class="box">
-        <div class="row-2">
-          <div>
-            <label for="cat">Tipo de Medida</label>
-            <select id="cat" onchange="loadUnits()">
-              <option value="length" selected>📏 Comprimento / Distância</option>
-              <option value="weight">⚖️ Peso / Massa</option>
-              <option value="temp">🌡️ Temperatura</option>
-              <option value="data">💾 Armazenamento Digital</option>
-            </select>
-          </div>
-          <div>
-            <label for="val">Valor a Converter</label>
-            <input type="number" id="val" value="10" step="any" oninput="convertUnit()">
-          </div>
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-grow">
+        
+        <!-- Seletor de Categoria Principal -->
+        <div class="flex flex-wrap gap-2 mb-8 justify-center" id="mainTabs">
+            <button onclick="switchTab('unidades')" class="main-tab px-4 py-2 rounded-xl text-sm font-medium bg-blue-600 text-white shadow-lg transition flex items-center gap-2" data-tab="unidades"><i data-lucide="ruler" class="w-4 h-4"></i> Unidades & Pressão</button>
+            <button onclick="switchTab('eletrica')" class="main-tab px-4 py-2 rounded-xl text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2" data-tab="eletrica"><i data-lucide="zap" class="w-4 h-4"></i> Elétrica & Fios</button>
+            <button onclick="switchTab('iluminacao')" class="main-tab px-4 py-2 rounded-xl text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2" data-tab="iluminacao"><i data-lucide="lightbulb" class="w-4 h-4"></i> Iluminação (Lumens)</button>
+            <button onclick="switchTab('automotivo')" class="main-tab px-4 py-2 rounded-xl text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2" data-tab="automotivo"><i data-lucide="car" class="w-4 h-4"></i> Consumo Automotivo</button>
         </div>
 
-        <div class="row-2">
-          <div>
-            <label for="from-u">De</label>
-            <select id="from-u" onchange="convertUnit()"></select>
-          </div>
-          <div>
-            <label for="to-u">Para</label>
-            <select id="to-u" onchange="convertUnit()"></select>
-          </div>
+        <!-- CONTEÚDO 1: UNIDADES E PRESSÃO -->
+        <div id="section-unidades" class="calc-section space-y-6">
+            <div class="flex flex-wrap gap-2 justify-center mb-4" id="subUnitTabs">
+                <button onclick="setSubUnit('pressao')" class="sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white" data-sub="pressao">Pressão</button>
+                <button onclick="setSubUnit('comprimento')" class="sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300" data-sub="comprimento">Comprimento</button>
+                <button onclick="setSubUnit('massa')" class="sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300" data-sub="massa">Massa / Peso</button>
+                <button onclick="setSubUnit('temperatura')" class="sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300" data-sub="temperatura">Temperatura</button>
+                <button onclick="setSubUnit('velocidade')" class="sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300" data-sub="velocidade">Velocidade</button>
+                <button onclick="setSubUnit('dados')" class="sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300" data-sub="dados">Dados (TI)</button>
+            </div>
+
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                <h2 id="subUnitTitle" class="text-xl font-bold mb-6 text-blue-400">Conversão de Pressão</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div class="space-y-2">
+                        <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">De:</label>
+                        <input type="number" id="inputValue" value="1" oninput="convertUnits()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-lg text-white focus:outline-none focus:border-blue-500 transition">
+                        <select id="inputUnit" onchange="convertUnits()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none"></select>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Para:</label>
+                        <input type="text" id="outputValue" readonly class="w-full bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3 text-lg text-blue-400 font-bold focus:outline-none">
+                        <select id="outputUnit" onchange="convertUnits()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none"></select>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="result-panel">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--muted); text-transform:uppercase;">Resultado</div>
-          <div class="result-val" id="res-out">1000 cm</div>
+        <!-- CONTEÚDO 2: ELÉTRICA & FIO -->
+        <div id="section-eletrica" class="calc-section hidden space-y-6">
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                <h2 class="text-xl font-bold mb-6 text-blue-400">Dimensionamento de Fios & Corrente (Ampères)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Potência Total (Watts):</label>
+                            <input type="number" id="elecWatts" value="2500" oninput="calculateElectric()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Tensão (Volts):</label>
+                            <select id="elecVolts" onchange="calculateElectric()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none">
+                                <option value="127">127V (Monofásico)</option>
+                                <option value="220" selected>220V (Bifásico/Monofásico)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 flex flex-col justify-center space-y-4">
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Corrente Estimada:</span>
+                            <p id="resAmperes" class="text-2xl font-bold text-white">-- A</p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Bitola Mínima Recomendada (Fio):</span>
+                            <p id="resBitola" class="text-2xl font-bold text-blue-400">-- mm²</p>
+                            <p id="resDicaFio" class="text-xs text-slate-400 mt-1"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="box seo">
-        <h2>Sobre o Conversor de Unidades</h2>
-        <p>Ideal para estudantes, engenheiros, técnicos de informática e tarefas do cotidiano. Suporta o Sistema Internacional de Unidades (metros, quilogramas, Celsius) e medidas imperiais (polegadas, pés, milhas, libras e Fahrenheit).</p>
-      </div>
-    </div>
+        <!-- CONTEÚDO 3: ILUMINAÇÃO (LUMENS) -->
+        <div id="section-iluminacao" class="calc-section hidden space-y-6">
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                <h2 class="text-xl font-bold mb-6 text-blue-400">Calculadora de Lumens e Lâmpadas por Ambiente</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Largura (m):</label>
+                                <input type="number" id="roomWidth" value="3" step="0.1" oninput="calculateLighting()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Comprimento (m):</label>
+                                <input type="number" id="roomLength" value="4" step="0.1" oninput="calculateLighting()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Tipo de Ambiente:</label>
+                            <select id="roomType" onchange="calculateLighting()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200">
+                                <option value="100">Quarto / Sala de Estar (100 lux)</option>
+                                <option value="150" selected>Cozinha / Área de Serviço (150 lux)</option>
+                                <option value="300">Escritório / Bancada de Trabalho (300 lux)</option>
+                                <option value="200">Banheiro / Garagem (200 lux)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 flex flex-col justify-center space-y-4">
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Área do Ambiente:</span>
+                            <p id="resArea" class="text-xl font-bold text-white">12 m²</p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Total de Lumens Necessários:</span>
+                            <p id="resLumens" class="text-2xl font-bold text-blue-400">-- lm</p>
+                            <p class="text-xs text-slate-400 mt-1">Estimativa baseada no fluxo luminoso ideal.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <aside>
-      <div class="ad-side">PUBLICIDADE • LATERAL (300x250)</div>
-      <div class="box">
-        <h3 style="font-size:0.85rem; color:var(--muted); margin-bottom:12px;">OUTRAS CALCULADORAS</h3>
-        <ul style="list-style:none; line-height:2.2; font-size:0.9rem;">
-          <li><a href="calculadora-fps.html" style="color:var(--text); text-decoration:none;">🎮 Calculadora de FPS</a></li>
-          <li><a href="calculadora-cambio.html" style="color:var(--text); text-decoration:none;">💱 Conversor de Câmbio</a></li>
-          <li><a href="calculadora-porcentagem.html" style="color:var(--text); text-decoration:none;">📊 Porcentagem</a></li>
-          <li><a href="calculadora-imc.html" style="color:var(--text); text-decoration:none;">❤️ Calculadora de IMC</a></li>
-        </ul>
-      </div>
-    </aside>
-  </div>
-</div>
+        <!-- CONTEÚDO 4: AUTOMOTIVO -->
+        <div id="section-automotivo" class="calc-section hidden space-y-6">
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                <h2 class="text-xl font-bold mb-6 text-blue-400">Consumo de Combustível & Custo por Km</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Quilômetros Rodados (Km):</label>
+                            <input type="number" id="autoKm" value="350" oninput="calculateAuto()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Litros Abastecidos:</label>
+                            <input type="number" id="autoLitros" value="30" step="0.1" oninput="calculateAuto()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Preço do Litro (R$):</label>
+                            <input type="number" id="autoPreco" value="5.89" step="0.01" oninput="calculateAuto()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 flex flex-col justify-center space-y-4">
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Média de Consumo:</span>
+                            <p id="resConsumo" class="text-2xl font-bold text-white">-- Km/l</p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Custo por Quilômetro Rodado:</span>
+                            <p id="resCustoKm" class="text-2xl font-bold text-blue-400">R$ -- / km</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<footer>© 2026 CalculaTudoBox • Todos os direitos reservados.</footer>
+    </main>
 
-<script>
-  var unitsData = {
-    length: {
-      m: { name: 'Metros (m)', factor: 1 },
-      km: { name: 'Quilômetros (km)', factor: 1000 },
-      cm: { name: 'Centímetros (cm)', factor: 0.01 },
-      mm: { name: 'Milímetros (mm)', factor: 0.001 },
-      in: { name: 'Polegadas (in)', factor: 0.0254 },
-      ft: { name: 'Pés (ft)', factor: 0.3048 },
-      mi: { name: 'Milhas (mi)', factor: 1609.344 }
-    },
-    weight: {
-      kg: { name: 'Quilogramas (kg)', factor: 1 },
-      g: { name: 'Gramas (g)', factor: 0.001 },
-      mg: { name: 'Miligramas (mg)', factor: 0.000001 },
-      t: { name: 'Toneladas (t)', factor: 1000 },
-      lb: { name: 'Libras (lb)', factor: 0.453592 },
-      oz: { name: 'Onças (oz)', factor: 0.0283495 }
-    },
-    temp: {
-      c: { name: 'Celsius (°C)' },
-      f: { name: 'Fahrenheit (°F)' },
-      k: { name: 'Kelvin (K)' }
-    },
-    data: {
-      gb: { name: 'Gigabytes (GB)', factor: 1024 },
-      mb: { name: 'Megabytes (MB)', factor: 1 },
-      tb: { name: 'Terabytes (TB)', factor: 1048576 },
-      kb: { name: 'Kilobytes (KB)', factor: 0.0009765625 }
-    }
-  };
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 text-center py-6 text-xs text-slate-500">
+        &copy; 2026 Calcula Tudo Box. Todos os direitos reservados.
+    </footer>
 
-  function loadUnits() {
-    var cat = document.getElementById('cat').value;
-    var fromSel = document.getElementById('from-u');
-    var toSel = document.getElementById('to-u');
-    var list = unitsData[cat];
-    var html = '';
-    for (var key in list) {
-      html += '<option value="' + key + '">' + list[key].name + '</option>';
-    }
-    fromSel.innerHTML = html;
-    toSel.innerHTML = html;
-    if (toSel.options.length > 1) toSel.selectedIndex = 1;
-    convertUnit();
-  }
+    <!-- Scripts de Lógica -->
+    <script>
+        lucide.createIcons();
 
-  function convertUnit() {
-    var cat = document.getElementById('cat').value;
-    var val = parseFloat(document.getElementById('val').value) || 0;
-    var from = document.getElementById('from-u').value;
-    var to = document.getElementById('to-u').value;
-    var res = 0;
+        // Alternar abas principais
+        function switchTab(tabId) {
+            document.querySelectorAll('.calc-section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(`section-${tabId}`).classList.remove('hidden');
 
-    if (cat === 'temp') {
-      var celsius = from === 'c' ? val : from === 'f' ? (val - 32) * 5 / 9 : val - 273.15;
-      res = to === 'c' ? celsius : to === 'f' ? (celsius * 9 / 5) + 32 : celsius + 273.15;
-    } else {
-      var baseVal = val * unitsData[cat][from].factor;
-      res = baseVal / unitsData[cat][to].factor;
-    }
+            document.querySelectorAll('.main-tab').forEach(btn => {
+                if(btn.dataset.tab === tabId) {
+                    btn.className = "main-tab px-4 py-2 rounded-xl text-sm font-medium bg-blue-600 text-white shadow-lg transition flex items-center gap-2";
+                } else {
+                    btn.className = "main-tab px-4 py-2 rounded-xl text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2";
+                }
+            });
+            lucide.createIcons();
+        }
 
-    var formatted = Number(res.toFixed(6)).toString().replace('.', ',');
-    document.getElementById('res-out').innerText = formatted + ' ' + to.toUpperCase();
-  }
+        // --- LÓGICA DE UNIDADES ---
+        const unitsData = {
+            pressao: { title: "Conversão de Pressão", units: { bar: { name: "Bar", toBase: v => v * 100000, fromBase: v => v / 100000 }, psi: { name: "PSI (Libras / pol²)", toBase: v => v * 6894.76, fromBase: v => v / 6894.76 }, atm: { name: "Atmosfera (atm)", toBase: v => v * 101325, fromBase: v => v / 101325 }, kpa: { name: "Quilopascal (kPa)", toBase: v => v * 1000, fromBase: v => v / 1000 }, mpa: { name: "Megapascal (MPa)", toBase: v => v * 1000000, fromBase: v => v / 1000000 }, mmhg: { name: "mmHg", toBase: v => v * 133.322, fromBase: v => v / 133.322 } } },
+            comprimento: { title: "Conversão de Comprimento", units: { m: { name: "Metros (m)", toBase: v => v, fromBase: v => v }, cm: { name: "Centímetros (cm)", toBase: v => v / 100, fromBase: v => v * 100 }, mm: { name: "Milímetros (mm)", toBase: v => v / 1000, fromBase: v => v * 1000 }, km: { name: "Quilômetros (km)", toBase: v => v * 1000, fromBase: v => v / 1000 }, polegada: { name: "Polegadas (in)", toBase: v => v * 0.0254, fromBase: v => v / 0.0254 }, pe: { name: "Pés (ft)", toBase: v => v * 0.3048, fromBase: v => v / 0.3048 } } },
+            massa: { title: "Conversão de Massa e Peso", units: { kg: { name: "Quilogramas (kg)", toBase: v => v, fromBase: v => v }, g: { name: "Gramas (g)", toBase: v => v / 1000, fromBase: v => v * 1000 }, mg: { name: "Miligramas (mg)", toBase: v => v / 1000000, fromBase: v => v * 1000000 }, ton: { name: "Toneladas (t)", toBase: v => v * 1000, fromBase: v => v / 1000 }, libra: { name: "Libras (lb)", toBase: v => v * 0.453592, fromBase: v => v / 0.453592 } } },
+            temperatura: { title: "Conversão de Temperatura", units: { c: { name: "Celsius (°C)", toBase: v => v, fromBase: v => v }, f: { name: "Fahrenheit (°F)", toBase: v => (v - 32) * 5/9, fromBase: v => (v * 9/5) + 32 }, k: { name: "Kelvin (K)", toBase: v => v - 273.15, fromBase: v => v + 273.15 } } },
+            velocidade: { title: "Conversão de Velocidade", units: { kmh: { name: "Km/h", toBase: v => v / 3.6, fromBase: v => v * 3.6 }, ms: { name: "Metros por segundo (m/s)", toBase: v => v, fromBase: v => v }, mph: { name: "Milhas por hora (mph)", toBase: v => v * 0.44704, fromBase: v => v / 0.44704 }, no: { name: "Nós", toBase: v => v * 0.514444, fromBase: v => v / 0.514444 } } },
+            dados: { title: "Armazenamento de Dados", units: { mb: { name: "Megabytes (MB)", toBase: v => v * 1024 * 1024, fromBase: v => v / (1024 * 1024) }, gb: { name: "Gigabytes (GB)", toBase: v => v * 1024 * 1024 * 1024, fromBase: v => v / (1024 * 1024 * 1024) }, tb: { name: "Terabytes (TB)", toBase: v => v * 1024 * 1024 * 1024 * 1024, fromBase: v => v / (1024 * 1024 * 1024 * 1024) }, kb: { name: "Kilobytes (KB)", toBase: v => v * 1024, fromBase: v => v / 1024 } } }
+        };
 
-  loadUnits();
-</script>
+        let currentSubUnit = 'pressao';
+
+        function setSubUnit(sub) {
+            currentSubUnit = sub;
+            document.querySelectorAll('.sub-unit-btn').forEach(btn => {
+                if(btn.dataset.sub === sub) {
+                    btn.className = "sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white";
+                } else {
+                    btn.className = "sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300";
+                }
+            });
+            document.getElementById('subUnitTitle').innerText = unitsData[sub].title;
+            
+            const inSel = document.getElementById('inputUnit');
+            const outSel = document.getElementById('outputUnit');
+            inSel.innerHTML = ''; outSel.innerHTML = '';
+
+            const units = unitsData[sub].units;
+            Object.keys(units).forEach(k => {
+                inSel.add(new Option(units[k].name, k));
+                outSel.add(new Option(units[k].name, k));
+            });
+            if(Object.keys(units).length > 1) outSel.selectedIndex = 1;
+            convertUnits();
+        }
+
+        function convertUnits() {
+            const val = parseFloat(document.getElementById('inputValue').value);
+            const inK = document.getElementById('inputUnit').value;
+            const outK = document.getElementById('outputUnit').value;
+            if(isNaN(val)) return;
+
+            const base = unitsData[currentSubUnit].units[inK].toBase(val);
+            const res = unitsData[currentSubUnit].units[outK].fromBase(base);
+            document.getElementById('outputValue').value = Math.abs(res) < 1e-6 || Math.abs(res) > 1e6 ? res.toExponential(4) : parseFloat(res.toFixed(4));
+        }
+
+        // --- LÓGICA ELÉTRICA ---
+        function calculateElectric() {
+            const watts = parseFloat(document.getElementById('elecWatts').value) || 0;
+            const volts = parseFloat(document.getElementById('elecVolts').value) || 127;
+            const amperes = watts / volts;
+            
+            document.getElementById('resAmperes').innerText = amperes.toFixed(2) + " A";
+
+            let bitola = "1.5 mm²";
+            let dica = "Recomendado para iluminação e pequenos aparelhos.";
+            if(amperes > 10 && amperes <= 16) { bitola = "2.5 mm²"; dica = "Ideal para tomadas de uso geral (TUG)."; }
+            else if(amperes > 16 && amperes <= 24) { bitola = "4.0 mm²"; dica = "Indicado para circuitos de média potência."; }
+            else if(amperes > 24 && amperes <= 32) { bitola = "6.0 mm²"; dica = "Ideal para chuveiros, torneiras elétricas ou ar-condicionado."; }
+            else if(amperes > 32) { bitola = "10.0 mm² ou superior"; dica = "Alta potência. Requer avaliação de eletricista e cabos especiais."; }
+
+            document.getElementById('resBitola').innerText = bitola;
+            document.getElementById('resDicaFio').innerText = dica;
+        }
+
+        // --- LÓGICA ILUMINAÇÃO ---
+        function calculateLighting() {
+            const w = parseFloat(document.getElementById('roomWidth').value) || 0;
+            const l = parseFloat(document.getElementById('roomLength').value) || 0;
+            const lux = parseFloat(document.getElementById('roomType').value) || 150;
+            
+            const area = w * l;
+            const totalLumens = area * lux;
+
+            document.getElementById('resArea').innerText = area.toFixed(1) + " m²";
+            document.getElementById('resLumens').innerText = Math.round(totalLumens).toLocaleString('pt-BR') + " lm";
+        }
+
+        // --- LÓGICA AUTOMOTIVA ---
+        function calculateAuto() {
+            const km = parseFloat(document.getElementById('autoKm').value) || 0;
+            const litros = parseFloat(document.getElementById('autoLitros').value) || 0;
+            const preco = parseFloat(document.getElementById('autoPreco').value) || 0;
+
+            const consumo = litros > 0 ? (km / litros) : 0;
+            const custoKm = km > 0 ? (litros * preco) / km : 0;
+
+            document.getElementById('resConsumo').innerText = consumo.toFixed(2) + " Km/l";
+            document.getElementById('resCustoKm').innerText = "R$ " + custoKm.toFixed(2) + " / km";
+        }
+
+        // Inicializar padrões
+        setSubUnit('pressao');
+        calculateElectric();
+        calculateLighting();
+        calculateAuto();
+    </script>
 </body>
 </html>
