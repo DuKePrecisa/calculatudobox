@@ -195,27 +195,35 @@
             </div>
         </div>
 
-        <!-- 5. CONSTRUÇÃO CIVIL -->
+     <!-- 5. CONSTRUÇÃO CIVIL -->
         <div id="section-construcao" class="calc-section hidden space-y-6">
             <div class="bg-cardBg border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
-                <h2 class="text-xl font-bold mb-6 text-blue-400">Cálculo de Materiais de Construção (Alvenaria)</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <h2 class="text-xl font-bold mb-6 text-blue-400">Calculadora de Materiais de Construção</h2>
+                
+                <!-- Sub-abas de Construção -->
+                <div class="flex gap-2 mb-6 border-b border-slate-800 pb-4">
+                    <button onclick="switchConstSub('alvenaria')" id="btn-alvenaria" class="px-4 py-2 rounded-xl text-xs font-medium bg-blue-600 text-white transition">Alvenaria (Paredes)</button>
+                    <button onclick="switchConstSub('piso')" id="btn-piso" class="px-4 py-2 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Pisos e Revestimentos</button>
+                </div>
+
+                <!-- Formulário: Alvenaria -->
+                <div id="const-alvenaria" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-4">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Comprimento Parede (m):</label>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Comprimento (m):</label>
                                 <input type="number" id="wallLength" value="5" step="0.1" oninput="calculateConstruction()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
                             </div>
                             <div>
-                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Altura Parede (m):</label>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Altura (m):</label>
                                 <input type="number" id="wallHeight" value="2.8" step="0.1" oninput="calculateConstruction()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
                             </div>
                         </div>
                         <div>
                             <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Tipo de Bloco / Tijolo:</label>
                             <select id="brickType" onchange="calculateConstruction()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200">
-                                <option value="25">Tijolo Baiano 8 Furos (9x19x19 cm) ~ 25 un/m²</option>
-                                <option value="12.5" selected>Bloco de Concreto / Cerâmico (14x19x39 cm) ~ 12.5 un/m²</option>
+                                <option value="25">Tijolo Baiano 8 Furos ~ 25 un/m²</option>
+                                <option value="12.5" selected>Bloco de Concreto / Cerâmico ~ 12.5 un/m²</option>
                                 <option value="40">Tijolo Maciço Comum ~ 40 un/m²</option>
                             </select>
                         </div>
@@ -232,6 +240,44 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Formulário: Pisos (Oculto por padrão) -->
+                <div id="const-piso" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Largura do Cômodo (m):</label>
+                                <input type="number" id="roomPisoWidth" value="4" step="0.1" oninput="calculateConstruction()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Comprimento do Cômodo (m):</label>
+                                <input type="number" id="roomPisoLength" value="5" step="0.1" oninput="calculateConstruction()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Largura da Peça (cm):</label>
+                                <input type="number" id="tileWidth" value="60" oninput="calculateConstruction()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Comprimento da Peça (cm):</label>
+                                <input type="number" id="tileLength" value="60" oninput="calculateConstruction()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 flex flex-col justify-center space-y-3">
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Área do Piso (+10% Recortes):</span>
+                            <p id="resPisoArea" class="text-xl font-bold text-white">-- m²</p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Total de Peças Necessárias:</span>
+                            <p id="resPisoCount" class="text-2xl font-bold text-blue-400">-- peças</p>
+                            <p id="resPisoBoxes" class="text-xs text-slate-400 mt-1"></p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -444,18 +490,57 @@
         }
 
         // 5. CONSTRUÇÃO CIVIL
+       // Alternador interno da Construção Civil
+        function switchConstSub(sub) {
+            if(sub === 'alvenaria') {
+                document.getElementById('const-alvenaria').classList.remove('hidden');
+                document.getElementById('const-piso').classList.add('hidden');
+                document.getElementById('btn-alvenaria').className = "px-4 py-2 rounded-xl text-xs font-medium bg-blue-600 text-white transition";
+                document.getElementById('btn-piso').className = "px-4 py-2 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+            } else {
+                document.getElementById('const-alvenaria').classList.add('hidden');
+                document.getElementById('const-piso').classList.remove('hidden');
+                document.getElementById('btn-piso').className = "px-4 py-2 rounded-xl text-xs font-medium bg-blue-600 text-white transition";
+                document.getElementById('btn-alvenaria').className = "px-4 py-2 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+            }
+        }
+
+        // Função unificada de Construção (Alvenaria + Pisos)
         function calculateConstruction() {
+            // Parte de Alvenaria
             const l = parseFloat(document.getElementById('wallLength').value) || 0;
             const h = parseFloat(document.getElementById('wallHeight').value) || 0;
             const perSqm = parseFloat(document.getElementById('brickType').value) || 12.5;
-            const area = l * h;
-            const totalBricks = Math.ceil((area * perSqm) * 1.10); // +10% margem de quebra
-            const cementBags = Math.ceil(area * 0.25); // estimativa média de argamassa assentamento
+            const areaWall = l * h;
+            const totalBricks = Math.ceil((areaWall * perSqm) * 1.10);
+            const cementBags = Math.ceil(areaWall * 0.25);
 
-            document.getElementById('resWallArea').innerText = area.toFixed(2) + " m²";
+            document.getElementById('resWallArea').innerText = areaWall.toFixed(2) + " m²";
             document.getElementById('resBricks').innerText = totalBricks.toLocaleString('pt-BR') + " unidades";
             document.getElementById('resMortar').innerText = `Estimativa de ~${cementBags} saco(s) de cimento (50kg) para assentamento.`;
+
+            // Parte de Pisos
+            const pw = parseFloat(document.getElementById('roomPisoWidth').value) || 0;
+            const pl = parseFloat(document.getElementById('roomPisoLength').value) || 0;
+            const tw = (parseFloat(document.getElementById('tileWidth').value) || 60) / 100; // converter cm para metros
+            const tl = (parseFloat(document.getElementById('tileLength').value) || 60) / 100;
+
+            const areaPisoReal = pw * pl;
+            const areaPisoComPerda = areaPisoReal * 1.10; // 10% margem de segurança para recortes
+            
+            const areaPeça = tw * tl;
+            const totalPecas = areaPeça > 0 ? Math.ceil(areaPisoComPerda / areaPeça) : 0;
+            
+            // Estimativa padrão de 2m² por caixa de piso para dar uma referência útil
+            const caixasEstimadas = Math.ceil(areaPisoComPerda / 2.2); 
+
+            document.getElementById('resPisoArea').innerText = areaPisoComPerda.toFixed(2) + " m² (c/ 10% de perda)";
+            document.getElementById('resPisoCount').innerText = totalPecas.toLocaleString('pt-BR') + " peças";
+            document.getElementById('resPisoBoxes').innerText = `Aprox. ${caixasEstimadas} caixa(s) padrão (considerando ~2.2m²/caixa).`;
         }
+
+        // Lembre-se de chamar calculateConstruction() na inicialização do script:
+        calculateConstruction();
 
         // 6. HORAS & TEMPO
         function calculateTime() {
