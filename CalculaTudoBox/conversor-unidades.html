@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadoras e Conversores Técnicos - Calcula Tudo Box</title>
+    <title>Central de Conversores e Calculadoras Técnicas - Calcula Tudo Box</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
@@ -25,30 +25,33 @@
 
     <!-- Header -->
     <header class="border-b border-slate-800 bg-cardBg/50 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-bold transition">
                 <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 <span>Voltar ao Início</span>
             </a>
             <h1 class="text-lg font-semibold flex items-center gap-2">
-                <i data-lucide="cpu" class="w-5 h-5 text-blue-400"></i>
-                Utilitários & Engenharia
+                <i data-lucide="layers" class="w-5 h-5 text-blue-400"></i>
+                Central de Utilitários & Engenharia
             </h1>
         </div>
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-grow">
+    <main class="max-w-5xl mx-auto px-4 py-8 w-full flex-grow">
         
-        <!-- Seletor de Categoria Principal -->
+        <!-- Seletor de Categoria Principal (7 Categorias) -->
         <div class="flex flex-wrap gap-2 mb-8 justify-center" id="mainTabs">
-            <button onclick="switchTab('unidades')" class="main-tab px-4 py-2 rounded-xl text-sm font-medium bg-blue-600 text-white shadow-lg transition flex items-center gap-2" data-tab="unidades"><i data-lucide="ruler" class="w-4 h-4"></i> Unidades & Pressão</button>
-            <button onclick="switchTab('eletrica')" class="main-tab px-4 py-2 rounded-xl text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2" data-tab="eletrica"><i data-lucide="zap" class="w-4 h-4"></i> Elétrica & Fios</button>
-            <button onclick="switchTab('iluminacao')" class="main-tab px-4 py-2 rounded-xl text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2" data-tab="iluminacao"><i data-lucide="lightbulb" class="w-4 h-4"></i> Iluminação (Lumens)</button>
-            <button onclick="switchTab('automotivo')" class="main-tab px-4 py-2 rounded-xl text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2" data-tab="automotivo"><i data-lucide="car" class="w-4 h-4"></i> Consumo Automotivo</button>
+            <button onclick="switchTab('unidades')" class="main-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-blue-600 text-white shadow-lg transition flex items-center gap-1.5" data-tab="unidades"><i data-lucide="ruler" class="w-4 h-4"></i> Unidades & Pressão</button>
+            <button onclick="switchTab('eletrica')" class="main-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-1.5" data-tab="eletrica"><i data-lucide="zap" class="w-4 h-4"></i> Elétrica & Fios</button>
+            <button onclick="switchTab('iluminacao')" class="main-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-1.5" data-tab="iluminacao"><i data-lucide="lightbulb" class="w-4 h-4"></i> Iluminação (Lumens)</button>
+            <button onclick="switchTab('automotivo')" class="main-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-1.5" data-tab="automotivo"><i data-lucide="car" class="w-4 h-4"></i> Automotivo</button>
+            <button onclick="switchTab('construcao')" class="main-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-1.5" data-tab="construcao"><i data-lucide="brick-wall" class="w-4 h-4"></i> Construção Civil</button>
+            <button onclick="switchTab('tempo')" class="main-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-1.5" data-tab="tempo"><i data-lucide="clock" class="w-4 h-4"></i> Horas & Tempo</button>
+            <button onclick="switchTab('saude')" class="main-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-1.5" data-tab="saude"><i data-lucide="heart-pulse" class="w-4 h-4"></i> Saúde (TMB/Calorias)</button>
         </div>
 
-        <!-- CONTEÚDO 1: UNIDADES E PRESSÃO -->
+        <!-- 1. UNIDADES E PRESSÃO -->
         <div id="section-unidades" class="calc-section space-y-6">
             <div class="flex flex-wrap gap-2 justify-center mb-4" id="subUnitTabs">
                 <button onclick="setSubUnit('pressao')" class="sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white" data-sub="pressao">Pressão</button>
@@ -76,7 +79,7 @@
             </div>
         </div>
 
-        <!-- CONTEÚDO 2: ELÉTRICA & FIO -->
+        <!-- 2. ELÉTRICA & FIO -->
         <div id="section-eletrica" class="calc-section hidden space-y-6">
             <div class="bg-cardBg border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
                 <h2 class="text-xl font-bold mb-6 text-blue-400">Dimensionamento de Fios & Corrente (Ampères)</h2>
@@ -91,6 +94,7 @@
                             <select id="elecVolts" onchange="calculateElectric()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none">
                                 <option value="127">127V (Monofásico)</option>
                                 <option value="220" selected>220V (Bifásico/Monofásico)</option>
+                                <option value="12">12V (Automotivo / Solar)</option>
                             </select>
                         </div>
                     </div>
@@ -109,7 +113,7 @@
             </div>
         </div>
 
-        <!-- CONTEÚDO 3: ILUMINAÇÃO (LUMENS) -->
+        <!-- 3. ILUMINAÇÃO (LUMENS) -->
         <div id="section-iluminacao" class="calc-section hidden space-y-6">
             <div class="bg-cardBg border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
                 <h2 class="text-xl font-bold mb-6 text-blue-400">Calculadora de Lumens e Lâmpadas por Ambiente</h2>
@@ -143,40 +147,186 @@
                         <div>
                             <span class="text-xs text-slate-400 uppercase">Total de Lumens Necessários:</span>
                             <p id="resLumens" class="text-2xl font-bold text-blue-400">-- lm</p>
-                            <p class="text-xs text-slate-400 mt-1">Estimativa baseada no fluxo luminoso ideal.</p>
+                            <p id="resLampadas" class="text-xs text-slate-400 mt-1"></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- CONTEÚDO 4: AUTOMOTIVO -->
+        <!-- 4. AUTOMOTIVO -->
         <div id="section-automotivo" class="calc-section hidden space-y-6">
             <div class="bg-cardBg border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
-                <h2 class="text-xl font-bold mb-6 text-blue-400">Consumo de Combustível & Custo por Km</h2>
+                <h2 class="text-xl font-bold mb-6 text-blue-400">Consumo de Combustível & Álcool vs Gasolina</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-4">
-                        <div>
-                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Quilômetros Rodados (Km):</label>
-                            <input type="number" id="autoKm" value="350" oninput="calculateAuto()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Km Rodados:</label>
+                                <input type="number" id="autoKm" value="350" oninput="calculateAuto()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Litros:</label>
+                                <input type="number" id="autoLitros" value="30" step="0.1" oninput="calculateAuto()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
                         </div>
-                        <div>
-                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Litros Abastecidos:</label>
-                            <input type="number" id="autoLitros" value="30" step="0.1" oninput="calculateAuto()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Preço do Litro (R$):</label>
-                            <input type="number" id="autoPreco" value="5.89" step="0.01" oninput="calculateAuto()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Preço Gasolina (R$):</label>
+                                <input type="number" id="autoGas" value="5.89" step="0.01" oninput="calculateAuto()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Preço Etanol (R$):</label>
+                                <input type="number" id="autoEtanol" value="3.99" step="0.01" oninput="calculateAuto()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 flex flex-col justify-center space-y-4">
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 flex flex-col justify-center space-y-3">
                         <div>
-                            <span class="text-xs text-slate-400 uppercase">Média de Consumo:</span>
-                            <p id="resConsumo" class="text-2xl font-bold text-white">-- Km/l</p>
+                            <span class="text-xs text-slate-400 uppercase">Média / Custo por Km (Gasolina):</span>
+                            <p id="resConsumo" class="text-xl font-bold text-white">-- Km/l (R$ --/km)</p>
                         </div>
                         <div>
-                            <span class="text-xs text-slate-400 uppercase">Custo por Quilômetro Rodado:</span>
-                            <p id="resCustoKm" class="text-2xl font-bold text-blue-400">R$ -- / km</p>
+                            <span class="text-xs text-slate-400 uppercase">Qual Vale Mais a Pena (Regra 70%):</span>
+                            <p id="resCombustivel" class="text-xl font-bold text-blue-400">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. CONSTRUÇÃO CIVIL -->
+        <div id="section-construcao" class="calc-section hidden space-y-6">
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                <h2 class="text-xl font-bold mb-6 text-blue-400">Cálculo de Materiais de Construção (Alvenaria)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Comprimento Parede (m):</label>
+                                <input type="number" id="wallLength" value="5" step="0.1" oninput="calculateConstruction()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Altura Parede (m):</label>
+                                <input type="number" id="wallHeight" value="2.8" step="0.1" oninput="calculateConstruction()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Tipo de Bloco / Tijolo:</label>
+                            <select id="brickType" onchange="calculateConstruction()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200">
+                                <option value="25">Tijolo Baiano 8 Furos (9x19x19 cm) ~ 25 un/m²</option>
+                                <option value="12.5" selected>Bloco de Concreto / Cerâmico (14x19x39 cm) ~ 12.5 un/m²</option>
+                                <option value="40">Tijolo Maciço Comum ~ 40 un/m²</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 flex flex-col justify-center space-y-3">
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Área Total da Parede:</span>
+                            <p id="resWallArea" class="text-xl font-bold text-white">-- m²</p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Quantidade Estimada (+10% perda):</span>
+                            <p id="resBricks" class="text-2xl font-bold text-blue-400">-- unidades</p>
+                            <p id="resMortar" class="text-xs text-slate-400 mt-1"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. HORAS & TEMPO -->
+        <div id="section-tempo" class="calc-section hidden space-y-6">
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                <h2 class="text-xl font-bold mb-6 text-blue-400">Calculadora de Horas e Soma de Tempo</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Tempo 1 (Horas : Min):</label>
+                                <div class="flex gap-2 mt-1">
+                                    <input type="number" id="h1" value="4" min="0" oninput="calculateTime()" class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-3 text-white text-center">
+                                    <input type="number" id="m1" value="35" min="0" max="59" oninput="calculateTime()" class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-3 text-white text-center">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Tempo 2 (Horas : Min):</label>
+                                <div class="flex gap-2 mt-1">
+                                    <input type="number" id="h2" value="3" min="0" oninput="calculateTime()" class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-3 text-white text-center">
+                                    <input type="number" id="m2" value="45" min="0" max="59" oninput="calculateTime()" class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-3 text-white text-center">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Operação:</label>
+                            <select id="timeOp" onchange="calculateTime()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200">
+                                <option value="add">Somar Tempos (+)</option>
+                                <option value="sub">Subtrair Tempos (-)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 flex flex-col justify-center space-y-3">
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Resultado Total:</span>
+                            <p id="resTimeFormatted" class="text-2xl font-bold text-blue-400">--h --min</p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Em Horas Decimais (Para folha de pagamento):</span>
+                            <p id="resTimeDecimal" class="text-lg font-bold text-white">-- horas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. SAÚDE AVANÇADA (TMB & CALORIAS) -->
+        <div id="section-saude" class="calc-section hidden space-y-6">
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                <h2 class="text-xl font-bold mb-6 text-blue-400">Taxa Metabólica Basal (TMB) & Gasto Calórico Diário</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Sexo:</label>
+                                <select id="healthSex" onchange="calculateHealth()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200">
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Feminino</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Idade (anos):</label>
+                                <input type="number" id="healthAge" value="35" oninput="calculateHealth()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Peso (kg):</label>
+                                <input type="number" id="healthWeight" value="75" step="0.5" oninput="calculateHealth()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white">
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Altura (cm):</label>
+                                <input type="number" id="healthHeight" value="175" oninput="calculateHealth()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Nível de Atividade Física:</label>
+                            <select id="healthActivity" onchange="calculateHealth()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200">
+                                <option value="1.2">Sedentário (Pouco ou nenhum exercício)</option>
+                                <option value="1.375" selected>Levemente Ativo (1 a 3 dias/semana)</option>
+                                <option value="1.55">Moderadamente Ativo (3 a 5 dias/semana)</option>
+                                <option value="1.725">Muito Ativo (6 a 7 dias/semana)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 flex flex-col justify-center space-y-3">
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Metabolismo Basal (Em repouso):</span>
+                            <p id="resTMB" class="text-xl font-bold text-white">-- kcal/dia</p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">Gasto Calórico Total (Para manter peso):</span>
+                            <p id="resTDEE" class="text-2xl font-bold text-blue-400">-- kcal/dia</p>
+                            <p id="resDietTip" class="text-xs text-slate-400 mt-1"></p>
                         </div>
                     </div>
                 </div>
@@ -194,22 +344,21 @@
     <script>
         lucide.createIcons();
 
-        // Alternar abas principais
         function switchTab(tabId) {
             document.querySelectorAll('.calc-section').forEach(sec => sec.classList.add('hidden'));
             document.getElementById(`section-${tabId}`).classList.remove('hidden');
 
             document.querySelectorAll('.main-tab').forEach(btn => {
                 if(btn.dataset.tab === tabId) {
-                    btn.className = "main-tab px-4 py-2 rounded-xl text-sm font-medium bg-blue-600 text-white shadow-lg transition flex items-center gap-2";
+                    btn.className = "main-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-blue-600 text-white shadow-lg transition flex items-center gap-1.5";
                 } else {
-                    btn.className = "main-tab px-4 py-2 rounded-xl text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2";
+                    btn.className = "main-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-1.5";
                 }
             });
             lucide.createIcons();
         }
 
-        // --- LÓGICA DE UNIDADES ---
+        // 1. UNIDADES
         const unitsData = {
             pressao: { title: "Conversão de Pressão", units: { bar: { name: "Bar", toBase: v => v * 100000, fromBase: v => v / 100000 }, psi: { name: "PSI (Libras / pol²)", toBase: v => v * 6894.76, fromBase: v => v / 6894.76 }, atm: { name: "Atmosfera (atm)", toBase: v => v * 101325, fromBase: v => v / 101325 }, kpa: { name: "Quilopascal (kPa)", toBase: v => v * 1000, fromBase: v => v / 1000 }, mpa: { name: "Megapascal (MPa)", toBase: v => v * 1000000, fromBase: v => v / 1000000 }, mmhg: { name: "mmHg", toBase: v => v * 133.322, fromBase: v => v / 133.322 } } },
             comprimento: { title: "Conversão de Comprimento", units: { m: { name: "Metros (m)", toBase: v => v, fromBase: v => v }, cm: { name: "Centímetros (cm)", toBase: v => v / 100, fromBase: v => v * 100 }, mm: { name: "Milímetros (mm)", toBase: v => v / 1000, fromBase: v => v * 1000 }, km: { name: "Quilômetros (km)", toBase: v => v * 1000, fromBase: v => v / 1000 }, polegada: { name: "Polegadas (in)", toBase: v => v * 0.0254, fromBase: v => v / 0.0254 }, pe: { name: "Pés (ft)", toBase: v => v * 0.3048, fromBase: v => v / 0.3048 } } },
@@ -220,22 +369,15 @@
         };
 
         let currentSubUnit = 'pressao';
-
         function setSubUnit(sub) {
             currentSubUnit = sub;
             document.querySelectorAll('.sub-unit-btn').forEach(btn => {
-                if(btn.dataset.sub === sub) {
-                    btn.className = "sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white";
-                } else {
-                    btn.className = "sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300";
-                }
+                btn.className = btn.dataset.sub === sub ? "sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white" : "sub-unit-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300";
             });
             document.getElementById('subUnitTitle').innerText = unitsData[sub].title;
-            
             const inSel = document.getElementById('inputUnit');
             const outSel = document.getElementById('outputUnit');
             inSel.innerHTML = ''; outSel.innerHTML = '';
-
             const units = unitsData[sub].units;
             Object.keys(units).forEach(k => {
                 inSel.add(new Option(units[k].name, k));
@@ -247,21 +389,17 @@
 
         function convertUnits() {
             const val = parseFloat(document.getElementById('inputValue').value);
-            const inK = document.getElementById('inputUnit').value;
-            const outK = document.getElementById('outputUnit').value;
             if(isNaN(val)) return;
-
-            const base = unitsData[currentSubUnit].units[inK].toBase(val);
-            const res = unitsData[currentSubUnit].units[outK].fromBase(base);
+            const base = unitsData[currentSubUnit].units[document.getElementById('inputUnit').value].toBase(val);
+            const res = unitsData[currentSubUnit].units[document.getElementById('outputUnit').value].fromBase(base);
             document.getElementById('outputValue').value = Math.abs(res) < 1e-6 || Math.abs(res) > 1e6 ? res.toExponential(4) : parseFloat(res.toFixed(4));
         }
 
-        // --- LÓGICA ELÉTRICA ---
+        // 2. ELÉTRICA
         function calculateElectric() {
             const watts = parseFloat(document.getElementById('elecWatts').value) || 0;
             const volts = parseFloat(document.getElementById('elecVolts').value) || 127;
             const amperes = watts / volts;
-            
             document.getElementById('resAmperes').innerText = amperes.toFixed(2) + " A";
 
             let bitola = "1.5 mm²";
@@ -269,43 +407,104 @@
             if(amperes > 10 && amperes <= 16) { bitola = "2.5 mm²"; dica = "Ideal para tomadas de uso geral (TUG)."; }
             else if(amperes > 16 && amperes <= 24) { bitola = "4.0 mm²"; dica = "Indicado para circuitos de média potência."; }
             else if(amperes > 24 && amperes <= 32) { bitola = "6.0 mm²"; dica = "Ideal para chuveiros, torneiras elétricas ou ar-condicionado."; }
-            else if(amperes > 32) { bitola = "10.0 mm² ou superior"; dica = "Alta potência. Requer avaliação de eletricista e cabos especiais."; }
-
+            else if(amperes > 32) { bitola = "10.0 mm² ou superior"; dica = "Alta corrente. Requer cabos reforçados e avaliação técnica."; }
             document.getElementById('resBitola').innerText = bitola;
             document.getElementById('resDicaFio').innerText = dica;
         }
 
-        // --- LÓGICA ILUMINAÇÃO ---
+        // 3. ILUMINAÇÃO
         function calculateLighting() {
             const w = parseFloat(document.getElementById('roomWidth').value) || 0;
             const l = parseFloat(document.getElementById('roomLength').value) || 0;
             const lux = parseFloat(document.getElementById('roomType').value) || 150;
-            
             const area = w * l;
             const totalLumens = area * lux;
-
+            const lampadas9W = Math.ceil(totalLumens / 800); // média 800lm por lâmpada LED 9W
             document.getElementById('resArea').innerText = area.toFixed(1) + " m²";
             document.getElementById('resLumens').innerText = Math.round(totalLumens).toLocaleString('pt-BR') + " lm";
+            document.getElementById('resLampadas').innerText = `Equivale a aprox. ${lampadas9W} lâmpada(s) LED de 9W (800 lm).`;
         }
 
-        // --- LÓGICA AUTOMOTIVA ---
+        // 4. AUTOMOTIVO
         function calculateAuto() {
             const km = parseFloat(document.getElementById('autoKm').value) || 0;
             const litros = parseFloat(document.getElementById('autoLitros').value) || 0;
-            const preco = parseFloat(document.getElementById('autoPreco').value) || 0;
+            const gas = parseFloat(document.getElementById('autoGas').value) || 0;
+            const etanol = parseFloat(document.getElementById('autoEtanol').value) || 0;
 
             const consumo = litros > 0 ? (km / litros) : 0;
-            const custoKm = km > 0 ? (litros * preco) / km : 0;
+            const custoKm = km > 0 ? (litros * gas) / km : 0;
+            document.getElementById('resConsumo').innerText = `${consumo.toFixed(2)} Km/l (R$ ${custoKm.toFixed(2)}/km)`;
 
-            document.getElementById('resConsumo').innerText = consumo.toFixed(2) + " Km/l";
-            document.getElementById('resCustoKm').innerText = "R$ " + custoKm.toFixed(2) + " / km";
+            if(gas > 0 && etanol > 0) {
+                const razao = (etanol / gas) * 100;
+                const melhor = razao <= 70 ? `Abasteça com ETANOL (${razao.toFixed(0)}% do valor)` : `Abasteça com GASOLINA (${razao.toFixed(0)}% do valor)`;
+                document.getElementById('resCombustivel').innerText = melhor;
+            }
         }
 
-         // Inicializar padrões
+        // 5. CONSTRUÇÃO CIVIL
+        function calculateConstruction() {
+            const l = parseFloat(document.getElementById('wallLength').value) || 0;
+            const h = parseFloat(document.getElementById('wallHeight').value) || 0;
+            const perSqm = parseFloat(document.getElementById('brickType').value) || 12.5;
+            const area = l * h;
+            const totalBricks = Math.ceil((area * perSqm) * 1.10); // +10% margem de quebra
+            const cementBags = Math.ceil(area * 0.25); // estimativa média de argamassa assentamento
+
+            document.getElementById('resWallArea').innerText = area.toFixed(2) + " m²";
+            document.getElementById('resBricks').innerText = totalBricks.toLocaleString('pt-BR') + " unidades";
+            document.getElementById('resMortar').innerText = `Estimativa de ~${cementBags} saco(s) de cimento (50kg) para assentamento.`;
+        }
+
+        // 6. HORAS & TEMPO
+        function calculateTime() {
+            const h1 = parseInt(document.getElementById('h1').value) || 0;
+            const m1 = parseInt(document.getElementById('m1').value) || 0;
+            const h2 = parseInt(document.getElementById('h2').value) || 0;
+            const m2 = parseInt(document.getElementById('m2').value) || 0;
+            const op = document.getElementById('timeOp').value;
+
+            const totalMin1 = (h1 * 60) + m1;
+            const totalMin2 = (h2 * 60) + m2;
+            let diffMin = op === 'add' ? (totalMin1 + totalMin2) : (totalMin1 - totalMin2);
+
+            const isNegative = diffMin < 0;
+            diffMin = Math.abs(diffMin);
+            const finalH = Math.floor(diffMin / 60);
+            const finalM = diffMin % 60;
+            const decimalH = (diffMin / 60).toFixed(2);
+
+            document.getElementById('resTimeFormatted').innerText = `${isNegative ? '-' : ''}${finalH}h ${finalM < 10 ? '0' : ''}${finalM}min`;
+            document.getElementById('resTimeDecimal').innerText = `${isNegative ? '-' : ''}${decimalH} horas`;
+        }
+
+        // 7. SAÚDE (TMB)
+        function calculateHealth() {
+            const sex = document.getElementById('healthSex').value;
+            const age = parseFloat(document.getElementById('healthAge').value) || 30;
+            const weight = parseFloat(document.getElementById('healthWeight').value) || 70;
+            const height = parseFloat(document.getElementById('healthHeight').value) || 170;
+            const activity = parseFloat(document.getElementById('healthActivity').value) || 1.2;
+
+            // Equação Mifflin-St Jeor
+            let tmb = (10 * weight) + (6.25 * height) - (5 * age);
+            tmb += (sex === 'M') ? 5 : -161;
+            const tdee = tmb * activity;
+
+            document.getElementById('resTMB').innerText = Math.round(tmb).toLocaleString('pt-BR') + " kcal/dia";
+            document.getElementById('resTDEE').innerText = Math.round(tdee).toLocaleString('pt-BR') + " kcal/dia";
+            document.getElementById('resDietTip').innerText = `Para emagrecer, consuma aprox. ${Math.round(tdee - 400)} kcal/dia.`;
+        }
+
+        // Inicializar todas as calculadoras
         setSubUnit('pressao');
         calculateElectric();
         calculateLighting();
         calculateAuto();
+        calculateConstruction();
+        calculateTime();
+        calculateHealth();
     </script>
 </body>
 </html>
