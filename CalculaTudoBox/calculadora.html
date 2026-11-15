@@ -168,9 +168,21 @@
                 // Tratamento de porcentagem simples
                 codigoParaCalculo = codigoParaCalculo.replace(/%/g, '/100');
 
+                // Conta quantos parênteses abriu e fecha automaticamente se faltar
+                let abre = (codigoParaCalculo.match(/\(/g) || []).length;
+                let fecha = (codigoParaCalculo.match(/\)/g) || []).length;
+                for (let i = 0; i < (abre - fecha); i++) {
+                    codigoParaCalculo += ')';
+                }
+
                 let resultado = eval(codigoParaCalculo);
                 
-                historicoEl.innerText = expressaoVisual + ' =';
+                // Arredonda números com muitas casas decimais se necessário
+                if (!Number.isInteger(resultado)) {
+                    resultado = Number(resultado.toFixed(6));
+                }
+                
+                historicoEl.innerText = expressaoVisual + (abre > fecha ? ')' : '') + ' =';
                 expressaoVisual = String(resultado);
                 expressaoReal = String(resultado);
                 atualizarVisor();
