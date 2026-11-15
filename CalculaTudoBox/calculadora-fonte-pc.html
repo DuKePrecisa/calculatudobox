@@ -43,7 +43,6 @@
 </header>
 
 <div class="wrap">
-  <!-- Contêiner topo limpo para AdSense -->
   <div style="margin-bottom: 24px; min-height: 90px; text-align: center;"></div>
 
   <h1>Calculadora de Fonte de PC (PSU)</h1>
@@ -56,48 +55,44 @@
           <div>
             <label for="cpu-w">Processador (CPU)</label>
             <select id="cpu-w" onchange="calcPSU()">
-              <optgroup label="Entrada / Escritório">
-                <option value="35">Athlon / Celeron / Pentium (35W)</option>
-                <option value="45">Core i3 (Ger. 8 a 14) / Ryzen 3 (45W-55W)</option>
-              </optgroup>
-              <optgroup label="Intermediários">
-                <option value="65" selected>Core i5 / Ryzen 5 (Padrão 65W)</option>
-                <option value="88">Core i5 K / Ryzen 5 X (88W-95W)</option>
-              </optgroup>
-              <optgroup label="Alto Desempenho / Trabalho">
-                <option value="105">Core i7 / Ryzen 7 (105W-120W)</option>
-                <option value="125">Core i7 K / Ryzen 7 X (125W-142W)</option>
-                <option value="120">Xeon E5 / W Series Workstation (120W-140W)</option>
-              </optgroup>
-              <optgroup label="Enthusiast / Top de Linha">
-                <option value="180">Core i9 / Ryzen 9 (180W-230W)</option>
-                <option value="253">Core i9 K / KS (Picos até 253W+)</option>
-                <option value="300">Processadores HEDT / Threadripper (300W+)</option>
-              </optgroup>
+              <option value="35">Athlon 3000G / Celeron / Pentium Gold (35W)</option>
+              <option value="45">Core i3-9100 / i3-10100 / Ryzen 3 3200G (45W-65W)</option>
+              <option value="58">Core i3-12100F / i3-13100F / i3-14100F (58W)</option>
+              <option value="65" selected>Ryzen 5 3600 / 5500 / 5600 / Core i5-10400F / 12400F (65W)</option>
+              <option value="65">Ryzen 7 5700X / Ryzen 7 7700 (65W)</option>
+              <option value="95">Core i5-9600K / Ryzen 5 3600X / 5600X / 7600X (95W-105W)</option>
+              <option value="105">Ryzen 7 3700X / 5800X / 5700X3D / 5800X3D (105W)</option>
+              <option value="120">Ryzen 7 7800X3D / 9800X3D (120W)</option>
+              <option value="120">Xeon E5-2620 / E5-2650 / E5-2670 v3 (85W-120W)</option>
+              <option value="135">Xeon E5-2680 v4 / E5-2690 v4 / E5-2697 v3 (120W-145W)</option>
+              <option value="125">Core i5-12600K / i5-13600K / i5-14600K (125W-180W)</option>
+              <option value="170">Ryzen 9 5900X / 5950X / 7900X / 7950X / 9950X (170W)</option>
+              <option value="190">Core i7-12700K / i7-13700K / i7-14700K (190W-250W)</option>
+              <option value="253">Core i9-12900K / i9-13900K / i9-14900K (253W+)</option>
+              <option value="280">Xeon Dual CPU / AMD Threadripper (280W+)</option>
             </select>
           </div>
           <div>
             <label for="gpu-w">Placa de Vídeo (GPU)</label>
             <select id="gpu-w" onchange="calcPSU()">
               <option value="0">Vídeo Integrado (Sem placa dedicada)</option>
-              <optgroup label="Entrada (Até 75W)">
-                <option value="50">GT 1030 / RX 550 / GTX 750 Ti (30W-50W)</option>
-                <option value="75">GTX 1050 Ti / GTX 1650 / RX 6400 (75W)</option>
-              </optgroup>
-              <optgroup label="Intermediárias (110W - 150W)">
-                <option value="115" selected>RTX 4060 / RX 6600 / GTX 1060 (115W-130W)</option>
-                <option value="140">RTX 3060 12GB / RTX 4060 Ti / RX 7600 (140W-160W)</option>
-                <option value="185">RX 580 / RTX 3060 Ti / GTX 1070/1080 (170W-185W)</option>
-              </optgroup>
-              <optgroup label="Avançadas (200W - 300W)">
-                <option value="220">RTX 4070 / RTX 3070 / RX 7700 XT (200W-225W)</option>
-                <option value="250">RTX 4070 Super / RX 7800 XT (250W)</option>
-                <option value="285">RTX 3080 / RTX 4070 Ti Super (285W-300W)</option>
-              </optgroup>
-              <optgroup label="Enthusiast / High-End (320W - 450W+)">
-                <option value="320">RTX 4080 / RX 7900 XTX / RTX 3090 (320W-355W)</option>
-                <option value="450">RTX 4090 / RTX 5090 (450W-500W+)</option>
-              </optgroup>
+              <option value="30">GT 710 / GT 730 / GT 1030 (30W)</option>
+              <option value="50">RX 550 / GTX 750 Ti / GTX 1050 (50W-75W)</option>
+              <option value="75">GTX 1050 Ti / GTX 1630 / GTX 1650 / RX 6400 (75W)</option>
+              <option value="100">GTX 1060 3GB / GTX 1650 Super / RX 6500 XT (100W-120W)</option>
+              <option value="115" selected>RTX 4060 / GTX 1060 6GB / GTX 1660 / 1660 Super (115W-125W)</option>
+              <option value="132">RX 6600 / RX 6600 XT / RX 6650 XT (132W-175W)</option>
+              <option value="160">RTX 2060 / RTX 3050 / RTX 4060 Ti / RX 7600 (130W-165W)</option>
+              <option value="170">RTX 3060 12GB / GTX 1070 / GTX 1070 Ti (150W-180W)</option>
+              <option value="185">RX 570 / RX 580 / RX 590 / GTX 1080 (180W-215W)</option>
+              <option value="200">RTX 2060 Super / RTX 2070 / RTX 3060 Ti / RTX 4070 (175W-215W)</option>
+              <option value="220">RTX 2080 / RTX 3070 / RTX 4070 Super / RX 6700 XT / 6750 XT (220W-250W)</option>
+              <option value="250">RTX 2080 Ti / RTX 3070 Ti / RX 7700 XT / RX 7800 XT (245W-290W)</option>
+              <option value="285">RTX 4070 Ti / RTX 4070 Ti Super / RX 6800 XT (285W-300W)</option>
+              <option value="320">RTX 3080 / RTX 3080 Ti / RTX 4080 / RTX 4080 Super (320W-350W)</option>
+              <option value="355">RX 6900 XT / RX 6950 XT / RX 7900 XT / RX 7900 XTX (300W-355W)</option>
+              <option value="360">RTX 3090 / RTX 3090 Ti / RTX 5080 (350W-450W)</option>
+              <option value="450">RTX 4090 / RTX 5090 (450W-575W)</option>
             </select>
           </div>
         </div>
@@ -106,19 +101,19 @@
           <div>
             <label for="ram-w">Módulos de Memória RAM</label>
             <select id="ram-w" onchange="calcPSU()">
-              <option value="5">1 Pente de RAM (DDR3/DDR4/DDR5)</option>
-              <option value="10" selected>2 Pentes de RAM (Dual Channel)</option>
+              <option value="5">1 Pente de RAM</option>
+              <option value="10" selected>2 Pentes de RAM</option>
               <option value="20">4 Pentes de RAM</option>
-              <option value="35">Kit Avançado 8 Pentes (Placas Mãe HEDT)</option>
+              <option value="35">8 Pentes de RAM (Workstation / Servidor)</option>
             </select>
           </div>
           <div>
             <label for="storage-w">Armazenamento e Ventoinhas</label>
             <select id="storage-w" onchange="calcPSU()">
-              <option value="25">1 SSD SATA / NVMe (Básico sem LED)</option>
-              <option value="35" selected>1 SSD NVMe + 3 Fans (Padrão)</option>
+              <option value="25">1 SSD SATA / NVMe (Sem fans extras)</option>
+              <option value="35" selected>1 SSD NVMe + 3 Fans (Básico)</option>
               <option value="55">2 SSDs/HDs + Water Cooler 240mm + RGB</option>
-              <option value="80">Múltiplos Discos + 6 a 9 Fans + Water Cooler 360mm</option>
+              <option value="80">Múltiplos HDs/SSDs + 6 a 9 Fans RGB + Water Cooler 360mm</option>
             </select>
           </div>
         </div>
@@ -137,7 +132,6 @@
     </div>
 
     <aside>
-      <!-- Contêiner lateral limpo para AdSense -->
       <div style="margin-bottom: 20px; min-height: 250px;"></div>
       <div class="box">
         <h3 style="font-size:0.85rem; color:var(--muted); margin-bottom:12px;">OUTRAS CALCULADORAS</h3>
