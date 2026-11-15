@@ -15,7 +15,6 @@
   .logo span { color: var(--blue); }
   .btn { background: var(--input); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
   .wrap { max-width: 1150px; margin: 0 auto; padding: 20px; width: 100%; }
-  .ad-top { height: 85px; background: var(--card); border: 2px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 24px; }
   h1 { font-size: 1.9rem; margin-bottom: 6px; }
   .sub { color: var(--muted); margin-bottom: 24px; font-size: 0.95rem; }
   .grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px; }
@@ -25,7 +24,6 @@
   select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--input); color: var(--text); font-size: 0.95rem; }
   .result-panel { background: rgba(6, 182, 212, 0.12); border: 1px solid var(--cyan); border-radius: 12px; padding: 22px; text-align: center; margin-top: 10px; }
   .result-val { font-size: 2.6rem; font-weight: 900; color: var(--cyan); margin: 6px 0; }
-  .ad-side { height: 260px; background: var(--card); border: 2px dashed var(--border); border-radius: 14px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; color: var(--muted); font-size: 0.75rem; margin-bottom: 20px; }
   .seo p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; }
   .seo h2 { font-size: 1.2rem; margin-bottom: 10px; }
   footer { background: var(--card); border-top: 1px solid var(--border); padding: 22px; margin-top: auto; text-align: center; font-size: 0.85rem; color: var(--muted); }
@@ -45,8 +43,8 @@
 </header>
 
 <div class="wrap">
-<!-- Novo (Limpo e pronto para o AdSense - TOPO) -->
-<div style="margin-bottom: 24px; min-height: 90px; text-align: center;"></div>
+  <!-- Contêiner topo limpo para AdSense -->
+  <div style="margin-bottom: 24px; min-height: 90px; text-align: center;"></div>
 
   <h1>Calculadora de Fonte de PC (PSU)</h1>
   <p class="sub">Descubra o consumo estimado do seu computador e a potência ideal da fonte de alimentação.</p>
@@ -58,23 +56,48 @@
           <div>
             <label for="cpu-w">Processador (CPU)</label>
             <select id="cpu-w" onchange="calcPSU()">
-              <option value="65" selected>Ryzen 5 / Core i5 (65W TDP)</option>
-              <option value="105">Ryzen 7 / Xeon E5-2680 v4 (105W-120W)</option>
-              <option value="150">Xeon Dual / Core i7 K (150W)</option>
-              <option value="250">Core i9 / Ryzen 9 Extreme (250W)</option>
-              <option value="45">Core i3 / Ryzen 3 / Athlon (45W)</option>
+              <optgroup label="Entrada / Escritório">
+                <option value="35">Athlon / Celeron / Pentium (35W)</option>
+                <option value="45">Core i3 (Ger. 8 a 14) / Ryzen 3 (45W-55W)</option>
+              </optgroup>
+              <optgroup label="Intermediários">
+                <option value="65" selected>Core i5 / Ryzen 5 (Padrão 65W)</option>
+                <option value="88">Core i5 K / Ryzen 5 X (88W-95W)</option>
+              </optgroup>
+              <optgroup label="Alto Desempenho / Trabalho">
+                <option value="105">Core i7 / Ryzen 7 (105W-120W)</option>
+                <option value="125">Core i7 K / Ryzen 7 X (125W-142W)</option>
+                <option value="120">Xeon E5 / W Series Workstation (120W-140W)</option>
+              </optgroup>
+              <optgroup label="Enthusiast / Top de Linha">
+                <option value="180">Core i9 / Ryzen 9 (180W-230W)</option>
+                <option value="253">Core i9 K / KS (Picos até 253W+)</option>
+                <option value="300">Processadores HEDT / Threadripper (300W+)</option>
+              </optgroup>
             </select>
           </div>
           <div>
             <label for="gpu-w">Placa de Vídeo (GPU)</label>
             <select id="gpu-w" onchange="calcPSU()">
               <option value="0">Vídeo Integrado (Sem placa dedicada)</option>
-              <option value="75">GTX 1050 Ti / GTX 1650 / RX 6400 (75W)</option>
-              <option value="115" selected>RTX 4060 / RX 6600 / GTX 1060 (115W-130W)</option>
-              <option value="185">RX 580 / RTX 3060 / GTX 1070 (170W-185W)</option>
-              <option value="220">RTX 4070 Super / RX 7700 XT (220W-245W)</option>
-              <option value="320">RTX 4080 / RX 7900 XT (320W)</option>
-              <option value="450">RTX 4090 / Série Enthusiast (450W)</option>
+              <optgroup label="Entrada (Até 75W)">
+                <option value="50">GT 1030 / RX 550 / GTX 750 Ti (30W-50W)</option>
+                <option value="75">GTX 1050 Ti / GTX 1650 / RX 6400 (75W)</option>
+              </optgroup>
+              <optgroup label="Intermediárias (110W - 150W)">
+                <option value="115" selected>RTX 4060 / RX 6600 / GTX 1060 (115W-130W)</option>
+                <option value="140">RTX 3060 12GB / RTX 4060 Ti / RX 7600 (140W-160W)</option>
+                <option value="185">RX 580 / RTX 3060 Ti / GTX 1070/1080 (170W-185W)</option>
+              </optgroup>
+              <optgroup label="Avançadas (200W - 300W)">
+                <option value="220">RTX 4070 / RTX 3070 / RX 7700 XT (200W-225W)</option>
+                <option value="250">RTX 4070 Super / RX 7800 XT (250W)</option>
+                <option value="285">RTX 3080 / RTX 4070 Ti Super (285W-300W)</option>
+              </optgroup>
+              <optgroup label="Enthusiast / High-End (320W - 450W+)">
+                <option value="320">RTX 4080 / RX 7900 XTX / RTX 3090 (320W-355W)</option>
+                <option value="450">RTX 4090 / RTX 5090 (450W-500W+)</option>
+              </optgroup>
             </select>
           </div>
         </div>
@@ -83,17 +106,19 @@
           <div>
             <label for="ram-w">Módulos de Memória RAM</label>
             <select id="ram-w" onchange="calcPSU()">
-              <option value="5">1 Pente de RAM</option>
-              <option value="10" selected>2 Pentes de RAM</option>
+              <option value="5">1 Pente de RAM (DDR3/DDR4/DDR5)</option>
+              <option value="10" selected>2 Pentes de RAM (Dual Channel)</option>
               <option value="20">4 Pentes de RAM</option>
+              <option value="35">Kit Avançado 8 Pentes (Placas Mãe HEDT)</option>
             </select>
           </div>
           <div>
             <label for="storage-w">Armazenamento e Ventoinhas</label>
             <select id="storage-w" onchange="calcPSU()">
-              <option value="35" selected>1 SSD NVMe + 3 Fans (Básico)</option>
-              <option value="55">2 SSDs/HDs + Water Cooler + RGB</option>
-              <option value="80">Múltiplos HDs + 6 Fans RGB + Water Cooler</option>
+              <option value="25">1 SSD SATA / NVMe (Básico sem LED)</option>
+              <option value="35" selected>1 SSD NVMe + 3 Fans (Padrão)</option>
+              <option value="55">2 SSDs/HDs + Water Cooler 240mm + RGB</option>
+              <option value="80">Múltiplos Discos + 6 a 9 Fans + Water Cooler 360mm</option>
             </select>
           </div>
         </div>
@@ -112,8 +137,8 @@
     </div>
 
     <aside>
-<!-- Novo (Limpo e pronto para o AdSense - LATERAL) -->
-<div style="margin-bottom: 20px; min-height: 250px;"></div>
+      <!-- Contêiner lateral limpo para AdSense -->
+      <div style="margin-bottom: 20px; min-height: 250px;"></div>
       <div class="box">
         <h3 style="font-size:0.85rem; color:var(--muted); margin-bottom:12px;">OUTRAS CALCULADORAS</h3>
         <ul style="list-style:none; line-height:2.2; font-size:0.9rem;">
@@ -140,7 +165,8 @@
     var withMargin = totalLoad * 1.35;
 
     var recommended = 400;
-    if (withMargin > 850) recommended = 1000;
+    if (withMargin > 1050) recommended = 1200;
+    else if (withMargin > 850) recommended = 1000;
     else if (withMargin > 750) recommended = 850;
     else if (withMargin > 650) recommended = 750;
     else if (withMargin > 550) recommended = 650;
