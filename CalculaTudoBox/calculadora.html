@@ -16,11 +16,12 @@
       }
     </script>
 
-    <!-- Tailwind CSS para Estilização Moderna -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .btn-calc {
-            transition: all 0.15s ease;
+            transition: all 0.12s ease;
+            user-select: none;
         }
         .btn-calc:active {
             transform: scale(0.95);
@@ -45,9 +46,9 @@
     <!-- Conteúdo Principal -->
     <main class="flex-grow max-w-md w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
         
-        <div class="text-center mb-6">
+        <div class="text-center mb-5">
             <h1 class="text-2xl font-bold text-slate-100">Calculadora Científica</h1>
-            <p class="text-xs text-slate-400 mt-1">Operações básicas e funções avançadas para o dia a dia</p>
+            <p class="text-xs text-slate-400 mt-1">Operações básicas, raízes, potências e funções rápidas</p>
         </div>
 
         <!-- Visor da Calculadora -->
@@ -56,39 +57,46 @@
             <div id="visor" class="text-right text-3xl sm:text-4xl font-mono text-cyan-400 overflow-x-auto whitespace-nowrap tracking-wider">0</div>
         </div>
 
-        <!-- Teclado da Calculadora -->
+        <!-- Teclado da Calculadora (4 colunas, 7 linhas) -->
         <div class="grid grid-cols-4 gap-2 bg-slate-900/50 border border-slate-800/80 p-4 rounded-2xl shadow-xl">
-            <!-- Linha Científica / Extra 1 -->
-            <button onclick="inserirValor('(')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-3 rounded-xl border border-slate-700/50">(</button>
-            <button onclick="inserirValor(')')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-3 rounded-xl border border-slate-700/50">)</button>
-            <button onclick="inserirFuncao('Math.sqrt(', '√')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-3 rounded-xl border border-slate-700/50">√</button>
-            <button onclick="inserirFuncao('**2', '²')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-3 rounded-xl border border-slate-700/50">x²</button>
+            
+            <!-- Linha 1: Funções Científicas Avançadas -->
+            <button onclick="inserirFuncao('Math.sqrt(', '√(')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Raiz Quadrada">√</button>
+            <button onclick="inserirFuncao('Math.cbrt(', '∛(')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Raiz Cúbica">∛</button>
+            <button onclick="inserirFuncao('**2', '²')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Elevado ao Quadrado">x²</button>
+            <button onclick="inserirFuncao('**', '^')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Potência">xʸ</button>
 
-            <!-- Linha Limpeza e Operadores -->
+            <!-- Linha 2: Parênteses, Pi e Inverter Sinal -->
+            <button onclick="inserirValor('(')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2.5 rounded-xl border border-slate-700/50">(</button>
+            <button onclick="inserirValor(')')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2.5 rounded-xl border border-slate-700/50">)</button>
+            <button onclick="inserirFuncao('Math.PI', 'π')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Pi">π</button>
+            <button onclick="inverterSinal()" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Inverter Sinal">±</button>
+
+            <!-- Linha 3: Limpeza, Porcentagem e Divisão -->
             <button onclick="limparTudo()" class="btn-calc bg-rose-950/60 hover:bg-rose-900/60 text-rose-300 font-semibold py-3 rounded-xl border border-rose-900/40">C</button>
             <button onclick="apagarUltimo()" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-3 rounded-xl border border-slate-700/50">⌫</button>
             <button onclick="inserirValor('%')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-3 rounded-xl border border-slate-700/50">%</button>
-            <button onclick="inserirValor('/')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">÷</button>
+            <button onclick="inserirOperador('/', '÷')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">÷</button>
 
-            <!-- Números 7, 8, 9 e Multiplicação -->
+            <!-- Linha 4: 7, 8, 9, × -->
             <button onclick="inserirValor('7')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">7</button>
             <button onclick="inserirValor('8')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">8</button>
             <button onclick="inserirValor('9')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">9</button>
-            <button onclick="inserirValor('*')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">×</button>
+            <button onclick="inserirOperador('*', '×')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">×</button>
 
-            <!-- Números 4, 5, 6 e Subtração -->
+            <!-- Linha 5: 4, 5, 6, - -->
             <button onclick="inserirValor('4')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">4</button>
             <button onclick="inserirValor('5')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">5</button>
             <button onclick="inserirValor('6')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">6</button>
-            <button onclick="inserirValor('-')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">-</button>
+            <button onclick="inserirOperador('-', '-')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">-</button>
 
-            <!-- Números 1, 2, 3 e Adição -->
+            <!-- Linha 6: 1, 2, 3, + -->
             <button onclick="inserirValor('1')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">1</button>
             <button onclick="inserirValor('2')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">2</button>
             <button onclick="inserirValor('3')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">3</button>
-            <button onclick="inserirValor('+')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">+</button>
+            <button onclick="inserirOperador('+', '+')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">+</button>
 
-            <!-- Zero, Ponto e Igual -->
+            <!-- Linha 7: 0, Ponto, Igual -->
             <button onclick="inserirValor('0')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800 col-span-2">0</button>
             <button onclick="inserirValor('.')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">.</button>
             <button onclick="calcular()" class="btn-calc bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold py-3 rounded-xl shadow-lg shadow-cyan-950">=</button>
@@ -110,10 +118,11 @@
 
     <!-- Lógica da Calculadora Científica -->
     <script>
-        let visorEl = document.getElementById('visor');
-        let historicoEl = document.getElementById('historico');
+        const visorEl = document.getElementById('visor');
+        const historicoEl = document.getElementById('historico');
         let expressaoVisual = '0';
         let expressaoReal = '0';
+        let calculadoRecentemente = false;
 
         function atualizarVisor() {
             visorEl.innerText = expressaoVisual;
@@ -123,14 +132,36 @@
             expressaoVisual = '0';
             expressaoReal = '0';
             historicoEl.innerText = '';
+            calculadoRecentemente = false;
             atualizarVisor();
         }
 
         function apagarUltimo() {
-            if (expressaoVisual.length > 1) {
+            if (calculadoRecentemente) {
+                limparTudo();
+                return;
+            }
+            if (expressaoVisual.endsWith('√(') || expressaoVisual.endsWith('∛(')) {
+                expressaoVisual = expressaoVisual.slice(0, -2);
+                expressaoReal = expressaoReal.slice(0, -10);
+            } else if (expressaoVisual.endsWith('π')) {
+                expressaoVisual = expressaoVisual.slice(0, -1);
+                expressaoReal = expressaoReal.slice(0, -7);
+            } else if (expressaoVisual.endsWith('²')) {
+                expressaoVisual = expressaoVisual.slice(0, -1);
+                expressaoReal = expressaoReal.slice(0, -3);
+            } else if (expressaoVisual.endsWith('^')) {
+                expressaoVisual = expressaoVisual.slice(0, -1);
+                expressaoReal = expressaoReal.slice(0, -2);
+            } else if (expressaoVisual.length > 1) {
                 expressaoVisual = expressaoVisual.slice(0, -1);
                 expressaoReal = expressaoReal.slice(0, -1);
             } else {
+                expressaoVisual = '0';
+                expressaoReal = '0';
+            }
+
+            if (expressaoVisual === '') {
                 expressaoVisual = '0';
                 expressaoReal = '0';
             }
@@ -138,6 +169,15 @@
         }
 
         function inserirValor(valor) {
+            if (calculadoRecentemente && !isNaN(valor)) {
+                expressaoVisual = valor;
+                expressaoReal = valor;
+                calculadoRecentemente = false;
+                atualizarVisor();
+                return;
+            }
+            calculadoRecentemente = false;
+
             if (expressaoVisual === '0' && valor !== '.') {
                 expressaoVisual = valor;
                 expressaoReal = valor;
@@ -148,13 +188,47 @@
             atualizarVisor();
         }
 
+        function inserirOperador(opReal, opVisual) {
+            calculadoRecentemente = false;
+            expressaoVisual += opVisual;
+            expressaoReal += opReal;
+            atualizarVisor();
+        }
+
         function inserirFuncao(funcReal, funcVisual) {
-            if (expressaoVisual === '0') {
-                expressaoVisual = funcVisual;
-                expressaoReal = funcReal;
+            // Se for função que inicia uma expressão (raízes ou Pi)
+            if (funcVisual === '√(' || funcVisual === '∛(' || funcVisual === 'π') {
+                if (expressaoVisual === '0' || calculadoRecentemente) {
+                    expressaoVisual = funcVisual;
+                    expressaoReal = funcReal;
+                } else {
+                    // Adiciona multiplicação implícita se vier logo após um número ou ')'
+                    const ultimoChar = expressaoVisual.slice(-1);
+                    if (!isNaN(ultimoChar) || ultimoChar === ')' || ultimoChar === 'π' || ultimoChar === '²') {
+                        expressaoVisual += '×' + funcVisual;
+                        expressaoReal += '*' + funcReal;
+                    } else {
+                        expressaoVisual += funcVisual;
+                        expressaoReal += funcReal;
+                    }
+                }
             } else {
+                // Funções pós-fixadas (x² e x^y)
                 expressaoVisual += funcVisual;
                 expressaoReal += funcReal;
+            }
+            calculadoRecentemente = false;
+            atualizarVisor();
+        }
+
+        function inverterSinal() {
+            if (expressaoVisual === '0') return;
+            if (expressaoVisual.startsWith('-')) {
+                expressaoVisual = expressaoVisual.slice(1);
+                expressaoReal = expressaoReal.slice(1);
+            } else {
+                expressaoVisual = '-' + expressaoVisual;
+                expressaoReal = '-' + expressaoReal;
             }
             atualizarVisor();
         }
@@ -163,35 +237,57 @@
             try {
                 let codigoParaCalculo = expressaoReal
                     .replace(/×/g, '*')
-                    .replace(/÷/g, '/');
-                
-                // Tratamento de porcentagem simples
-                codigoParaCalculo = codigoParaCalculo.replace(/%/g, '/100');
+                    .replace(/÷/g, '/')
+                    .replace(/%/g, '/100');
 
-                // Conta quantos parênteses abriu e fecha automaticamente se faltar
-                let abre = (codigoParaCalculo.match(/\(/g) || []).length;
-                let fecha = (codigoParaCalculo.match(/\)/g) || []).length;
-                for (let i = 0; i < (abre - fecha); i++) {
+                // Fecha automaticamente parênteses abertos (ex: √(27 -> √(27))
+                const abre = (codigoParaCalculo.match(/\(/g) || []).length;
+                const fecha = (codigoParaCalculo.match(/\)/g) || []).length;
+                const faltando = abre - fecha;
+                
+                let sufixoVisual = '';
+                for (let i = 0; i < faltando; i++) {
                     codigoParaCalculo += ')';
+                    sufixoVisual += ')';
                 }
 
                 let resultado = eval(codigoParaCalculo);
-                
-                // Arredonda números com muitas casas decimais se necessário
-                if (!Number.isInteger(resultado)) {
-                    resultado = Number(resultado.toFixed(6));
+
+                if (!isFinite(resultado) || isNaN(resultado)) {
+                    throw new Error('Inválido');
                 }
-                
-                historicoEl.innerText = expressaoVisual + (abre > fecha ? ')' : '') + ' =';
+
+                if (!Number.isInteger(resultado)) {
+                    resultado = Number(resultado.toFixed(8));
+                }
+
+                historicoEl.innerText = expressaoVisual + sufixoVisual + ' =';
                 expressaoVisual = String(resultado);
                 expressaoReal = String(resultado);
+                calculadoRecentemente = true;
                 atualizarVisor();
             } catch (error) {
                 visorEl.innerText = 'Erro';
                 expressaoVisual = '0';
                 expressaoReal = '0';
+                calculadoRecentemente = false;
             }
         }
+
+        // Suporte para digitação pelo teclado físico
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '0' && e.key <= '9') inserirValor(e.key);
+            else if (e.key === '.') inserirValor('.');
+            else if (e.key === '+') inserirOperador('+', '+');
+            else if (e.key === '-') inserirOperador('-', '-');
+            else if (e.key === '*') inserirOperador('*', '×');
+            else if (e.key === '/') { e.preventDefault(); inserirOperador('/', '÷'); }
+            else if (e.key === '(' || e.key === ')') inserirValor(e.key);
+            else if (e.key === '^') inserirFuncao('**', '^');
+            else if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calcular(); }
+            else if (e.key === 'Backspace') apagarUltimo();
+            else if (e.key === 'Escape') limparTudo();
+        });
     </script>
 </body>
 </html>
