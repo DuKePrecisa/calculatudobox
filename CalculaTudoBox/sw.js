@@ -7,6 +7,5 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Deixa o site buscar os arquivos normalmente da web/cloudflare
   event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
 });
