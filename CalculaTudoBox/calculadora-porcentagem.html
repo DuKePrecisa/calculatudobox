@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6508271443030056"
      crossorigin="anonymous"></script>
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#020617">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('Service Worker registrado com sucesso!'))
+      .catch((err) => console.log('Erro ao registrar Service Worker:', err));
+  }
+</script>
 <title>Calculadora de Porcentagem Online - CalculaTudoBox</title>
 <style>
   :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --amber: #f59e0b; }
