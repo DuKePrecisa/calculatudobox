@@ -171,20 +171,49 @@
   var isLive = false;
   var lastUpdate = '';
 
-  async function fetchLiveRates() {
+    async function fetchLiveRates() {
     try {
-      var host1 = "open" + "." + "er-api" + "." + "com";
-      var res = await fetch("https://" + host1 + "/v6/latest/USD");
+      // Tentativa primária: AwesomeAPI (ótima para cotações comerciais diretas em BRL)
+      var res = await fetch("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,CAD-BRL,ARS-BRL,JPY-BRL");
       var data = await res.json();
       
-      if (data && data.rates) {
-        rates = data.rates;
+      if (data && data.USDBRL) {
+        var usdBrl = parseFloat(data.USDBRL.bid);
+        rates.BRL = usdBrl;
+        rates.EUR = usdBrl / parseFloat(data.EURBRL.bid);
+        rates.GBP = usdBrl / parseFloat(data.GBPBRL.bid);
+        rates.CAD = usdBrl / parseFloat(data.CADBRL.bid);
+        rates.ARS = usdBrl / parseFloat(data.ARSBRL.bid);
+        rates.JPY = usdBrl / parseFloat(data.JPYBRL.bid);
+        
         isLive = true;
         var agora = new Date();
         lastUpdate = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         convert();
         return;
       }
+    } catch (e) {
+      // Tentativa secundária: Open Exchange Rates pública caso a primeira falhe
+      try {
+        var resAlt = await fetch("https://open.er-api.com/v6/latest/USD");
+        var dataAlt = await resAlt.json();
+        if (dataAlt && dataAlt.rates) {
+          rates = dataAlt.rates;
+          isLive = true;
+          var agoraAlt = new Date();
+          lastUpdate = agoraAlt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          convert();
+          return;
+        }
+      } catch (eAlt) {
+        console.warn("Modo offline ativado: usando taxas de referência.");
+      }
+    }
+    // Se tudo falhar, mantém as taxas padrão e sinaliza offline
+    isLive = false;
+    convert();
+  }
+
     } catch (e) {
       try {
         var host2 = "economia" + "." + "awesomeapi" + "." + "com" + "." + "br";
