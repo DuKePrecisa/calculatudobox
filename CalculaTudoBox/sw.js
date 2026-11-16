@@ -1,42 +1,30 @@
-const CACHE_NAME = 'calculatudobox-v2';
+const CACHE_NAME = 'calculatudobox-v3';
 
-// Lista de todas as páginas e recursos que funcionam 100% offline
-const OFFLINE_URLS = [
+// Arquivos essenciais que o site precisa para rodar
+const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/calculadora.html',
-  '/conversor-unidades.html',
-  '/calculadora-porcentagem.html',
-  '/calculadora-imc.html',
-  '/calculadora-fonte-pc.html',
-  '/manifest.json',
-  '/favicon-32x32.png',
-  '/favicon-16x16.png',
-  '/apple-touch-icon.png'
+  '/manifest.json'
 ];
 
-// 1. Instalação: baixa e salva todos os arquivos essenciais no dispositivo
+// 1. Instalação: Salva os arquivos essenciais
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Salvando calculadoras offline no cache...');
-      // Usa Promise.allSettled para que, se algum arquivo opcional faltar, não quebre o cache dos demais
-      return Promise.allSettled(
-        OFFLINE_URLS.map((url) => cache.add(url))
-      );
+      return cache.addAll(ASSETS_TO_CACHE);
     })
   );
   self.skipWaiting();
 });
 
-// 2. Ativação: limpa caches antigos quando você atualizar a versão (ex: v2 -> v3)
+// 2. Ativação: Limpa os caches antigos
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('[SW] Removendo cache antigo:', cache);
             return caches.delete(cache);
           }
         })
@@ -46,37 +34,33 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 3. Interceptação de requisições: entrega rápido do cache ou busca na rede
+// 3. Busca: Tenta pegar da rede primeiro; se estiver offline, busca no cache
 self.addEventListener('fetch', (event) => {
-  // Ignora requisições que não sejam GET (como chamadas POST para a API da IA)
   if (event.request.method !== 'GET') return;
 
-  // Ignora scripts externos de anúncios (AdSense) ou analytics para não travar offline
-  if (event.request.url.includes('googlesyndication') || event.request.url.includes('google-analytics')) {
+  // Ignora requisições de anúncios, analytics e APIs externas (como a de Câmbio ou IA)
+  const url = event.request.url;
+  if (url.includes('googlesyndication') || url.includes('google-analytics') || url.includes('api') || url.includes('exchangerate')) {
     return;
   }
 
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      // Se já está salvo no cache offline, entrega imediatamente e atualiza em segundo plano
-      const fetchPromise = fetch(event.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
+    fetch(event.request)
+      .then((response) => {
+        // Se a rede estiver funcionando, retorna normalmente
+        return response;
+      })
+      .catch(() => {
+        // Se cair a internet, tenta entregar o arquivo salvo no cache
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
           }
-          return networkResponse;
-        })
-        .catch(() => {
-          // Se estiver sem internet e for navegação de página, garante o retorno da home ou cache
+          // Se não tiver nem no cache e nem na rede, retorna a página inicial por segurança
           if (event.request.mode === 'navigate') {
             return caches.match('/index.html');
           }
         });
-
-      return cachedResponse || fetchPromise;
-    })
+      })
   );
 });
