@@ -16,107 +16,134 @@
       }
     </script>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Estilos Nativos (Padrão do Portal - Sem dependência externa) -->
     <style>
-        .btn-calc {
-            transition: all 0.12s ease;
-            user-select: none;
+        :root { 
+            --bg: #020617; 
+            --card: #0f172a; 
+            --hover: #1e293b; 
+            --border: #1e293b; 
+            --text: #f8fafc; 
+            --muted: #94a3b8; 
+            --blue: #3b82f6; 
+            --cyan: #22d3ee;
+            --rose: #f43f5e;
         }
-        .btn-calc:active {
-            transform: scale(0.95);
+        body.light { 
+            --bg: #f8fafc; 
+            --card: #ffffff; 
+            --hover: #f1f5f9; 
+            --border: #e2e8f0; 
+            --text: #0f172a; 
+            --muted: #475569; 
+            --cyan: #0284c7;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; transition: 0.2s; }
+        header { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .nav { max-width: 1200px; margin: 0 auto; padding: 0 20px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 800; font-size: 1.3rem; }
+        .logo span { color: var(--blue); }
+        .theme-btn { background: var(--hover); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 0.9rem; }
+        
+        .wrap { max-width: 420px; margin: 0 auto; padding: 30px 20px; width: 100%; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        
+        .calc-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); }
+        .visor-container { background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 16px; text-align: right; }
+        #historico { font-size: 0.8rem; color: var(--muted); height: 20px; overflow-x: auto; white-space: nowrap; margin-bottom: 4px; }
+        #visor { font-size: 2.2rem; font-family: monospace; color: var(--cyan); overflow-x: auto; white-space: nowrap; }
+
+        .keypad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .btn { background: var(--hover); border: 1px solid var(--border); color: var(--text); font-size: 1rem; font-weight: 600; padding: 14px 0; border-radius: 12px; cursor: pointer; transition: 0.12s; user-select: none; }
+        .btn:hover { border-color: var(--blue); }
+        .btn:active { transform: scale(0.95); }
+        
+        .btn-func { color: var(--cyan); }
+        .btn-op { background: rgba(59, 130, 246, 0.1); color: var(--blue); border-color: rgba(59, 130, 246, 0.2); }
+        .btn-op:hover { background: rgba(59, 130, 246, 0.2); }
+        .btn-clear { background: rgba(244, 63, 94, 0.1); color: var(--rose); border-color: rgba(244, 63, 94, 0.2); }
+        .btn-equal { background: var(--blue); color: white; border-color: var(--blue); grid-column: span 1; font-weight: 700; }
+        .btn-equal:hover { opacity: 0.9; }
+
+        footer { background: var(--card); border-top: 1px solid var(--border); padding: 20px 0; text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: auto; }
+        footer a { color: var(--muted); text-decoration: none; margin: 0 10px; }
+        footer a:hover { color: var(--blue); }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between font-sans">
+<body>
 
     <!-- Cabeçalho -->
-    <header class="bg-slate-900 border-b border-slate-800 py-4 px-6">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <a href="index.html" class="text-xl font-bold tracking-wider text-cyan-400 hover:text-cyan-300 transition-colors">
-                Calcula Tudo Box
-            </a>
-            <nav class="space-x-4 text-sm text-slate-400">
-                <a href="index.html" class="hover:text-slate-100 transition-colors">Início</a>
-                <a href="sobre.html" class="hover:text-slate-100 transition-colors">Sobre</a>
-            </nav>
+    <header>
+        <div class="nav">
+            <a href="index.html" class="logo">📦 Calcula<span>Tudo</span>Box</a>
+            <button class="theme-btn" onclick="document.body.classList.toggle('light')">🌓 Tema</button>
         </div>
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="flex-grow max-w-md w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
-        
-        <div class="text-center mb-5">
-            <h1 class="text-2xl font-bold text-slate-100">Calculadora Científica</h1>
-            <p class="text-xs text-slate-400 mt-1">Operações básicas, raízes, potências e funções rápidas</p>
+    <main class="wrap">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 4px;">Calculadora Científica</h1>
+            <p style="font-size: 0.85rem; color: var(--muted);">Funciona totalmente offline direto no seu dispositivo</p>
         </div>
 
-        <!-- Visor da Calculadora -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl mb-4">
-            <div id="historico" class="text-right text-xs text-slate-500 h-6 overflow-x-auto whitespace-nowrap mb-1"></div>
-            <div id="visor" class="text-right text-3xl sm:text-4xl font-mono text-cyan-400 overflow-x-auto whitespace-nowrap tracking-wider">0</div>
+        <div class="calc-box">
+            <!-- Visor -->
+            <div class="visor-container">
+                <div id="historico"></div>
+                <div id="visor">0</div>
+            </div>
+
+            <!-- Teclado -->
+            <div class="keypad">
+                <button onclick="inserirFuncao('Math.sqrt(', '√(')" class="btn btn-func" title="Raiz Quadrada">√</button>
+                <button onclick="inserirFuncao('Math.cbrt(', '∛(')" class="btn btn-func" title="Raiz Cúbica">∛</button>
+                <button onclick="inserirFuncao('**2', '²')" class="btn btn-func" title="Quadrado">x²</button>
+                <button onclick="inserirFuncao('**', '^')" class="btn btn-func" title="Potência">xʸ</button>
+
+                <button onclick="inserirValor('(')" class="btn">(</button>
+                <button onclick="inserirValor(')')" class="btn">)</button>
+                <button onclick="inserirFuncao('Math.PI', 'π')" class="btn btn-func">π</button>
+                <button onclick="inverterSinal()" class="btn">±</button>
+
+                <button onclick="limparTudo()" class="btn btn-clear">C</button>
+                <button onclick="apagarUltimo()" class="btn">⌫</button>
+                <button onclick="inserirValor('%')" class="btn btn-func">%</button>
+                <button onclick="inserirOperador('/', '÷')" class="btn btn-op">÷</button>
+
+                <button onclick="inserirValor('7')" class="btn">7</button>
+                <button onclick="inserirValor('8')" class="btn">8</button>
+                <button onclick="inserirValor('9')" class="btn">9</button>
+                <button onclick="inserirOperador('*', '×')" class="btn btn-op">×</button>
+
+                <button onclick="inserirValor('4')" class="btn">4</button>
+                <button onclick="inserirValor('5')" class="btn">5</button>
+                <button onclick="inserirValor('6')" class="btn">6</button>
+                <button onclick="inserirOperador('-', '-')" class="btn btn-op">-</button>
+
+                <button onclick="inserirValor('1')" class="btn">1</button>
+                <button onclick="inserirValor('2')" class="btn">2</button>
+                <button onclick="inserirValor('3')" class="btn">3</button>
+                <button onclick="inserirOperador('+', '+')" class="btn btn-op">+</button>
+
+                <button onclick="inserirValor('0')" class="btn" style="grid-column: span 2;">0</button>
+                <button onclick="inserirValor('.')" class="btn">.</button>
+                <button onclick="calcular()" class="btn btn-equal">=</button>
+            </div>
         </div>
-
-        <!-- Teclado da Calculadora (4 colunas, 7 linhas) -->
-        <div class="grid grid-cols-4 gap-2 bg-slate-900/50 border border-slate-800/80 p-4 rounded-2xl shadow-xl">
-            
-            <!-- Linha 1: Funções Científicas Avançadas -->
-            <button onclick="inserirFuncao('Math.sqrt(', '√(')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Raiz Quadrada">√</button>
-            <button onclick="inserirFuncao('Math.cbrt(', '∛(')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Raiz Cúbica">∛</button>
-            <button onclick="inserirFuncao('**2', '²')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Elevado ao Quadrado">x²</button>
-            <button onclick="inserirFuncao('**', '^')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Potência">xʸ</button>
-
-            <!-- Linha 2: Parênteses, Pi e Inverter Sinal -->
-            <button onclick="inserirValor('(')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2.5 rounded-xl border border-slate-700/50">(</button>
-            <button onclick="inserirValor(')')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2.5 rounded-xl border border-slate-700/50">)</button>
-            <button onclick="inserirFuncao('Math.PI', 'π')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Pi">π</button>
-            <button onclick="inverterSinal()" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2.5 rounded-xl border border-slate-700/50" title="Inverter Sinal">±</button>
-
-            <!-- Linha 3: Limpeza, Porcentagem e Divisão -->
-            <button onclick="limparTudo()" class="btn-calc bg-rose-950/60 hover:bg-rose-900/60 text-rose-300 font-semibold py-3 rounded-xl border border-rose-900/40">C</button>
-            <button onclick="apagarUltimo()" class="btn-calc bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-3 rounded-xl border border-slate-700/50">⌫</button>
-            <button onclick="inserirValor('%')" class="btn-calc bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold py-3 rounded-xl border border-slate-700/50">%</button>
-            <button onclick="inserirOperador('/', '÷')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">÷</button>
-
-            <!-- Linha 4: 7, 8, 9, × -->
-            <button onclick="inserirValor('7')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">7</button>
-            <button onclick="inserirValor('8')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">8</button>
-            <button onclick="inserirValor('9')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">9</button>
-            <button onclick="inserirOperador('*', '×')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">×</button>
-
-            <!-- Linha 5: 4, 5, 6, - -->
-            <button onclick="inserirValor('4')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">4</button>
-            <button onclick="inserirValor('5')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">5</button>
-            <button onclick="inserirValor('6')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">6</button>
-            <button onclick="inserirOperador('-', '-')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">-</button>
-
-            <!-- Linha 6: 1, 2, 3, + -->
-            <button onclick="inserirValor('1')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">1</button>
-            <button onclick="inserirValor('2')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">2</button>
-            <button onclick="inserirValor('3')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">3</button>
-            <button onclick="inserirOperador('+', '+')" class="btn-calc bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 font-semibold py-3 rounded-xl border border-cyan-900/40">+</button>
-
-            <!-- Linha 7: 0, Ponto, Igual -->
-            <button onclick="inserirValor('0')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800 col-span-2">0</button>
-            <button onclick="inserirValor('.')" class="btn-calc bg-slate-900 hover:bg-slate-800 text-slate-200 py-3 rounded-xl border border-slate-800">.</button>
-            <button onclick="calcular()" class="btn-calc bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold py-3 rounded-xl shadow-lg shadow-cyan-950">=</button>
-        </div>
-
     </main>
 
     <!-- Rodapé -->
-    <footer class="bg-slate-900 border-t border-slate-800 py-4 px-6 text-center text-xs text-slate-500">
-        <p>&copy; 2026 Calcula Tudo Box. Todos os direitos reservados.</p>
-        <div class="mt-2 space-x-3">
-            <a href="privacidade.html" class="hover:text-slate-400">Privacidade</a>
-            <span>•</span>
-            <a href="termos.html" class="hover:text-slate-400">Termos</a>
-            <span>•</span>
-            <a href="contato.html" class="hover:text-slate-400">Contato</a>
+    <footer>
+        <p>© 2026 CalculaTudoBox. Todos os direitos reservados.</p>
+        <div style="margin-top: 8px;">
+            <a href="index.html">Início</a>
+            <a href="privacidade.html">Privacidade</a>
+            <a href="termos.html">Termos</a>
         </div>
     </footer>
 
-    <!-- Lógica da Calculadora Científica -->
+    <!-- Lógica -->
     <script>
         const visorEl = document.getElementById('visor');
         const historicoEl = document.getElementById('historico');
@@ -196,13 +223,11 @@
         }
 
         function inserirFuncao(funcReal, funcVisual) {
-            // Se for função que inicia uma expressão (raízes ou Pi)
             if (funcVisual === '√(' || funcVisual === '∛(' || funcVisual === 'π') {
                 if (expressaoVisual === '0' || calculadoRecentemente) {
                     expressaoVisual = funcVisual;
                     expressaoReal = funcReal;
                 } else {
-                    // Adiciona multiplicação implícita se vier logo após um número ou ')'
                     const ultimoChar = expressaoVisual.slice(-1);
                     if (!isNaN(ultimoChar) || ultimoChar === ')' || ultimoChar === 'π' || ultimoChar === '²') {
                         expressaoVisual += '×' + funcVisual;
@@ -213,7 +238,6 @@
                     }
                 }
             } else {
-                // Funções pós-fixadas (x² e x^y)
                 expressaoVisual += funcVisual;
                 expressaoReal += funcReal;
             }
@@ -240,7 +264,6 @@
                     .replace(/÷/g, '/')
                     .replace(/%/g, '/100');
 
-                // Fecha automaticamente parênteses abertos (ex: √(27 -> √(27))
                 const abre = (codigoParaCalculo.match(/\(/g) || []).length;
                 const fecha = (codigoParaCalculo.match(/\)/g) || []).length;
                 const faltando = abre - fecha;
@@ -274,7 +297,7 @@
             }
         }
 
-        // Suporte para digitação pelo teclado físico
+        // Teclado físico
         document.addEventListener('keydown', (e) => {
             if (e.key >= '0' && e.key <= '9') inserirValor(e.key);
             else if (e.key === '.') inserirValor('.');
