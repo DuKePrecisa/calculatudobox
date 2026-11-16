@@ -1,6 +1,5 @@
-const CACHE_NAME = 'calculatudobox-v3';
+const CACHE_NAME = 'calculatudobox-v4';
 
-// Arquivos essenciais que o site precisa para rodar
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -8,7 +7,7 @@ const ASSETS_TO_CACHE = [
   '/manifest.json'
 ];
 
-// 1. Instalação: Salva os arquivos essenciais
+// 1. Instala e salva os arquivos na memória do aparelho
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -18,7 +17,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// 2. Ativação: Limpa os caches antigos
+// 2. Limpa caches antigos quando houver atualização
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -34,33 +33,34 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 3. Busca: Tenta pegar da rede primeiro; se estiver offline, busca no cache
+// 3. Intercepta as requisições com foco em robustez offline
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  // Ignora requisições de anúncios, analytics e APIs externas (como a de Câmbio ou IA)
-  const url = event.request.url;
-  if (url.includes('googlesyndication') || url.includes('google-analytics') || url.includes('api') || url.includes('exchangerate')) {
+  const url = new URL(event.request.url);
+
+  // Ignora chamadas externas (APIs de câmbio, IA, Google Analytics, anúncios)
+  if (!url.origin.includes(self.location.origin)) {
     return;
   }
 
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // Se a rede estiver funcionando, retorna normalmente
-        return response;
-      })
-      .catch(() => {
-        // Se cair a internet, tenta entregar o arquivo salvo no cache
-        return caches.match(event.request).then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          // Se não tiver nem no cache e nem na rede, retorna a página inicial por segurança
-          if (event.request.mode === 'navigate') {
-            return caches.match('/index.html');
-          }
-        });
-      })
+    caches.match(event.request).then((cachedResponse) => {
+      // Se encontrou no cache, retorna imediatamente (garante velocidade e funcionamento offline)
+      // E em segundo plano atualiza o cache caso haja internet
+      const fetchPromise = fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return networkResponse;
+      }).catch(() => {
+        // Se a rede falhar silenciosamente, o usuário continua navegando pelo cache
+      });
+
+      return cachedResponse || fetchPromise;
+    })
   );
 });
