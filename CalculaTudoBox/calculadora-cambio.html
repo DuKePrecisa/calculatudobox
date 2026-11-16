@@ -166,62 +166,7 @@
 
 <footer>© 2026 CalculaTudoBox • Todos os direitos reservados.</footer>
 
-<script>
-  var rates = { USD: 1, BRL: 5.80, EUR: 0.92, GBP: 0.79, CAD: 1.39, ARS: 1000, JPY: 154 };
-  var isLive = false;
-  var lastUpdate = '';
-
-    async function fetchLiveRates() {
-    try {
-      // Tentativa primária: AwesomeAPI (ótima para cotações comerciais diretas em BRL)
-      var res = await fetch("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,CAD-BRL,ARS-BRL,JPY-BRL");
-      var data = await res.json();
-      
-      if (data && data.USDBRL) {
-        var usdBrl = parseFloat(data.USDBRL.bid);
-        rates.BRL = usdBrl;
-        rates.EUR = usdBrl / parseFloat(data.EURBRL.bid);
-        rates.GBP = usdBrl / parseFloat(data.GBPBRL.bid);
-        rates.CAD = usdBrl / parseFloat(data.CADBRL.bid);
-        rates.ARS = usdBrl / parseFloat(data.ARSBRL.bid);
-        rates.JPY = usdBrl / parseFloat(data.JPYBRL.bid);
-        
-        isLive = true;
-        var agora = new Date();
-        lastUpdate = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        convert();
-        return;
-      }
-    } catch (e) {
-      // Tentativa secundária: Open Exchange Rates pública caso a primeira falhe
-      try {
-        var resAlt = await fetch("https://open.er-api.com/v6/latest/USD");
-        var dataAlt = await resAlt.json();
-        if (dataAlt && dataAlt.rates) {
-          rates = dataAlt.rates;
-          isLive = true;
-          var agoraAlt = new Date();
-          lastUpdate = agoraAlt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-          convert();
-          return;
-        }
-      } catch (eAlt) {
-        console.warn("Modo offline ativado: usando taxas de referência.");
-      }
-    }
-    // Se tudo falhar, mantém as taxas padrão e sinaliza offline
-    isLive = false;
-    convert();
-  }
-
-    } catch (e) {
-      try {
-        var host2 = "economia" + "." + "awesomeapi" + "." + "com" + "." + "br";
-        var res2 = await fetch("https://" + host2 + "/last/USD-BRL,EUR-BRL,GBP-BRL,CAD-BRL,ARS-BRL,JPY-BRL");
-        var d2 = await res2.json();
-        if (d2 && d2.USDBRL) {
-          var usdBrl = parseFloat(d2.USDBRL.bid);
-          rates.BRL = usdBrl;
+ usdBrl;
           rates.EUR = usdBrl / parseFloat(d2.EURBRL.bid);
           rates.GBP = usdBrl / parseFloat(d2.GBPBRL.bid);
           rates.CAD = usdBrl / parseFloat(d2.CADBRL.bid);
@@ -340,6 +285,157 @@
     ctx.beginPath();
     points.forEach(function(p, idx) {
       var x = (idx / (points.length - 1)) * (w - 20) + 10;
+
+<script>
+  var rates = { USD: 1, BRL: 5.80, EUR: 0.92, GBP: 0.79, CAD: 1.39, ARS: 1000, JPY: 154 };
+  var isLive = false;
+  var lastUpdate = '';
+
+  async function fetchLiveRates() {
+    try {
+      // Tentativa primária: AwesomeAPI (ótima para cotações comerciais diretas em BRL)
+      var res = await fetch("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,CAD-BRL,ARS-BRL,JPY-BRL");
+      var data = await res.json();
+      
+      if (data && data.USDBRL) {
+        var usdBrl = parseFloat(data.USDBRL.bid);
+        rates.BRL = usdBrl;
+        rates.EUR = usdBrl / parseFloat(data.EURBRL.bid);
+        rates.GBP = usdBrl / parseFloat(data.GBPBRL.bid);
+        rates.CAD = usdBrl / parseFloat(data.CADBRL.bid);
+        rates.ARS = usdBrl / parseFloat(data.ARSBRL.bid);
+        rates.JPY = usdBrl / parseFloat(data.JPYBRL.bid);
+        
+        isLive = true;
+        var agora = new Date();
+        lastUpdate = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        convert();
+        return;
+      }
+    } catch (e) {
+      // Tentativa secundária: Open Exchange Rates pública caso a primeira falhe
+      try {
+        var resAlt = await fetch("https://open.er-api.com/v6/latest/USD");
+        var dataAlt = await resAlt.json();
+        if (dataAlt && dataAlt.rates) {
+          rates = dataAlt.rates;
+          isLive = true;
+          var agoraAlt = new Date();
+          lastUpdate = agoraAlt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          convert();
+          return;
+        }
+      } catch (eAlt) {
+        console.warn("Modo offline ativado: usando taxas de referência.");
+      }
+    }
+    // Se tudo falhar, mantém as taxas padrão e sinaliza offline
+    isLive = false;
+    convert();
+  }
+
+  async function fetchHistoryChart() {
+    var from = document.getElementById('from-curr').value;
+    var to = document.getElementById('to-curr').value;
+    var container = document.getElementById('chart-container');
+    
+    document.getElementById('chart-title').innerText = 'Variação nos Últimos 15 Dias (' + from + ' → ' + to + ')';
+
+    if (from === to) {
+      document.getElementById('stat-min').innerText = '1.0000';
+      document.getElementById('stat-max').innerText = '1.0000';
+      document.getElementById('stat-var').innerText = '0.00%';
+      container.innerText = 'Selecione moedas diferentes para visualizar a variação histórica.';
+      container.style.display = 'flex';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'center';
+      return;
+    }
+
+    container.style.display = 'block';
+    container.innerText = 'Atualizando gráfico histórico...';
+
+    try {
+      var host = "api" + "." + "frankfurter" + "." + "app";
+      var end = new Date();
+      var start = new Date();
+      start.setDate(end.getDate() - 21);
+      
+      var startStr = start.toISOString().split('T').at(0);
+      var url = "https://" + host + "/" + startStr + "..?from=" + from + "&to=" + to;
+      
+      var res = await fetch(url);
+      if (!res.ok) throw new Error('Par não suportado');
+      var data = await res.json();
+      
+      var dates = Object.keys(data.rates).sort();
+      var points = dates.map(function(d) {
+        return { date: d, val: data.rates[d][to] };
+      });
+
+      if (points.length < 2) throw new Error('Poucos dados');
+      drawCanvasChart(points, to);
+
+    } catch (e) {
+      try {
+        var hostBr = "economia" + "." + "awesomeapi" + "." + "com" + "." + "br";
+        var resBr = await fetch("https://" + hostBr + "/json/daily/" + from + "-" + to + "/15");
+        var dataBr = await resBr.json();
+        if (Array.isArray(dataBr) && dataBr.length > 1) {
+          var pointsBr = dataBr.reverse().map(function(item) {
+            var dt = new Date(parseInt(item.timestamp) * 1000).toISOString().split('T').at(0);
+            return { date: dt, val: parseFloat(item.bid) };
+          });
+          drawCanvasChart(pointsBr, to);
+          return;
+        }
+      } catch (e2) {}
+
+      container.innerText = 'Histórico gráfico indisponível para este par no momento.';
+      document.getElementById('stat-min').innerText = '--';
+      document.getElementById('stat-max').innerText = '--';
+      document.getElementById('stat-var').innerText = '--';
+    }
+  }
+
+  function drawCanvasChart(points, targetCurr) {
+    var container = document.getElementById('chart-container');
+    container.innerHTML = '';
+
+    var values = points.map(function(p) { return p.val; });
+    var minVal = Math.min.apply(null, values);
+    var maxVal = Math.max.apply(null, values);
+    var firstVal = values.at(0);
+    var lastVal = values.at(-1);
+    var diffPct = ((lastVal - firstVal) / firstVal) * 100;
+
+    var decimals = targetCurr === 'JPY' ? 2 : 4;
+    document.getElementById('stat-min').innerText = minVal.toFixed(decimals);
+    document.getElementById('stat-max').innerText = maxVal.toFixed(decimals);
+    
+    var varEl = document.getElementById('stat-var');
+    var sign = diffPct >= 0 ? '+' : '';
+    varEl.innerText = sign + diffPct.toFixed(2) + '%';
+    varEl.style.color = diffPct >= 0 ? '#10b981' : '#ef4444';
+
+    var lineColor = diffPct >= 0 ? '#10b981' : '#ef4444';
+
+    var canvas = document.createElement('canvas');
+    canvas.width = 600;
+    canvas.height = 150;
+    canvas.style.width = '100%';
+    canvas.style.height = '150px';
+    canvas.style.display = 'block';
+    container.appendChild(canvas);
+
+    var ctx = canvas.getContext('2d');
+    var w = canvas.width;
+    var h = canvas.height;
+    var range = (maxVal - minVal) || (maxVal * 0.01);
+
+    ctx.beginPath();
+    points.forEach(function(p, idx) {
+      var x = (idx / (points.length - 1)) * (w - 20) + 10;
       var y = h - (((p.val - minVal) / range) * (h - 30) + 15);
       if (idx === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
@@ -351,14 +447,12 @@
     ctx.lineJoin = 'round';
     ctx.stroke();
 
-    // Área sombreada abaixo da linha
     ctx.lineTo(w - 10, h);
     ctx.lineTo(10, h);
     ctx.closePath();
     ctx.fillStyle = diffPct >= 0 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
     ctx.fill();
 
-    // Datas abaixo do gráfico
     var labelsDiv = document.createElement('div');
     labelsDiv.className = 'chart-labels';
     
