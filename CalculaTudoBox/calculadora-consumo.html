@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6508271443030056"
+     crossorigin="anonymous"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#020617">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('Service Worker registrado com sucesso!'))
+      .catch((err) => console.log('Erro ao registrar Service Worker:', err));
+  }
+</script>
+<title>Calculadora de Consumo de Energia (kWh) com IA - CalculaTudoBox</title>
+<style>
+  :root { --bg: #020617; --card: #0f172a; --input: #1e293b; --border: #334155; --text: #f8fafc; --muted: #94a3b8; --blue: #3b82f6; --green: #10b981; --yellow: #f59e0b; --purple: #8b5cf6; --red: #ef4444; }
+  body.light { --bg: #f8fafc; --card: #ffffff; --input: #f1f5f9; --border: #cbd5e1; --text: #0f172a; --muted: #475569; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+  body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 20; }
+  .nav { max-width: 1150px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-size: 1.3rem; font-weight: 800; color: var(--text); text-decoration: none; }
+  .logo span { color: var(--blue); }
+  .btn { background: var(--input); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+  .wrap { max-width: 1150px; margin: 0 auto; padding: 20px; width: 100%; }
+  h1 { font-size: 1.9rem; margin-bottom: 6px; }
+  .sub { color: var(--muted); margin-bottom: 24px; font-size: 0.95rem; }
+  .grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px; }
+  .box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 20px; }
+  .box-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; font-weight: 700; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  label { display: block; font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+  input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--input); color: var(--text); font-size: 0.95rem; outline: none; }
+  input:focus, select:focus { border-color: var(--blue); }
+  .ai-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .ai-row input { flex: 1; }
+  .ai-btn { padding: 12px 18px; border: none; border-radius: 10px; background: linear-gradient(135deg, var(--blue), var(--purple)); color: white; font-size: 0.92rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: opacity 0.2s; }
+  .ai-btn:hover { opacity: 0.92; }
+  .ai-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .preset-chip { background: var(--input); border: 1px solid var(--border); color: var(--muted); font-size: 0.78rem; font-weight: 600; padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: 0.15s; }
+  .preset-chip:hover { border-color: var(--blue); color: var(--text); }
+  .res-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .kwh-card { background: rgba(59,130,246,0.12); border: 1px solid var(--blue); border-radius: 12px; padding: 18px; text-align: center; }
+  .kwh-val { font-size: 2.5rem; font-weight: 900; color: var(--blue); line-height: 1.1; }
+  .kwh-badge { display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; background: rgba(16,185,129,0.2); color: var(--green); }
+  .mini-card { background: var(--input); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+  .mini-card span { font-size: 0.75rem; color: var(--muted); font-weight: 700; }
+  .mini-card strong { font-size: 1.45rem; margin-top: 6px; }
+  .add-list-btn { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--green); background: rgba(16,185,129,0.12); color: var(--green); font-weight: 700; font-size: 0.92rem; cursor: pointer; transition: 0.15s; }
+  .add-list-btn:hover { background: var(--green); color: #ffffff; }
+  .info-box { background: var(--input); border-left: 4px solid var(--blue); padding: 14px; border-radius: 8px; font-size: 0.88rem; line-height: 1.5; margin-top: 14px; }
+  .info-box.tip { border-left-color: var(--purple); }
+  .info-box p { color: var(--muted); margin-top: 4px; }
+  .error-msg { background: rgba(239,68,68,0.15); border: 1px solid var(--red); color: #fca5a5; padding: 12px; border-radius: 8px; font-size: 0.88rem; margin-top: 10px; display: none; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 10px; }
+  th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; }
+  .del-btn { background: rgba(239,68,68,0.15); border: none; color: var(--red); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-weight: 700; }
+  .total-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: var(--input); padding: 16px; border-radius: 12px; margin-top: 14px; border: 1px solid var(--border); }
+  footer { background: var(--card); border-top: 1px solid var(--border); padding: 22px; margin-top: auto; text-align: center; font-size: 0.85rem; color: var(--muted); }
+  @media (max-width: 850px) { .grid, .res-grid, .row-2, .row-3 { grid-template-columns: 1fr; } .ai-row { flex-direction: column; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="logo">📦 Calcula<span>Tudo</span>Box</a>
+    <div style="display:flex; gap:10px;">
+      <a href="index.html" class="btn">← Início</a>
+      <button type="button" class="btn" onclick="document.body.classList.toggle('light')">🌓 Tema</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div style="margin-bottom: 24px; min-height: 90px; text-align: center;"></div>
+
+  <h1>Calculadora de Consumo em kWh com IA</h1>
+  <p class="sub">Descreva o eletrodoméstico para a IA estimar a potência ou preencha os dados manualmente para calcular o gasto na conta de luz.</p>
+
+  <div class="grid">
+    <div>
+      <!-- BLOCO IA -->
+      <div class="box">
+        <div class="box-head">
+          <span>✨ 1. Estimar Aparelho com Inteligência Artificial</span>
+          <span style="font-size:0.75rem; background:rgba(139,92,246,0.2); color:#a78bfa; padding:4px 10px; border-radius:99px;">Motor IA PROCEL</span>
+        </div>
+        <label for="ai-query">Descreva o aparelho e o uso (ex: "Ar-condicionado split 12000 BTUs inverter 8h por noite" ou "Chuveiro 5500W 20 min/dia")</label>
+        <div class="ai-row">
+          <input type="text" id="ai-query" placeholder="Ex: Geladeira frost free duplex 400 litros ligada o mês todo...">
+          <button type="button" class="ai-btn" id="ai-btn" onclick="estimarComIA()">✨ Preencher com IA</button>
+        </div>
+
+        <div class="presets">
+          <button type="button" class="preset-chip" onclick="aplicarPreset('Chuveiro Elétrico 5500W', 5500, 0.5, 30)">🚿 Chuveiro (5500W)</button>
+          <button type="button" class="preset-chip" onclick="aplicarPreset('Ar-Condicionado Split 9000 BTUs', 850, 8, 30)">❄️ Ar Split 9k BTUs</button>
+          <button type="button" class="preset-chip" onclick="aplicarPreset('Geladeira Frost Free Duplex', 65, 24, 30)">🧊 Geladeira Duplex</button>
+          <button type="button" class="preset-chip" onclick="aplicarPreset('Air Fryer (Fritadeira Elétrica)', 1500, 0.5, 20)">🍟 Air Fryer (1500W)</button>
+          <button type="button" class="preset-chip" onclick="aplicarPreset('Smart TV LED 50 Polegadas', 110, 5, 30)">📺 Smart TV 50"</button>
+          <button type="button" class="preset-chip" onclick="aplicarPreset('Máquina de Lavar 12kg', 500, 1, 12)">🧺 Máquina Lavar</button>
+        </div>
+
+        <div id="ai-error" class="error-msg"></div>
+        <div id="ai-feedback" style="display:none;">
+          <div class="info-box">
+            <strong id="ai-obs-title">Análise Técnica da IA</strong>
+            <p id="ai-obs-text"></p>
+          </div>
+          <div class="info-box tip">
+            <strong>💡 Dica para Economizar Energia</strong>
+            <p id="ai-tip-text"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCO CALCULADORA -->
+      <div class="box">
+        <div class="box-head">
+          <span>⚡ 2. Cálculo Detalhado (kWh e R$)</span>
+          <span style="font-size:0.78rem; color:var(--muted);">Atualização em tempo real</span>
+        </div>
+
+        <div class="row-2">
+          <div>
+            <label for="nome-aparelho">Nome do Eletrodoméstico</label>
+            <input type="text" id="nome-aparelho" value="Chuveiro Elétrico" oninput="calcularConsumo()">
+          </div>
+          <div>
+            <label for="tarifa">Tarifa de Energia (R$ / kWh)</label>
+            <input type="number" id="tarifa" value="0.85" step="0.01" min="0.01" oninput="calcularConsumo()">
+          </div>
+        </div>
+
+        <div class="row-3">
+          <div>
+            <label for="potencia">Potência (Watts - W)</label>
+            <input type="number" id="potencia" value="5500" step="1" min="1" oninput="calcularConsumo()">
+          </div>
+          <div>
+            <label for="horas">Uso por Dia (Horas)</label>
+            <input type="number" id="horas" value="0.5" step="0.1" min="0.05" max="24" oninput="calcularConsumo()">
+          </div>
+          <div>
+            <label for="dias">Dias no Mês</label>
+            <input type="number" id="dias" value="30" step="1" min="1" max="31" oninput="calcularConsumo()">
+          </div>
+        </div>
+
+        <div class="res-grid">
+          <div class="kwh-card">
+            <div style="font-size:0.78rem; font-weight:700; color:var(--muted);">CONSUMO MENSAL</div>
+            <div class="kwh-val" id="res-kwh-mes">82,50</div>
+            <div class="kwh-badge" id="res-kwh-dia">2,75 kWh / dia</div>
+          </div>
+          <div class="mini-card">
+            <span>CUSTO MENSAL ESTIMADO</span>
+            <strong id="res-custo-mes" style="color:var(--yellow);">R$ 70,13</strong>
+          </div>
+          <div class="mini-card">
+            <span>CUSTO ANUAL ESTIMADO</span>
+            <strong id="res-custo-ano" style="color:var(--green);">R$ 841,50</strong>
+          </div>
+        </div>
+
+        <button type="button" class="add-list-btn" onclick="adicionarNaLista()">+ Adicionar Aparelho à Lista da Casa</button>
+      </div>
+
+      <!-- LISTA ACUMULADA DA CASA -->
+      <div class="box">
+        <div class="box-head">
+          <span>🏠 3. Simulador Total da Residência</span>
+          <button type="button" class="btn" style="font-size:0.78rem; padding:5px 10px;" onclick="limparLista()">Limpar Lista</button>
+        </div>
+        <p style="font-size:0.85rem; color:var(--muted); margin-bottom:10px;">Adicione vários eletrodomésticos acima para somar o consumo total em kWh e o valor estimado da fatura.</p>
+
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Aparelho</th>
+                <th>Potência</th>
+                <th>Uso</th>
+                <th>kWh/Mês</th>
+                <th>Custo/Mês</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="lista-aparelhos">
+              <tr>
+                <td colspan="6" style="text-align:center; color:var(--muted); padding:18px;">Nenhum aparelho adicionado ainda. Clique em "+ Adicionar Aparelho à Lista da Casa".</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="total-bar">
+          <div>
+            <span style="font-size:0.78rem; color:var(--muted); display:block;">CONSUMO TOTAL ACUMULADO</span>
+            <strong id="total-kwh" style="font-size:1.3rem; color:var(--blue);">0,00 kWh/mês</strong>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-size:0.78rem; color:var(--muted); display:block;">FATURA ESTIMADA (SEM BANDEIRAS/IMPOSTOS EXTRAS)</span>
+            <strong id="total-reais" style="font-size:1.4rem; color:var(--green);">R$ 0,00</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <div style="margin-bottom: 20px; min-height: 250px;"></div>
+
+      <div class="box">
+        <h3 style="font-size:0.85rem; color:var(--muted); margin-bottom:10px;">FÓRMULA DO CÁLCULO</h3>
+        <p style="font-size:0.85rem; color:var(--muted); line-height:1.5; margin-bottom:10px;">
+          O consumo elétrico em quilowatt-hora (kWh) é obtido multiplicando a potência do aparelho (em Watts) pelas horas de uso diário e pelos dias no mês, dividindo por 1.000:
+        </p>
+        <div style="background:var(--input); padding:10px; border-radius:8px; font-size:0.82rem; font-weight:700; text-align:center; color:var(--blue);">
+          kWh = (Watts × Horas × Dias) ÷ 1000
+        </div>
+      </div>
+
+      <div class="box">
+        <h3 style="font-size:0.85rem; color:var(--muted); margin-bottom:12px;">OUTRAS CALCULADORAS</h3>
+        <ul style="list-style:none; line-height:2.2; font-size:0.9rem;">
+          <li><a href="conversor-unidades.html" style="color:var(--text); text-decoration:none;">📐 Conversor & Engenharia</a></li>
+          <li><a href="calculadora-imc.html" style="color:var(--text); text-decoration:none;">❤️ Calculadora de IMC</a></li>
+          <li><a href="calculadora-porcentagem.html" style="color:var(--text); text-decoration:none;">📊 Porcentagem</a></li>
+          <li><a href="calculadora-fonte-pc.html" style="color:var(--text); text-decoration:none;">🔌 Calculadora de Fonte PC</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>© 2026 CalculaTudoBox • Todos os direitos reservados.</footer>
+
+<script>
+  let listaCasa = [];
+
+  function formatBR(num, dec = 2) {
+    return num.toLocaleString('pt-BR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  }
+
+  function calcularConsumo() {
+    const potencia = parseFloat(document.getElementById('potencia').value) || 0;
+    const horas = parseFloat(document.getElementById('horas').value) || 0;
+    const dias = parseFloat(document.getElementById('dias').value) || 0;
+    const tarifa = parseFloat(document.getElementById('tarifa').value) || 0;
+
+    const kwhDia = (potencia * horas) / 1000;
+    const kwhMes = kwhDia * dias;
+    const custoMes = kwhMes * tarifa;
+    const custoAno = custoMes * 12;
+
+    document.getElementById('res-kwh-mes').textContent = formatBR(kwhMes, 2) + ' kWh';
+    document.getElementById('res-kwh-dia').textContent = formatBR(kwhDia, 2) + ' kWh / dia';
+    document.getElementById('res-custo-mes').textContent = 'R$ ' + formatBR(custoMes, 2);
+    document.getElementById('res-custo-ano').textContent = 'R$ ' + formatBR(custoAno, 2);
+  }
+
+  function aplicarPreset(nome, watts, horas, dias) {
+    document.getElementById('nome-aparelho').value = nome;
+    document.getElementById('potencia').value = watts;
+    document.getElementById('horas').value = horas;
+    document.getElementById('dias').value = dias;
+    document.getElementById('ai-feedback').style.display = 'none';
+    calcularConsumo();
+  }
+
+  async function estimarComIA() {
+    const query = document.getElementById('ai-query').value.trim();
+    const tarifa = parseFloat(document.getElementById('tarifa').value) || 0.85;
+    const btn = document.getElementById('ai-btn');
+    const errorBox = document.getElementById('ai-error');
+    const feedbackBox = document.getElementById('ai-feedback');
+
+    if (!query) {
+      errorBox.textContent = 'Digite o nome ou a descrição do eletrodoméstico antes de consultar a IA.';
+      errorBox.style.display = 'block';
+      return;
+    }
+
+    errorBox.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = '⏳ Consultando IA...';
+
+    try {
+      const response = await fetch('/consumo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, tarifa })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao consultar o servidor de IA.');
+      }
+
+      document.getElementById('nome-aparelho').value = data.nomeAparelho || query;
+      document.getElementById('potencia').value = data.potenciaWatts || 100;
+      document.getElementById('horas').value = data.horasPorDia || 1;
+      document.getElementById('dias').value = data.diasPorMes || 30;
+
+      document.getElementById('ai-obs-title').textContent = `Análise Técnica • Selo Estimado: ${data.seloProcelEstimado || 'Padrão'}`;
+      document.getElementById('ai-obs-text').textContent = data.observacao || '';
+      document.getElementById('ai-tip-text').textContent = data.dicaEconomia || '';
+      feedbackBox.style.display = 'block';
+
+      calcularConsumo();
+    } catch (err) {
+      errorBox.textContent = 'Não foi possível estimar via IA: ' + err.message;
+      errorBox.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '✨ Preencher com IA';
+    }
+  }
+
+  function adicionarNaLista() {
+    const nome = document.getElementById('nome-aparelho').value.trim() || 'Eletrodoméstico';
+    const potencia = parseFloat(document.getElementById('potencia').value) || 0;
+    const horas = parseFloat(document.getElementById('horas').value) || 0;
+    const dias = parseFloat(document.getElementById('dias').value) || 0;
+    const tarifa = parseFloat(document.getElementById('tarifa').value) || 0;
+
+    if (potencia <= 0 || horas <= 0 || dias <= 0) return;
+
+    const kwhMes = (potencia * horas * dias) / 1000;
+    const custoMes = kwhMes * tarifa;
+
+    listaCasa.push({ nome, potencia, horas, dias, kwhMes, custoMes });
+    renderizarLista();
+  }
+
+  function removerItem(index) {
+    listaCasa.splice(index, 1);
+    renderizarLista();
+  }
+
+  function limparLista() {
+    listaCasa = [];
+    renderizarLista();
+  }
+
+  function renderizarLista() {
+    const tbody = document.getElementById('lista-aparelhos');
+    if (listaCasa.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--muted); padding:18px;">Nenhum aparelho adicionado ainda. Clique em "+ Adicionar Aparelho à Lista da Casa".</td></tr>';
+      document.getElementById('total-kwh').textContent = '0,00 kWh/mês';
+      document.getElementById('total-reais').textContent = 'R$ 0,00';
+      return;
+    }
+
+    let somaKwh = 0;
+    let somaReais = 0;
+    tbody.innerHTML = '';
+
+    listaCasa.forEach((item, idx) => {
+      somaKwh += item.kwhMes;
+      somaReais += item.custoMes;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${item.nome}</strong></td>
+        <td>${item.potencia} W</td>
+        <td>${formatBR(item.horas, 1)}h × ${item.dias}d</td>
+        <td style="color:var(--blue); font-weight:700;">${formatBR(item.kwhMes, 2)} kWh</td>
+        <td style="color:var(--green); font-weight:700;">R$ ${formatBR(item.custoMes, 2)}</td>
+        <td><button type="button" class="del-btn" onclick="removerItem(${idx})">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('total-kwh').textContent = formatBR(somaKwh, 2) + ' kWh/mês';
+    document.getElementById('total-reais').textContent = 'R$ ' + formatBR(somaReais, 2);
+  }
+
+  document.getElementById('ai-query').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      estimarComIA();
+    }
+  });
+
+  calcularConsumo();
+</script>
+</body>
+</html>
