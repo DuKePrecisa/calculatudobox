@@ -7,9 +7,9 @@
   <meta name="description" content="Jogue 6 clássicos retrô gratuitos e offline no CalculaTudoBox: Serpente Retrô, Quebra-Blocos, Soma 2048, Campo Minado, Defensor Espacial e Encaixe de Blocos." />
   <meta name="theme-color" content="#0f172a" />
   <link rel="canonical" href="https://calculatudobox.dukeprecisa.com.br/games.html" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.json" />
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6508271443030056" crossorigin="anonymous"></script>
 
@@ -17,7 +17,6 @@
     :root {
       --bg: #0f172a;
       --surface: #1e293b;
-      --surface-light: #334155;
       --text: #f8fafc;
       --muted: #94a3b8;
       --primary: #3b82f6;
@@ -34,7 +33,6 @@
     a { text-decoration: none; color: inherit; }
     .container { max-width: 1020px; margin: 0 auto; padding: 0 16px; }
 
-    /* Top Bar */
     .top-bar {
       background: #090e1a;
       border-bottom: 1px solid #1e293b;
@@ -75,7 +73,6 @@
       font-weight: 600;
     }
 
-    /* AdSense Safe Slot (Afastado dos controles) */
     .ad-wrap { margin: 18px 0; text-align: center; }
     .ad-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
     .ad-box {
@@ -90,7 +87,6 @@
       font-size: 0.82rem;
     }
 
-    /* Seletor de Jogos */
     .games-nav {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
@@ -107,17 +103,13 @@
       text-align: center;
       font-weight: 700;
       font-size: 0.88rem;
-      transition: all 0.15s ease;
     }
-    .game-tab:hover { border-color: var(--primary); }
     .game-tab.active {
       background: var(--primary);
       border-color: #60a5fa;
       color: #fff;
-      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
     }
 
-    /* Arena do Jogo */
     .arcade-box {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -150,7 +142,6 @@
       cursor: pointer;
       font-size: 0.85rem;
     }
-    .btn-restart:hover { background: #059669; }
 
     .canvas-holder {
       display: flex;
@@ -168,15 +159,14 @@
       display: block;
     }
 
-    /* Grade HTML para Campo Minado e Soma 2048 */
     .board-html {
       display: none;
       margin: 0 auto;
       user-select: none;
+      touch-action: none;
     }
     .board-html.active { display: inline-grid; }
 
-    /* Controles Virtuais Mobile */
     .mobile-controls {
       margin-top: 16px;
       display: flex;
@@ -186,21 +176,21 @@
     }
     .dpad-row { display: flex; gap: 10px; justify-content: center; }
     .ctrl-btn {
-      width: 56px;
-      height: 50px;
+      width: 58px;
+      height: 52px;
       background: #0f172a;
       border: 1px solid #475569;
       color: #fff;
       border-radius: 12px;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .ctrl-btn:active { background: var(--primary); transform: scale(0.95); }
-    .ctrl-btn.wide { width: 120px; font-size: 0.9rem; }
+    .ctrl-btn:active { background: var(--primary); }
+    .ctrl-btn.wide { width: 130px; font-size: 0.92rem; }
 
     .game-instructions {
       margin-top: 14px;
@@ -208,25 +198,24 @@
       color: var(--muted);
     }
 
-    /* Estilos específicos 2048 e Campo Minado */
     .grid-2048 {
       gap: 8px;
       background: #0f172a;
       padding: 10px;
       border-radius: 12px;
       border: 2px solid #334155;
-      grid-template-columns: repeat(4, 68px);
+      grid-template-columns: repeat(4, 66px);
     }
     .cell-2048 {
-      width: 68px;
-      height: 68px;
+      width: 66px;
+      height: 66px;
       border-radius: 8px;
       background: #1e293b;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       color: #f8fafc;
     }
     .grid-mine {
@@ -235,18 +224,18 @@
       padding: 8px;
       border-radius: 10px;
       border: 2px solid #334155;
-      grid-template-columns: repeat(9, 34px);
+      grid-template-columns: repeat(9, 32px);
     }
     .cell-mine {
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       background: #334155;
       border-radius: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       cursor: pointer;
     }
     .cell-mine.open { background: #0f172a; border: 1px solid #1e293b; cursor: default; }
@@ -266,7 +255,7 @@
   <div class="top-bar">
     <div class="container top-bar-inner">
       <div class="top-links">
-        <a href="/index.html">← Voltar às Calculadoras</a>
+        <a href="index.html">← Voltar às Calculadoras</a>
         <a href="https://dukeprecisa.com.br">Portal DuKêPrecisa</a>
       </div>
       <span>Funciona 100% Offline no PWA</span>
@@ -275,19 +264,17 @@
 
   <header>
     <div class="container header-inner">
-      <a href="/index.html" class="brand">🕹️ CalculaTudoBox <span style="color:#38bdf8;">Games</span></a>
+      <a href="index.html" class="brand">🕹️ CalculaTudoBox <span style="color:#38bdf8;">Games</span></a>
       <span class="badge-offline">● Pronto para Jogar Offline</span>
     </div>
   </header>
 
   <main class="container">
-    <!-- Banner Superior (longe dos botões do jogo) -->
     <div class="ad-wrap" aria-label="Publicidade">
       <div class="ad-label">Publicidade</div>
       <div class="ad-box">Espaço Reservado Google AdSense</div>
     </div>
 
-    <!-- Menu dos 6 Jogos Retrô -->
     <div class="games-nav" role="tablist">
       <button type="button" class="game-tab active" onclick="selectGame('serpente', this)">🐍 Serpente Retrô</button>
       <button type="button" class="game-tab" onclick="selectGame('blocos', this)">🧱 Quebra-Blocos</button>
@@ -297,7 +284,6 @@
       <button type="button" class="game-tab" onclick="selectGame('encaixe', this)">🟦 Encaixe de Blocos</button>
     </div>
 
-    <!-- Arena Principal -->
     <section class="arcade-box">
       <div class="hud">
         <div class="hud-scores">
@@ -309,11 +295,10 @@
       </div>
 
       <div class="canvas-holder" id="canvasHolder">
-        <canvas id="gameCanvas" width="360" height="400"></canvas>
+        <canvas id="gameCanvas" width="360" height="360"></canvas>
         <div id="boardHtml" class="board-html"></div>
       </div>
 
-      <!-- Controles Virtuais para Celular -->
       <div class="mobile-controls" id="mobileControls">
         <div class="dpad-row">
           <button type="button" class="ctrl-btn" onclick="handleInput('UP')">▲</button>
@@ -328,10 +313,9 @@
         </div>
       </div>
 
-      <p class="game-instructions" id="gameHelp">Use as setas do teclado ou os botões acima para guiar a serpente.</p>
+      <p class="game-instructions" id="gameHelp">Use as setas do teclado, deslize o dedo ou use os botões acima.</p>
     </section>
 
-    <!-- Banner Inferior -->
     <div class="ad-wrap" aria-label="Publicidade">
       <div class="ad-label">Publicidade</div>
       <div class="ad-box">Espaço Reservado Google AdSense</div>
@@ -402,13 +386,11 @@
       if (currentGame === 'encaixe') startEncaixe();
     }
 
-    /* ==========================================
-       1. SERPENTE RETRÔ
-       ========================================== */
+    /* 1. SERPENTE RETRÔ */
     let snakeState = {};
     function startSerpente() {
       canvas.width = 360; canvas.height = 360;
-      document.getElementById('gameHelp').textContent = 'Setas ou botões direcionais para mover. Colete as frutas verdes sem bater nas paredes ou no corpo.';
+      document.getElementById('gameHelp').textContent = 'Setas, deslize o dedo ou use os botões para mover. Colete as frutas verdes.';
       const grid = 18;
       snakeState = {
         grid,
@@ -418,6 +400,17 @@
         food: {x: 14, y: 9},
         over: false
       };
+      const drawSnakeFrame = () => {
+        ctx.fillStyle = '#090e1a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#10b981';
+        ctx.fillRect(snakeState.food.x * grid + 2, snakeState.food.y * grid + 2, grid - 4, grid - 4);
+        snakeState.snake.forEach((s, idx) => {
+          ctx.fillStyle = idx === 0 ? '#38bdf8' : '#0284c7';
+          ctx.fillRect(s.x * grid + 1, s.y * grid + 1, grid - 2, grid - 2);
+        });
+      };
+      drawSnakeFrame();
       loopTimer = setInterval(() => {
         if (snakeState.over) return;
         snakeState.dir = snakeState.nextDir;
@@ -439,24 +432,15 @@
         } else {
           snakeState.snake.pop();
         }
-        ctx.fillStyle = '#090e1a';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#10b981';
-        ctx.fillRect(snakeState.food.x * grid + 2, snakeState.food.y * grid + 2, grid - 4, grid - 4);
-        snakeState.snake.forEach((s, idx) => {
-          ctx.fillStyle = idx === 0 ? '#38bdf8' : '#0284c7';
-          ctx.fillRect(s.x * grid + 1, s.y * grid + 1, grid - 2, grid - 2);
-        });
-      }, 130);
+        drawSnakeFrame();
+      }, 140);
     }
 
-    /* ==========================================
-       2. QUEBRA-BLOCOS
-       ========================================== */
+    /* 2. QUEBRA-BLOCOS */
     let breakState = {};
     function startBlocos() {
       canvas.width = 360; canvas.height = 400;
-      document.getElementById('gameHelp').textContent = 'Use ◀ / ▶ ou arraste o dedo sobre a tela para mover a barra e rebater a esfera.';
+      document.getElementById('gameHelp').textContent = 'Use ◀ / ▶ ou arraste o dedo sobre a tela para mover a barra.';
       const cols = 6, rows = 4, bricks = [];
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
@@ -514,15 +498,13 @@
       animFrame = requestAnimationFrame(step);
     }
 
-    /* ==========================================
-       3. SOMA 2048
-       ========================================== */
+    /* 3. SOMA 2048 */
     let grid2048 = [];
     function startSoma2048() {
       canvas.style.display = 'none';
       boardHtml.className = 'board-html active grid-2048';
-      document.getElementById('gameHelp').textContent = 'Deslize os blocos com as setas para somar números iguais e alcançar 2048.';
-      grid2048 = Array.from({length: 4}, () => [0, 0, 0, 0]);
+      document.getElementById('gameHelp').textContent = 'Deslize o dedo sobre o tabuleiro ou use as setas para somar blocos iguais.';
+      grid2048 = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
       addTile2048(); addTile2048();
       render2048();
     }
@@ -579,12 +561,290 @@
       ).join('');
     }
 
-    /* ==========================================
-       4. CAMPO MINADO CLÁSSICO
-       ========================================== */
+    /* 4. CAMPO MINADO */
     let mineBoard = [], mineOver = false;
     function startMinado() {
       canvas.style.display = 'none';
       mobileControls.style.display = 'none';
       boardHtml.className = 'board-html active grid-mine';
-      document.getElementById('gameHelp').textContent = 
+      document.getElementById('gameHelp').textContent = 'Toque para abrir uma casa. Botão direito marca bandeira 🚩.';
+      mineOver = false;
+      const size = 9, minesCount = 10;
+      mineBoard = Array.from({length: size}, () => Array.from({length: size}, () => ({ mine: false, open: false, flag: false, count: 0 })));
+      let placed = 0;
+      while (placed < minesCount) {
+        const r = Math.floor(Math.random() * size), c = Math.floor(Math.random() * size);
+        if (!mineBoard[r][c].mine) { mineBoard[r][c].mine = true; placed++; }
+      }
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          let n = 0;
+          for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+            if (mineBoard[r + dr] && mineBoard[r + dr][c + dc] && mineBoard[r + dr][c + dc].mine) n++;
+          }
+          mineBoard[r][c].count = n;
+        }
+      }
+      renderMinado();
+    }
+
+    function openMineCell(r, c) {
+      if (mineOver || mineBoard[r][c].open || mineBoard[r][c].flag) return;
+      const cell = mineBoard[r][c];
+      cell.open = true;
+      if (cell.mine) {
+        mineOver = true;
+        mineBoard.flat().forEach(x => { if (x.mine) x.open = true; });
+        renderMinado();
+        return;
+      }
+      updateScore(score + 5);
+      if (cell.count === 0) {
+        for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+          if (mineBoard[r + dr] && mineBoard[r + dr][c + dc]) openMineCell(r + dr, c + dc);
+        }
+      }
+      renderMinado();
+    }
+
+    function toggleMineFlag(e, r, c) {
+      e.preventDefault();
+      if (mineOver || mineBoard[r][c].open) return;
+      mineBoard[r][c].flag = !mineBoard[r][c].flag;
+      renderMinado();
+    }
+
+    function renderMinado() {
+      boardHtml.innerHTML = mineBoard.map((row, r) => row.map((cell, c) => {
+        let txt = '';
+        if (cell.open) txt = cell.mine ? '💥' : (cell.count || '');
+        else if (cell.flag) txt = '🚩';
+        return `<div class="cell-mine ${cell.open ? 'open' : ''}" onclick="openMineCell(${r},${c})" oncontextmenu="toggleMineFlag(event,${r},${c})">${txt}</div>`;
+      }).join('')).join('');
+    }
+
+    /* 5. DEFENSOR ESPACIAL */
+    let spaceState = {};
+    function startEspacial() {
+      canvas.width = 360; canvas.height = 400;
+      document.getElementById('gameHelp').textContent = 'Mova a nave com ◀ / ▶ (ou arraste o dedo) e atire com "Ação / Girar".';
+      const aliens = [];
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 6; c++) aliens.push({ x: c * 48 + 30, y: r * 32 + 30, alive: true });
+      spaceState = { shipX: 165, bullets: [], aliens, dir: 1, over: false };
+
+      function step() {
+        if (currentGame !== 'espacial' || spaceState.over) return;
+        ctx.fillStyle = '#090e1a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        let hitEdge = false;
+        let aliveCount = 0;
+        spaceState.aliens.forEach(a => {
+          if (!a.alive) return;
+          aliveCount++;
+          a.x += spaceState.dir * 1.1;
+          if (a.x < 15 || a.x > canvas.width - 35) hitEdge = true;
+          if (a.y > canvas.height - 55) spaceState.over = true;
+          ctx.fillStyle = '#10b981';
+          ctx.fillRect(a.x, a.y, 24, 16);
+        });
+
+        if (hitEdge) {
+          spaceState.dir *= -1;
+          spaceState.aliens.forEach(a => a.y += 14);
+        }
+        if (spaceState.over) { drawGameOver('Invasão concluída! Clique em Reiniciar'); return; }
+        if (aliveCount === 0) { spaceState.over = true; drawGameOver('Setor Protegido! Vitória!'); return; }
+
+        spaceState.bullets.forEach(b => b.y -= 6);
+        spaceState.bullets = spaceState.bullets.filter(b => b.y > 0);
+        spaceState.bullets.forEach(b => {
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(b.x, b.y, 4, 10);
+          spaceState.aliens.forEach(a => {
+            if (a.alive && b.x > a.x && b.x < a.x + 24 && b.y > a.y && b.y < a.y + 16) {
+              a.alive = false; b.y = -20; updateScore(score + 20);
+            }
+          });
+        });
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.moveTo(spaceState.shipX + 15, canvas.height - 34);
+        ctx.lineTo(spaceState.shipX, canvas.height - 14);
+        ctx.lineTo(spaceState.shipX + 30, canvas.height - 14);
+        ctx.fill();
+
+        animFrame = requestAnimationFrame(step);
+      }
+      animFrame = requestAnimationFrame(step);
+    }
+
+    /* 6. ENCAIXE DE BLOCOS */
+    let tetState = {};
+    const SHAPES = [
+      [[1,1,1,1]],
+      [[1,1],[1,1]],
+      [[0,1,0],[1,1,1]],
+      [[1,0,0],[1,1,1]],
+      [[0,0,1],[1,1,1]]
+    ];
+    function startEncaixe() {
+      canvas.width = 240; canvas.height = 384;
+      document.getElementById('gameHelp').textContent = 'Setas ◀ / ▶ movem, ▼ acelera e "Ação / Girar" rotaciona a peça.';
+      const cols = 10, rows = 16;
+      tetState = {
+        cols, rows, sz: 24,
+        board: Array.from({length: rows}, () => Array(cols).fill(0)),
+        piece: null, px: 3, py: 0, over: false
+      };
+      spawnPiece();
+      loopTimer = setInterval(() => {
+        if (tetState.over) return;
+        if (!movePiece(0, 1)) {
+          mergePiece();
+          clearLines();
+          spawnPiece();
+        }
+        drawEncaixe();
+      }, 420);
+      drawEncaixe();
+    }
+
+    function spawnPiece() {
+      const s = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+      tetState.piece = s.map(r => [...r]);
+      tetState.px = 3; tetState.py = 0;
+      if (collides(tetState.px, tetState.py, tetState.piece)) {
+        tetState.over = true;
+        drawGameOver('Topo atingido!');
+      }
+    }
+
+    function collides(nx, ny, p) {
+      for (let r = 0; r < p.length; r++) {
+        for (let c = 0; c < p[r].length; c++) {
+          if (!p[r][c]) continue;
+          const bx = nx + c, by = ny + r;
+          if (bx < 0 || bx >= tetState.cols || by >= tetState.rows || (tetState.board[by] && tetState.board[by][bx])) return true;
+        }
+      }
+      return false;
+    }
+
+    function movePiece(dx, dy) {
+      if (!collides(tetState.px + dx, tetState.py + dy, tetState.piece)) {
+        tetState.px += dx; tetState.py += dy;
+        return true;
+      }
+      return false;
+    }
+
+    function rotatePiece() {
+      const rot = tetState.piece[0].map((_, i) => tetState.piece.map(row => row[i]).reverse());
+      if (!collides(tetState.px, tetState.py, rot)) tetState.piece = rot;
+    }
+
+    function mergePiece() {
+      tetState.piece.forEach((row, r) => row.forEach((v, c) => {
+        if (v) tetState.board[tetState.py + r][tetState.px + c] = 1;
+      }));
+    }
+
+    function clearLines() {
+      for (let r = tetState.rows - 1; r >= 0; r--) {
+        if (tetState.board[r].every(v => v === 1)) {
+          tetState.board.splice(r, 1);
+          tetState.board.unshift(Array(tetState.cols).fill(0));
+          updateScore(score + 100);
+          r++;
+        }
+      }
+    }
+
+    function drawEncaixe() {
+      if (tetState.over) return;
+      const sz = tetState.sz;
+      ctx.fillStyle = '#090e1a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      tetState.board.forEach((row, r) => row.forEach((v, c) => {
+        if (v) { ctx.fillStyle = '#3b82f6'; ctx.fillRect(c * sz + 1, r * sz + 1, sz - 2, sz - 2); }
+      }));
+      tetState.piece.forEach((row, r) => row.forEach((v, c) => {
+        if (v) { ctx.fillStyle = '#f59e0b'; ctx.fillRect((tetState.px + c) * sz + 1, (tetState.py + r) * sz + 1, sz - 2, sz - 2); }
+      }));
+    }
+
+    function drawGameOver(msg) {
+      ctx.fillStyle = 'rgba(9, 14, 26, 0.85)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(msg, canvas.width / 2, canvas.height / 2);
+    }
+
+    /* CONTROLES UNIFICADOS */
+    function handleInput(cmd) {
+      if (currentGame === 'serpente') {
+        if (cmd === 'UP' && snakeState.dir.y === 0) snakeState.nextDir = {x: 0, y: -1};
+        if (cmd === 'DOWN' && snakeState.dir.y === 0) snakeState.nextDir = {x: 0, y: 1};
+        if (cmd === 'LEFT' && snakeState.dir.x === 0) snakeState.nextDir = {x: -1, y: 0};
+        if (cmd === 'RIGHT' && snakeState.dir.x === 0) snakeState.nextDir = {x: 1, y: 0};
+      } else if (currentGame === 'blocos') {
+        if (cmd === 'LEFT') breakState.px = Math.max(0, breakState.px - 28);
+        if (cmd === 'RIGHT') breakState.px = Math.min(canvas.width - breakState.pw, breakState.px + 28);
+      } else if (currentGame === 'soma2048') {
+        if (['UP','DOWN','LEFT','RIGHT'].includes(cmd)) move2048(cmd);
+      } else if (currentGame === 'espacial') {
+        if (cmd === 'LEFT') spaceState.shipX = Math.max(0, spaceState.shipX - 22);
+        if (cmd === 'RIGHT') spaceState.shipX = Math.min(canvas.width - 30, spaceState.shipX + 22);
+        if (cmd === 'ACTION' || cmd === 'UP') spaceState.bullets.push({ x: spaceState.shipX + 13, y: canvas.height - 38 });
+      } else if (currentGame === 'encaixe') {
+        if (cmd === 'LEFT') { movePiece(-1, 0); drawEncaixe(); }
+        if (cmd === 'RIGHT') { movePiece(1, 0); drawEncaixe(); }
+        if (cmd === 'DOWN') { movePiece(0, 1); drawEncaixe(); }
+        if (cmd === 'ACTION' || cmd === 'UP') { rotatePiece(); drawEncaixe(); }
+      }
+    }
+
+    document.addEventListener('keydown', e => {
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
+      if (e.key === 'ArrowUp') handleInput('UP');
+      if (e.key === 'ArrowDown') handleInput('DOWN');
+      if (e.key === 'ArrowLeft') handleInput('LEFT');
+      if (e.key === 'ArrowRight') handleInput('RIGHT');
+      if (e.key === ' ') handleInput('ACTION');
+    });
+
+    // Suporte a Swipe (deslizar o dedo) no celular
+    let touchStartX = 0, touchStartY = 0;
+    const holder = document.getElementById('canvasHolder');
+    holder.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    holder.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) < 20 && Math.abs(dy) < 20) return;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        handleInput(dx > 0 ? 'RIGHT' : 'LEFT');
+      } else {
+        handleInput(dy > 0 ? 'DOWN' : 'UP');
+      }
+    }, { passive: true });
+
+    canvas.addEventListener('touchmove', e => {
+      const rect = canvas.getBoundingClientRect();
+      const tx = e.touches[0].clientX - rect.left;
+      if (currentGame === 'blocos') breakState.px = Math.max(0, Math.min(canvas.width - breakState.pw, tx - breakState.pw / 2));
+      if (currentGame === 'espacial') spaceState.shipX = Math.max(0, Math.min(canvas.width - 30, tx - 15));
+    }, { passive: true });
+
+    window.addEventListener('DOMContentLoaded', restartCurrentGame);
+    if (document.readyState !== 'loading') restartCurrentGame();
+  </script>
+</body>
+</html>
