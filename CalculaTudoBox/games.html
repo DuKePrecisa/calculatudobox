@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Games Retrô Offline — CalculaTudoBox</title>
+  <meta name="description" content="Jogue 6 clássicos retrô gratuitos e offline no CalculaTudoBox: Serpente Retrô, Quebra-Blocos, Soma 2048, Campo Minado, Defensor Espacial e Encaixe de Blocos." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="canonical" href="https://calculatudobox.dukeprecisa.com.br/games.html" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/manifest.json" />
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-light: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #3b82f6;
+      --accent: #10b981;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    a { text-decoration: none; color: inherit; }
+    .container { max-width: 1020px; margin: 0 auto; padding: 0 16px; }
+
+    /* Top Bar */
+    .top-bar {
+      background: #090e1a;
+      border-bottom: 1px solid #1e293b;
+      padding: 8px 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .top-bar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .top-links { display: flex; gap: 14px; }
+    .top-links a:hover { color: #fff; }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .brand { font-weight: 800; font-size: 1.25rem; display: flex; align-items: center; gap: 8px; }
+    .badge-offline {
+      background: rgba(16, 185, 129, 0.16);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    /* AdSense Safe Slot (Afastado dos controles) */
+    .ad-wrap { margin: 18px 0; text-align: center; }
+    .ad-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+    .ad-box {
+      min-height: 90px;
+      background: #131c31;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    /* Seletor de Jogos */
+    .games-nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .game-tab {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all 0.15s ease;
+    }
+    .game-tab:hover { border-color: var(--primary); }
+    .game-tab.active {
+      background: var(--primary);
+      border-color: #60a5fa;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+    }
+
+    /* Arena do Jogo */
+    .arcade-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: #0f172a;
+      padding: 10px 16px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      font-size: 0.92rem;
+    }
+    .hud-scores { display: flex; gap: 18px; font-weight: 700; }
+    .hud-scores span strong { color: #38bdf8; }
+    .btn-restart {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .btn-restart:hover { background: #059669; }
+
+    .canvas-holder {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      touch-action: none;
+    }
+    canvas {
+      background: #090e1a;
+      border: 2px solid #334155;
+      border-radius: 10px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Grade HTML para Campo Minado e Soma 2048 */
+    .board-html {
+      display: none;
+      margin: 0 auto;
+      user-select: none;
+    }
+    .board-html.active { display: inline-grid; }
+
+    /* Controles Virtuais Mobile */
+    .mobile-controls {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .dpad-row { display: flex; gap: 10px; justify-content: center; }
+    .ctrl-btn {
+      width: 56px;
+      height: 50px;
+      background: #0f172a;
+      border: 1px solid #475569;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ctrl-btn:active { background: var(--primary); transform: scale(0.95); }
+    .ctrl-btn.wide { width: 120px; font-size: 0.9rem; }
+
+    .game-instructions {
+      margin-top: 14px;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    /* Estilos específicos 2048 e Campo Minado */
+    .grid-2048 {
+      gap: 8px;
+      background: #0f172a;
+      padding: 10px;
+      border-radius: 12px;
+      border: 2px solid #334155;
+      grid-template-columns: repeat(4, 68px);
+    }
+    .cell-2048 {
+      width: 68px;
+      height: 68px;
+      border-radius: 8px;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: #f8fafc;
+    }
+    .grid-mine {
+      gap: 3px;
+      background: #0f172a;
+      padding: 8px;
+      border-radius: 10px;
+      border: 2px solid #334155;
+      grid-template-columns: repeat(9, 34px);
+    }
+    .cell-mine {
+      width: 34px;
+      height: 34px;
+      background: #334155;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+    .cell-mine.open { background: #0f172a; border: 1px solid #1e293b; cursor: default; }
+
+    footer {
+      text-align: center;
+      padding: 24px 0 36px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-links">
+        <a href="/index.html">← Voltar às Calculadoras</a>
+        <a href="https://dukeprecisa.com.br">Portal DuKêPrecisa</a>
+      </div>
+      <span>Funciona 100% Offline no PWA</span>
+    </div>
+  </div>
+
+  <header>
+    <div class="container header-inner">
+      <a href="/index.html" class="brand">🕹️ CalculaTudoBox <span style="color:#38bdf8;">Games</span></a>
+      <span class="badge-offline">● Pronto para Jogar Offline</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Banner Superior (longe dos botões do jogo) -->
+    <div class="ad-wrap" aria-label="Publicidade">
+      <div class="ad-label">Publicidade</div>
+      <div class="ad-box">Espaço Reservado Google AdSense</div>
+    </div>
+
+    <!-- Menu dos 6 Jogos Retrô -->
+    <div class="games-nav" role="tablist">
+      <button type="button" class="game-tab active" onclick="selectGame('serpente', this)">🐍 Serpente Retrô</button>
+      <button type="button" class="game-tab" onclick="selectGame('blocos', this)">🧱 Quebra-Blocos</button>
+      <button type="button" class="game-tab" onclick="selectGame('soma2048', this)">🔢 Soma 2048</button>
+      <button type="button" class="game-tab" onclick="selectGame('minado', this)">💣 Campo Minado</button>
+      <button type="button" class="game-tab" onclick="selectGame('espacial', this)">🚀 Defensor Espacial</button>
+      <button type="button" class="game-tab" onclick="selectGame('encaixe', this)">🟦 Encaixe de Blocos</button>
+    </div>
+
+    <!-- Arena Principal -->
+    <section class="arcade-box">
+      <div class="hud">
+        <div class="hud-scores">
+          <span>Jogo: <strong id="hudGameName">Serpente Retrô</strong></span>
+          <span>Pontos: <strong id="hudScore">0</strong></span>
+          <span>Recorde: <strong id="hudBest">0</strong></span>
+        </div>
+        <button type="button" class="btn-restart" onclick="restartCurrentGame()">↻ Reiniciar</button>
+      </div>
+
+      <div class="canvas-holder" id="canvasHolder">
+        <canvas id="gameCanvas" width="360" height="400"></canvas>
+        <div id="boardHtml" class="board-html"></div>
+      </div>
+
+      <!-- Controles Virtuais para Celular -->
+      <div class="mobile-controls" id="mobileControls">
+        <div class="dpad-row">
+          <button type="button" class="ctrl-btn" onclick="handleInput('UP')">▲</button>
+        </div>
+        <div class="dpad-row">
+          <button type="button" class="ctrl-btn" onclick="handleInput('LEFT')">◀</button>
+          <button type="button" class="ctrl-btn" onclick="handleInput('DOWN')">▼</button>
+          <button type="button" class="ctrl-btn" onclick="handleInput('RIGHT')">▶</button>
+        </div>
+        <div class="dpad-row">
+          <button type="button" class="ctrl-btn wide" id="actionBtn" onclick="handleInput('ACTION')">Ação / Girar</button>
+        </div>
+      </div>
+
+      <p class="game-instructions" id="gameHelp">Use as setas do teclado ou os botões acima para guiar a serpente.</p>
+    </section>
+
+    <!-- Banner Inferior -->
+    <div class="ad-wrap" aria-label="Publicidade">
+      <div class="ad-label">Publicidade</div>
+      <div class="ad-box">Espaço Reservado Google AdSense</div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>CalculaTudoBox Games — Jogos originais em HTML5 leves e livres de direitos autorais.</p>
+    </div>
+  </footer>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const boardHtml = document.getElementById('boardHtml');
+    const mobileControls = document.getElementById('mobileControls');
+
+    let currentGame = 'serpente';
+    let loopTimer = null;
+    let animFrame = null;
+    let score = 0;
+
+    function stopLoops() {
+      if (loopTimer) { clearInterval(loopTimer); loopTimer = null; }
+      if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
+    }
+
+    function updateScore(val) {
+      score = val;
+      document.getElementById('hudScore').textContent = score;
+      const key = 'ctb_best_' + currentGame;
+      const best = Math.max(score, Number(localStorage.getItem(key) || 0));
+      localStorage.setItem(key, best);
+      document.getElementById('hudBest').textContent = best;
+    }
+
+    function selectGame(gameId, btn) {
+      currentGame = gameId;
+      document.querySelectorAll('.game-tab').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      restartCurrentGame();
+    }
+
+    function restartCurrentGame() {
+      stopLoops();
+      updateScore(0);
+      canvas.style.display = 'block';
+      boardHtml.className = 'board-html';
+      boardHtml.innerHTML = '';
+      mobileControls.style.display = 'flex';
+
+      const names = {
+        serpente: 'Serpente Retrô',
+        blocos: 'Quebra-Blocos',
+        soma2048: 'Soma 2048',
+        minado: 'Campo Minado',
+        espacial: 'Defensor Espacial',
+        encaixe: 'Encaixe de Blocos'
+      };
+      document.getElementById('hudGameName').textContent = names[currentGame];
+
+      if (currentGame === 'serpente') startSerpente();
+      if (currentGame === 'blocos') startBlocos();
+      if (currentGame === 'soma2048') startSoma2048();
+      if (currentGame === 'minado') startMinado();
+      if (currentGame === 'espacial') startEspacial();
+      if (currentGame === 'encaixe') startEncaixe();
+    }
+
+    /* ==========================================
+       1. SERPENTE RETRÔ
+       ========================================== */
+    let snakeState = {};
+    function startSerpente() {
+      canvas.width = 360; canvas.height = 360;
+      document.getElementById('gameHelp').textContent = 'Setas ou botões direcionais para mover. Colete as frutas verdes sem bater nas paredes ou no corpo.';
+      const grid = 18;
+      snakeState = {
+        grid,
+        snake: [{x: 9, y: 9}, {x: 8, y: 9}],
+        dir: {x: 1, y: 0},
+        nextDir: {x: 1, y: 0},
+        food: {x: 14, y: 9},
+        over: false
+      };
+      loopTimer = setInterval(() => {
+        if (snakeState.over) return;
+        snakeState.dir = snakeState.nextDir;
+        const head = {
+          x: snakeState.snake[0].x + snakeState.dir.x,
+          y: snakeState.snake[0].y + snakeState.dir.y
+        };
+        const max = canvas.width / grid;
+        if (head.x < 0 || head.y < 0 || head.x >= max || head.y >= max ||
+            snakeState.snake.some(s => s.x === head.x && s.y === head.y)) {
+          snakeState.over = true;
+          drawGameOver('Fim de Jogo! Clique em Reiniciar');
+          return;
+        }
+        snakeState.snake.unshift(head);
+        if (head.x === snakeState.food.x && head.y === snakeState.food.y) {
+          updateScore(score + 10);
+          snakeState.food = { x: Math.floor(Math.random() * max), y: Math.floor(Math.random() * max) };
+        } else {
+          snakeState.snake.pop();
+        }
+        ctx.fillStyle = '#090e1a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#10b981';
+        ctx.fillRect(snakeState.food.x * grid + 2, snakeState.food.y * grid + 2, grid - 4, grid - 4);
+        snakeState.snake.forEach((s, idx) => {
+          ctx.fillStyle = idx === 0 ? '#38bdf8' : '#0284c7';
+          ctx.fillRect(s.x * grid + 1, s.y * grid + 1, grid - 2, grid - 2);
+        });
+      }, 130);
+    }
+
+    /* ==========================================
+       2. QUEBRA-BLOCOS
+       ========================================== */
+    let breakState = {};
+    function startBlocos() {
+      canvas.width = 360; canvas.height = 400;
+      document.getElementById('gameHelp').textContent = 'Use ◀ / ▶ ou arraste o dedo sobre a tela para mover a barra e rebater a esfera.';
+      const cols = 6, rows = 4, bricks = [];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          bricks.push({ x: c * 56 + 14, y: r * 24 + 34, w: 50, h: 16, alive: true, color: ['#f59e0b','#10b981','#3b82f6','#8b5cf6'][r] });
+        }
+      }
+      breakState = { px: 140, pw: 80, bx: 180, by: 260, vx: 3, vy: -3, bricks, over: false };
+
+      function step() {
+        if (currentGame !== 'blocos' || breakState.over) return;
+        ctx.fillStyle = '#090e1a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        breakState.bx += breakState.vx;
+        breakState.by += breakState.vy;
+
+        if (breakState.bx < 8 || breakState.bx > canvas.width - 8) breakState.vx *= -1;
+        if (breakState.by < 8) breakState.vy *= -1;
+
+        if (breakState.by > canvas.height - 26 && breakState.bx > breakState.px && breakState.bx < breakState.px + breakState.pw) {
+          breakState.vy = -Math.abs(breakState.vy);
+        } else if (breakState.by > canvas.height) {
+          breakState.over = true;
+          drawGameOver('A esfera caiu! Clique em Reiniciar');
+          return;
+        }
+
+        let remaining = 0;
+        breakState.bricks.forEach(b => {
+          if (!b.alive) return;
+          remaining++;
+          if (breakState.bx > b.x && breakState.bx < b.x + b.w && breakState.by > b.y && breakState.by < b.y + b.h) {
+            b.alive = false;
+            breakState.vy *= -1;
+            updateScore(score + 15);
+          } else {
+            ctx.fillStyle = b.color;
+            ctx.fillRect(b.x, b.y, b.w, b.h);
+          }
+        });
+
+        if (remaining === 0) {
+          breakState.over = true;
+          drawGameOver('Fase Concluída! Parabéns!');
+          return;
+        }
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(breakState.px, canvas.height - 18, breakState.pw, 10);
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc(breakState.bx, breakState.by, 7, 0, Math.PI * 2); ctx.fill();
+
+        animFrame = requestAnimationFrame(step);
+      }
+      animFrame = requestAnimationFrame(step);
+    }
+
+    /* ==========================================
+       3. SOMA 2048
+       ========================================== */
+    let grid2048 = [];
+    function startSoma2048() {
+      canvas.style.display = 'none';
+      boardHtml.className = 'board-html active grid-2048';
+      document.getElementById('gameHelp').textContent = 'Deslize os blocos com as setas para somar números iguais e alcançar 2048.';
+      grid2048 = Array.from({length: 4}, () => [0, 0, 0, 0]);
+      addTile2048(); addTile2048();
+      render2048();
+    }
+
+    function addTile2048() {
+      const empty = [];
+      for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) if (grid2048[r][c] === 0) empty.push({r, c});
+      if (!empty.length) return;
+      const pick = empty[Math.floor(Math.random() * empty.length)];
+      grid2048[pick.r][pick.c] = Math.random() < 0.9 ? 2 : 4;
+    }
+
+    function move2048(dir) {
+      let moved = false;
+      const slide = row => {
+        let arr = row.filter(v => v !== 0);
+        for (let i = 0; i < arr.length - 1; i++) {
+          if (arr[i] === arr[i + 1]) {
+            arr[i] *= 2;
+            updateScore(score + arr[i]);
+            arr[i + 1] = 0;
+          }
+        }
+        arr = arr.filter(v => v !== 0);
+        while (arr.length < 4) arr.push(0);
+        return arr;
+      };
+
+      for (let i = 0; i < 4; i++) {
+        let line = [];
+        for (let j = 0; j < 4; j++) {
+          if (dir === 'LEFT') line.push(grid2048[i][j]);
+          if (dir === 'RIGHT') line.push(grid2048[i][3 - j]);
+          if (dir === 'UP') line.push(grid2048[j][i]);
+          if (dir === 'DOWN') line.push(grid2048[3 - j][i]);
+        }
+        const res = slide(line);
+        for (let j = 0; j < 4; j++) {
+          let r = i, c = j;
+          if (dir === 'RIGHT') c = 3 - j;
+          if (dir === 'UP') { r = j; c = i; }
+          if (dir === 'DOWN') { r = 3 - j; c = i; }
+          if (grid2048[r][c] !== res[j]) moved = true;
+          grid2048[r][c] = res[j];
+        }
+      }
+      if (moved) { addTile2048(); render2048(); }
+    }
+
+    function render2048() {
+      const colors = { 0:'#1e293b', 2:'#334155', 4:'#475569', 8:'#0284c7', 16:'#0369a1', 32:'#059669', 64:'#047857', 128:'#d97706', 256:'#b45309', 512:'#7c3aed', 1024:'#6d28d9', 2048:'#dc2626' };
+      boardHtml.innerHTML = grid2048.flat().map(v =>
+        `<div class="cell-2048" style="background:${colors[v] || '#dc2626'}">${v || ''}</div>`
+      ).join('');
+    }
+
+    /* ==========================================
+       4. CAMPO MINADO CLÁSSICO
+       ========================================== */
+    let mineBoard = [], mineOver = false;
+    function startMinado() {
+      canvas.style.display = 'none';
+      mobileControls.style.display = 'none';
+      boardHtml.className = 'board-html active grid-mine';
+      document.getElementById('gameHelp').textContent = 
